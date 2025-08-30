@@ -1,0 +1,614 @@
+# file: index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuration Hub</title>
+  <style>
+    :root {
+      --brand-blue: #1589ee;
+      --dark-blue: #16325c;
+      --light-gray: #f4f6f9;
+      --border-gray: #d8dde6;
+      --text-dark: #1a1a1a;
+      --text-light: #63737a;
+      --font: Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: var(--font); background: var(--light-gray); color: var(--text-dark); }
+    .app-container { display: flex; flex-direction: column; height: 100%; }
+    header { background: var(--dark-blue); color: white; padding: 0 1em; display: flex; align-items: center; height: 50px; }
+    header h1 { font-size: 1.2em; }
+    .body { flex: 1; display: flex; overflow: hidden; }
+    nav { width: 200px; background: var(--brand-blue); display: flex; flex-direction: column; }
+    nav a { color: white; text-decoration: none; padding: 1em; }
+    nav a.active, nav a:hover { background: var(--dark-blue); }
+    .main { flex: 1; overflow-y: auto; padding: 1em; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .card { background: white; border: 1px solid var(--border-gray); border-radius: 4px; padding: 1em; margin-bottom: 1em; }
+    h2 { margin-bottom: 0.5em; color: var(--dark-blue); }
+    label { display: block; margin: 0.5em 0 0.25em; }
+    select, input[type="text"] { width: 100%; padding: 0.5em; border: 1px solid var(--border-gray); border-radius: 3px; }
+    button { margin-top: 0.5em; background: var(--brand-blue); color: white; border: none; padding: 0.5em 1em; border-radius: 3px; cursor: pointer; }
+    ul { list-style: none; margin-top: 0.5em; }
+    li { padding: 0.25em 0; border-bottom: 1px solid var(--border-gray); display: flex; justify-content: space-between; }
+    .remove-btn { background: transparent; color: #d9534f; border: none; cursor: pointer; }
+    /* Collaboration panel */
+    .collab-panel { width: 300px; background: white; border-left: 1px solid var(--border-gray); display: flex; flex-direction: column; flex-shrink: 0; }
+    .collab-tabs { display: flex; border-bottom: 1px solid var(--border-gray); }
+    .collab-tabs button { flex: 1; padding: 0.5em; border: none; background: var(--light-gray); cursor: pointer; font-size: 0.9em; }
+    .collab-tabs button.active { background: var(--brand-blue); color: white; }
+    .collab-content { flex: 1; overflow-y: auto; padding: 0.5em; }
+    .chat, .tasks { display: none; }
+    .chat.active, .tasks.active { display: block; }
+    .message, .task-item { padding: 0.5em; border-bottom: 1px solid var(--border-gray); display: flex; justify-content: space-between; align-items: center; }
+    .message:last-child, .task-item:last-child { border-bottom: none; }
+    .chat-input, .task-input { display: flex; border-top: 1px solid var(--border-gray); padding: 0.5em; }
+    .chat-input input, .task-input input, .task-input select { padding: 0.5em; border: 1px solid var(--border-gray); border-radius: 3px; margin-right: 0.5em; font-size: 0.9em; }
+    .task-input select { width: 120px; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header><h1>Configuration Hub</h1></header>
+    <div class="body">
+      <nav>
+        <a href="#" data-target="cohorts" class="active">Cohorts</a>
+        <a href="#" data-target="bundles">Bundles</a>
+        <a href="#" data-target="submission-library">Submission Library</a>
+        <a href="#" data-target="review-library">Review Library</a>
+      </nav>
+      <div class="main">
+        <section id="cohorts" class="section active">
+          <h2>Cohorts</h2>
+          <div class="card">
+            <label for="cohort-program">Program</label>
+            <select id="cohort-program">
+              <option value="">-- select program --</option>
+              <option value="330">FQHC 330</option>
+              <option value="LGP">Loan Guarantee Program</option>
+              <option value="LAL">Look-Alike Program</option>
+            </select>
+            <label for="cohort-type">Entity Type</label>
+            <select id="cohort-type">
+              <option value="">-- select entity type --</option>
+              <option value="applications">Applications</option>
+              <option value="awards">Awards</option>
+              <option value="organizations">Organizations</option>
+            </select>
+            <label for="cohort-entities">Entities</label>
+            <select id="cohort-entities" multiple size="5"></select>
+            <button id="add-cohort">Add to Cohort</button>
+            <button id="clear-cohort" style="background:#d9534f;">Clear Cohort</button>
+            <div>
+              <h3>Current Cohort</h3>
+              <ul id="cohort-list"></ul>
+            </div>
+          </div>
+        </section>
+        <section id="bundles" class="section">
+          <h2>Bundles</h2>
+          <div class="card">
+            <label for="bundle-name">Bundle Name</label>
+            <input type="text" id="bundle-name" placeholder="Enter bundle name">
+            <label for="bundle-search">Filter Forms</label>
+            <input type="text" id="bundle-search" placeholder="Search forms...">
+            <label for="bundle-forms">Select Forms</label>
+            <select id="bundle-forms" multiple size="8"></select>
+            <button id="create-bundle">Create Bundle</button>
+          </div>
+          <div class="card">
+            <h3>Existing Bundles</h3>
+            <ul id="bundle-list"></ul>
+          </div>
+        </section>
+        <section id="submission-library" class="section">
+          <h2>Submission Library</h2>
+          <div class="card"><ul id="submission-list"></ul></div>
+        </section>
+        <section id="review-library" class="section">
+          <h2>Review Library</h2>
+          <div class="card"><ul id="review-list"></ul></div>
+        </section>
+      </div>
+      <aside class="collab-panel">
+        <div class="collab-tabs">
+          <button data-tab="chat" class="active">Chat</button>
+          <button data-tab="tasks">Tasks</button>
+        </div>
+        <div class="collab-content">
+          <div class="chat active" id="chat"></div>
+          <div class="tasks" id="tasks"></div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chat-input" placeholder="Type a message…">
+          <button class="btn" id="chat-send">Send</button>
+        </div>
+        <div class="task-input" style="display:none;">
+          <input type="text" id="task-input" placeholder="New task…">
+          <select id="task-assignee"></select>
+          <button class="btn" id="task-add">Add</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <script>
+    // Navigation
+    document.querySelectorAll('nav a').forEach(link=>{
+      link.addEventListener('click', e=>{
+        e.preventDefault();
+        document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+        link.classList.add('active');
+        document.querySelectorAll('.section').forEach(sec=>sec.classList.remove('active'));
+        document.getElementById(link.dataset.target).classList.add('active');
+      });
+    });
+
+    // Cohorts
+    const dataStore={330:{applications:['App1','App2'],awards:['Award1'],organizations:['Org1','Org2']},LGP:{applications:['LGP1'],awards:['LGPAward'],organizations:['LGPO']},LAL:{applications:['LAL1'],awards:['LALAward'],organizations:['LALO']}};
+    let cohortEntities=[];
+    const progSel=document.getElementById('cohort-program'),typeSel=document.getElementById('cohort-type'),entSel=document.getElementById('cohort-entities'),cohortList=document.getElementById('cohort-list');
+    function populateEntities(){entSel.innerHTML='';const p=progSel.value,t=typeSel.value; if(p&&t&&dataStore[p])dataStore[p][t].forEach(i=>{const o=document.createElement('option');o.value=i;o.textContent=i;entSel.appendChild(o);});}
+    progSel.onchange=typeSel.onchange=populateEntities;
+    document.getElementById('add-cohort').onclick=()=>{
+      Array.from(entSel.selectedOptions).map(o=>o.value).forEach(v=>{if(!cohortEntities.includes(v))cohortEntities.push(v);});
+      renderCohort();
+    };
+    document.getElementById('clear-cohort').onclick=()=>{
+      cohortEntities=[];renderCohort();
+    };
+    function renderCohort(){
+      cohortList.innerHTML='';
+      cohortEntities.forEach(v=>{
+        const li=document.createElement('li');li.textContent=v;
+        const btn=document.createElement('button');btn.textContent='✖';btn.className='remove-btn';
+        btn.onclick=()=>{cohortEntities=cohortEntities.filter(x=>x!==v);renderCohort();};
+        li.appendChild(btn);cohortList.appendChild(li);
+      });
+    }
+
+    // Bundles
+    const formLibrary=['Add Projects','Add Site','Assurances','External Correspondence (EC)','Attachment','Consolidated Budget','Form 1A','Form 2','Form 3','Form 4','Form 5A','Form 5B','Form 5C'];
+    const bundles=[], bfSel=document.getElementById('bundle-forms'), searchInput=document.getElementById('bundle-search'), blist=document.getElementById('bundle-list');
+    function filterForms(){
+      const f=searchInput.value.toLowerCase();
+      bfSel.innerHTML='';formLibrary.filter(n=>n.toLowerCase().includes(f)).forEach(n=>{const o=new Option(n,n);bfSel.appendChild(o);});
+    }
+    searchInput.oninput=filterForms;filterForms();
+    document.getElementById('create-bundle').onclick=()=>{
+      const name=document.getElementById('bundle-name').value.trim(),forms=Array.from(bfSel.selectedOptions).map(o=>o.value);
+      if(name&&forms.length){bundles.push({name,forms});renderBundles();document.getElementById('bundle-name').value='';bfSel.selectedIndex=-1;}
+    };
+    function renderBundles(){
+      blist.innerHTML='';
+      bundles.forEach((b,i)=>{
+        const li=document.createElement('li');li.innerHTML=`<strong>${b.name}</strong>: ${b.forms.join(', ')}`;
+        const btn=document.createElement('button');btn.textContent='Delete';btn.className='remove-btn';
+        btn.onclick=()=>{bundles.splice(i,1);renderBundles();};
+        li.appendChild(btn);blist.appendChild(li);
+      });
+    }
+
+    // Libraries
+    const subList=document.getElementById('submission-list'),revList=document.getElementById('review-list');
+    ['Add Projects','Add Site','Assurances','External Correspondence (EC)','Attachment','Consolidated Budget','Form 1A','Form 2','Form 3','Form 4','Form 5A','Form 5B','Form 5C'].forEach(n=>subList.appendChild(Object.assign(document.createElement('li'),{textContent:n})));
+    ['Scope PO Review','Scope PQC Review','Pre-funding Compliance Analysis','PAR Recommendation','TAR Checklist','GAR Recommendation'].forEach(n=>revList.appendChild(Object.assign(document.createElement('li'),{textContent:n})));
+
+    // Collaboration
+    const chatLog=[], tasksData=[], events=[];
+    document.querySelectorAll('.collab-tabs button').forEach(btn=>{
+      btn.onclick=()=>{
+        document.querySelectorAll('.collab-tabs button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('chat').classList.toggle('active',btn.dataset.tab==='chat');
+        document.getElementById('tasks').classList.toggle('active',btn.dataset.tab==='tasks');
+        document.querySelector('.chat-input').style.display = btn.dataset.tab==='chat'?'flex':'none';
+        document.querySelector('.task-input').style.display = btn.dataset.tab==='tasks'?'flex':'none';
+      };
+    });
+    function renderChat(){const c=document.getElementById('chat');c.innerHTML='';chatLog.forEach(m=>{const d=document.createElement('div');d.className='message';d.textContent=m;c.appendChild(d);});c.scrollTop=c.scrollHeight;}
+    function renderTasks(){const c=document.getElementById('tasks');c.innerHTML='';tasksData.filter(t=>!t.doneAt).forEach(t=>{const d=document.createElement('div');d.className='task-item';d.innerHTML=`<span>${t.text} (to ${t.assignee})</span><button class="btn reject" data-time="${t.createdAt}">Done</button>`;c.appendChild(d);});}
+    document.getElementById('chat-send').onclick=()=>{
+      const t=document.getElementById('chat-input').value.trim();if(!t)return;chatLog.push(t);events.push({type:'chat',text:t,time:Date.now()});document.getElementById('chat-input').value='';renderChat();renderTimeline();
+    };
+    document.getElementById('task-add').onclick=()=>{
+      const t=document.getElementById('task-input').value.trim(),a=document.getElementById('task-assignee').value; if(!t||!a)return;
+      const ts=Date.now();tasksData.push({text:t,assignee:a,createdAt:ts,doneAt:null});events.push({type:'task-add',text:t,assignee:a,time:ts});
+      document.getElementById('task-input').value='';renderTasks();updateProgress();
+    };
+    document.getElementById('tasks').onclick=e=>{
+      if(e.target.matches('button.reject')){const ts=+e.target.dataset.time;const t=tasksData.find(x=>x.createdAt===ts);t.doneAt=Date.now();events.push({type:'task-done',text:t.text,time:t.doneAt});renderTasks();updateProgress();}
+    };
+
+    // Status & Timeline
+    function renderTimeline(){const c=document.getElementById('timeline');c.innerHTML='';events.sort((a,b)=>a.time-b.time).forEach(evt=>{const row=document.createElement('div');row.className='timeline-event';const t=document.createElement('div');t.className='event-time';t.textContent=formatTime(evt.time);const d=document.createElement('div');d.className='event-desc';switch(evt.type){case'chat':d.textContent=`Chat: "${evt.text}"`;break;case'task-add':d.textContent=`Task added: "${evt.text}" ↦ ${evt.assignee}`;break;case'task-done':d.textContent=`Task done: "${evt.text}"`;break;case'po-approve':d.textContent='PO Approved';break;case'po-reject':d.textContent='PO Rejected';break;case'pqc-approve':d.textContent='PQC Approved';break;case'pqc-reject':d.textContent='PQC Rejected';break;case'pqc-skip':d.textContent='PQC Skipped';break;}row.appendChild(t);row.appendChild(d);c.appendChild(row);});}
+    function updateProgress(){
+      const map={Approved:100,Skipped:100,Rejected:0,Pending:0};const p=map[statuses.po]+'%',q=map[statuses.pqc]+'%';
+      ['prog-po','footer-prog-po'].forEach(id=>document.getElementById(id).style.width=p);
+      ['prog-pqc','footer-prog-pqc'].forEach(id=>document.getElementById(id).style.width=q);
+      const total=tasksData.length,done=tasksData.filter(t=>t.doneAt).length;
+      document.getElementById('overall-progress').style.width = total?Math.round(done/total*100)+'%':'0%';
+    }
+
+    document.getElementById('btn-po-approve').onclick=()=>{statuses.po='Approved';events.push({type:'po-approve',time:Date.now()});updateProgress();};
+    document.getElementById('btn-po-reject').onclick=()=>{statuses.po='Rejected';events.push({type:'po-reject',time:Date.now()});updateProgress();};
+    document.getElementById('btn-po-skip').onclick=()=>{statuses.pqc='Skipped';events.push({type:'pqc-skip',time:Date.now()});updateProgress();};
+    document.getElementById('btn-pqc-approve').onclick=()=>{statuses.pqc='Approved';events.push({type:'pqc-approve',time:Date.now()});updateProgress();};
+    document.getElementById('btn-pqc-reject').onclick=()=>{statuses.pqc='Rejected';events.push({type:'pqc-reject',time:Date.now()});updateProgress();};
+
+    function init(){ const sel=document.getElementById('task-assignee'); teamMembers.forEach(m=>sel.appendChild(new Option(m,m))); updateProgress(); renderChat(); renderTasks();}
+    init();
+  </script>
+</body>
+</html>
+```html
+# file: index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BPHC Review Console with Timeline & Progress</title>
+  <style>
+    /* Salesforce Themed Variables */
+    :root {
+      --brand-blue: #1589ee;
+      --dark-blue: #16325c;
+      --light-gray: #f4f6f9;
+      --border-gray: #d8dde6;
+      --text-dark: #1a1a1a;
+      --text-light: #63737a;
+      --font: "Salesforce Sans", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body, html { height:100%; font-family:var(--font); color:var(--text-dark); background:var(--light-gray); }
+    .app-container { display:flex; flex-direction:column; height:100%; }
+    /* Header */
+    .header {
+      height:50px; background:var(--dark-blue); color:white;
+      display:flex; align-items:center; padding:0 1em; flex-shrink:0;
+    }
+    .app-menu { background:transparent; border:none; color:white; font-size:1.5em; cursor:pointer; margin-right:0.5em; }
+    .logo { font-weight:bold; font-size:1.1em; display:flex; align-items:center; }
+    .hrsa-logo { height:30px; margin-left:1em; }
+    .app-title { margin-left:1em; font-size:1em; }
+    /* Body */
+    .body { display:flex; flex:1; overflow:hidden; }
+    /* Sidebar */
+    .sidebar {
+      width:200px; background:var(--brand-blue); padding-top:1em; display:flex; flex-direction:column; flex-shrink:0;
+    }
+    .sidebar a {
+      color:white; text-decoration:none; padding:0.75em 1em; font-size:0.95em;
+    }
+    .sidebar a.active, .sidebar a:hover { background:var(--dark-blue); }
+    /* Main content */
+    .main-content { flex:1; overflow-y:auto; padding:1em; position:relative; }
+    .section { display:none; }
+    .section.active { display:block; }
+    .card {
+      background:white; border:1px solid var(--border-gray);
+      border-radius:4px; padding:1em; margin-bottom:1em;
+    }
+    h2 { margin-bottom:0.5em; color:var(--dark-blue); }
+    h3 { margin-bottom:0.5em; color:var(--brand-blue); }
+    textarea {
+      width:100%; height:150px; border:1px solid var(--border-gray);
+      border-radius:3px; padding:0.5em; resize:vertical; font-size:0.95em;
+    }
+    .btn {
+      background:var(--brand-blue); color:white; border:none;
+      padding:0.5em 1em; border-radius:3px; cursor:pointer;
+      font-size:0.9em; margin-right:0.5em;
+    }
+    .btn.reject { background:#d9534f; }
+    .btn.skip   { background:#f0ad4e; }
+    .btn:disabled { opacity:0.6; cursor:not-allowed; }
+    /* Collaboration panel */
+    .collab-panel {
+      width:300px; background:white; border-left:1px solid var(--border-gray);
+      display:flex; flex-direction:column; flex-shrink:0;
+    }
+    .collab-tabs { display:flex; border-bottom:1px solid var(--border-gray); }
+    .collab-tabs button {
+      flex:1; padding:0.5em; border:none; background:var(--light-gray);
+      cursor:pointer; font-size:0.9em;
+    }
+    .collab-tabs button.active {
+      background:var(--brand-blue); color:white;
+    }
+    .collab-content { flex:1; overflow-y:auto; padding:0.5em; }
+    .chat, .tasks { display:none; }
+    .chat.active, .tasks.active { display:block; }
+    .message, .task-item {
+      padding:0.5em; border-bottom:1px solid var(--border-gray);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .message:last-child, .task-item:last-child { border-bottom:none; }
+    .chat-input, .task-input {
+      display:flex; border-top:1px solid var(--border-gray); padding:0.5em;
+    }
+    .chat-input input, .task-input input, .task-input select {
+      padding:0.5em; border:1px solid var(--border-gray);
+      border-radius:3px; margin-right:0.5em; font-size:0.9em;
+    }
+    .task-input select { width:120px; }
+    /* Status page progress */
+    .status-bar { margin-bottom:1em; }
+    .status-bar .label { margin-bottom:0.25em; font-size:0.9em; color:var(--text-light); }
+    .progress { background:#e0e0e0; border-radius:4px; overflow:hidden; height:16px; }
+    .progress-bar { height:100%; background:var(--brand-blue); width:0; transition:width 0.3s ease; }
+    /* Timeline */
+    #timeline { max-height:200px; overflow-y:auto; }
+    .timeline-event { display:flex; margin-bottom:0.5em; }
+    .event-time { width:80px; color:var(--text-light); font-size:0.8em; }
+    .event-desc { flex:1; font-size:0.9em; }
+    /* Footer progress */
+    .footer-progress {
+      background:white; border-top:1px solid var(--border-gray);
+      padding:0.5em 1em; display:flex; justify-content:space-around; align-items:center;
+      flex-shrink:0;
+    }
+    .footer-progress .status { display:flex; align-items:center; }
+    .footer-progress .status .label { margin-right:0.5em; font-size:0.9em; color:var(--text-light); }
+    .footer-progress .status .progress { width:120px; margin-right:0.5em; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Header -->
+    <header class="header">
+      <button class="app-menu">☰</button>
+      <div class="logo">☁️ Salesforce</div>
+      <img src="hrsa-logo.png" alt="HRSA BPHC" class="hrsa-logo">
+      <div class="app-title">BPHC Post-Award Review</div>
+    </header>
+
+    <div class="body">
+      <!-- Left Nav -->
+      <nav class="sidebar">
+        <a href="#" data-target="status-page" class="active">Status</a>
+        <a href="#" data-target="po-review">PO Review</a>
+        <a href="#" data-target="pqc-review">PQC Review</a>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Status Page -->
+        <section id="status-page" class="section active">
+          <h2>Review Progress</h2>
+          <div class="status-bar">
+            <div class="label">PO Review</div>
+            <div class="progress"><div class="progress-bar" id="prog-po"></div></div>
+          </div>
+          <div class="status-bar">
+            <div class="label">PQC Review</div>
+            <div class="progress"><div class="progress-bar" id="prog-pqc"></div></div>
+          </div>
+          <div class="card">
+            <h3>Timeline</h3>
+            <div id="timeline"></div>
+          </div>
+          <div class="card">
+            <h3>Overall Tasks Progress</h3>
+            <div class="progress"><div class="progress-bar" id="overall-progress"></div></div>
+          </div>
+        </section>
+
+        <!-- PO Review -->
+        <section id="po-review" class="section">
+          <h2>Project Officer Review</h2>
+          <div class="card">
+            <h3>Notes</h3>
+            <textarea id="notes-po" placeholder="Enter your review notes here..."></textarea>
+          </div>
+          <div class="card">
+            <button class="btn approve" id="btn-po-approve">Approve</button>
+            <button class="btn reject" id="btn-po-reject">Reject</button>
+            <button class="btn skip" id="btn-po-skip">Skip PQC</button>
+          </div>
+        </section>
+
+        <!-- PQC Review -->
+        <section id="pqc-review" class="section">
+          <h2>Project Quality Control Review</h2>
+          <div class="card">
+            <h3>Notes</h3>
+            <textarea id="notes-pqc" placeholder="Enter your QC notes here..."></textarea>
+          </div>
+          <div class="card">
+            <button class="btn approve" id="btn-pqc-approve">Approve</button>
+            <button class="btn reject" id="btn-pqc-reject">Reject</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Collaboration Panel -->
+      <aside class="collab-panel">
+        <div class="collab-tabs">
+          <button data-tab="chat" class="active">Chat</button>
+          <button data-tab="tasks">Tasks</button>
+        </div>
+        <div class="collab-content">
+          <div class="chat active" id="chat"></div>
+          <div class="tasks" id="tasks"></div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chat-input" placeholder="Type a message…">
+          <button class="btn" id="chat-send">Send</button>
+        </div>
+        <div class="task-input" style="display:none;">
+          <input type="text" id="task-input" placeholder="New task…">
+          <select id="task-assignee"></select>
+          <button class="btn" id="task-add">Add</button>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Footer Progress -->
+    <footer class="footer-progress">
+      <div class="status">
+        <span class="label">PO:</span>
+        <div class="progress"><div id="footer-prog-po" class="progress-bar"></div></div>
+      </div>
+      <div class="status">
+        <span class="label">PQC:</span>
+        <div class="progress"><div id="footer-prog-pqc" class="progress-bar"></div></div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // STATE
+    const statuses = { po: 'Pending', pqc: 'Pending' };
+    const chatLog = [];
+    let tasksData = []; 
+    const events = [];  
+    const teamMembers = ["Alice","Bob","Charlie"];
+
+    // HELPERS
+    function formatTime(ts){
+      const d=new Date(ts);
+      return d.toLocaleTimeString();
+    }
+
+    // NAVIGATION
+    document.querySelectorAll('.sidebar a').forEach(link=>{
+      link.addEventListener('click',e=>{
+        e.preventDefault();
+        document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
+        link.classList.add('active');
+        const tgt=link.dataset.target;
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        document.getElementById(tgt).classList.add('active');
+      });
+    });
+
+    // COLLAB TABS
+    document.querySelectorAll('.collab-tabs button').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.collab-tabs button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab=btn.dataset.tab;
+        document.getElementById('chat').classList.toggle('active', tab==='chat');
+        document.getElementById('tasks').classList.toggle('active', tab==='tasks');
+        document.querySelector('.chat-input').style.display = tab==='chat'?'flex':'none';
+        document.querySelector('.task-input').style.display = tab==='tasks'?'flex':'none';
+      });
+    });
+
+    // RENDERERS
+    function updateProgress(){
+      const map={ Approved:100, Skipped:100, Rejected:0, Pending:0 };
+      const p=map[statuses.po]+'%';
+      const q=map[statuses.pqc]+'%';
+      ['prog-po','footer-prog-po'].forEach(id=>document.getElementById(id).style.width=p);
+      ['prog-pqc','footer-prog-pqc'].forEach(id=>document.getElementById(id).style.width=q);
+      // overall
+      const total=tasksData.length, done=tasksData.filter(t=>t.doneAt).length;
+      const overall = total? Math.round(done/total*100) : 0;
+      document.getElementById('overall-progress').style.width = overall + '%';
+    }
+    function renderChat(){
+      const c=document.getElementById('chat');
+      c.innerHTML='';
+      chatLog.forEach(m=>{
+        const d=document.createElement('div');
+        d.className='message'; d.textContent=m;
+        c.appendChild(d);
+      });
+      c.scrollTop=c.scrollHeight;
+    }
+    function renderTasks(){
+      const c=document.getElementById('tasks');
+      c.innerHTML='';
+      tasksData.filter(t=>!t.doneAt).forEach(t=>{
+        const d=document.createElement('div');
+        d.className='task-item';
+        d.innerHTML=`<span>${t.text} (to ${t.assignee})</span>
+          <button class="btn reject" data-time="${t.createdAt}">Done</button>`;
+        c.appendChild(d);
+      });
+    }
+    function renderTimeline(){
+      const c=document.getElementById('timeline');
+      c.innerHTML='';
+      events.sort((a,b)=>a.time-b.time).forEach(evt=>{
+        const row=document.createElement('div'); row.className='timeline-event';
+        const t=document.createElement('div'); t.className='event-time'; t.textContent=formatTime(evt.time);
+        const d=document.createElement('div'); d.className='event-desc';
+        switch(evt.type){
+          case 'chat': d.textContent=`Chat: "${evt.text}"`; break;
+          case 'task-add': d.textContent=`Task added: "${evt.text}" ↦ ${evt.assignee}`; break;
+          case 'task-done': d.textContent=`Task done: "${evt.text}"`; break;
+          case 'po-approve': d.textContent='PO Approved'; break;
+          case 'po-reject': d.textContent='PO Rejected'; break;
+          case 'pqc-approve': d.textContent='PQC Approved'; break;
+          case 'pqc-reject': d.textContent='PQC Rejected'; break;
+          case 'pqc-skip': d.textContent='PQC Skipped'; break;
+        }
+        row.appendChild(t); row.appendChild(d); c.appendChild(row);
+      });
+    }
+
+    // ACTIONS
+    document.getElementById('chat-send').onclick=()=>{
+      const txt=document.getElementById('chat-input').value.trim(); if(!txt) return;
+      chatLog.push(txt); events.push({type:'chat', text:txt, time:Date.now()});
+      document.getElementById('chat-input').value=''; renderChat(); renderTimeline();
+    };
+    document.getElementById('task-add').onclick=()=>{
+      const txt=document.getElementById('task-input').value.trim();
+      const assignee=document.getElementById('task-assignee').value;
+      if(!txt||!assignee) return;
+      const now=Date.now();
+      tasksData.push({text:txt, assignee, createdAt:now, doneAt:null});
+      events.push({type:'task-add', text:txt, assignee, time:now});
+      document.getElementById('task-input').value=''; renderTasks(); updateProgress();
+    };
+    document.getElementById('tasks').addEventListener('click',e=>{
+      if(e.target.matches('button.reject')){
+        const t0=+e.target.dataset.time;
+        const t=tasksData.find(x=>x.createdAt===t0);
+        if(!t) return;
+        t.doneAt=Date.now();
+        events.push({type:'task-done', text:t.text, time:t.doneAt});
+        renderTasks(); updateProgress();
+      }
+    });
+    document.getElementById('btn-po-approve').onclick=()=>{
+      statuses.po='Approved'; events.push({type:'po-approve', time:Date.now()});
+      updateProgress();
+    };
+    document.getElementById('btn-po-reject').onclick=(()=>{
+      statuses.po='Rejected'; events.push({type:'po-reject', time:Date.now()});
+      updateProgress();
+    });
+    document.getElementById('btn-po-skip').onclick=(()=>{
+      statuses.pqc='Skipped'; events.push({type:'pqc-skip', time:Date.now()});
+      updateProgress();
+    });
+    document.getElementById('btn-pqc-approve').onclick=(()=>{
+      statuses.pqc='Approved'; events.push({type:'pqc-approve', time:Date.now()});
+      updateProgress();
+    });
+    document.getElementById('btn-pqc-reject').onclick=(()=>{
+      statuses.pqc='Rejected'; events.push({type:'pqc-reject', time:Date.now()});
+      updateProgress();
+    });
+
+    // INIT
+    function init(){
+      const sel=document.getElementById('task-assignee');
+      teamMembers.forEach(m=>{
+        sel.appendChild(new Option(m,m));
+      });
+      updateProgress(); renderChat(); renderTasks();
+    }
+    init();
+  </script>
+</body>
+</html>
+```

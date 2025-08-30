@@ -1,0 +1,761 @@
+# file: index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuration Hub</title>
+  <style>
+    :root {
+      --brand-blue: #1589ee;
+      --dark-blue: #16325c;
+      --light-gray: #f4f6f9;
+      --border-gray: #d8dde6;
+      --text-dark: #1a1a1a;
+      --text-light: #63737a;
+      --font: Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: var(--font); background: var(--light-gray); color: var(--text-dark); }
+    .app-container { display: flex; flex-direction: column; height: 100%; }
+    header { background: var(--dark-blue); color: white; padding: 0 1em; display: flex; align-items: center; height: 50px; }
+    header h1 { font-size: 1.2em; }
+    .body { flex: 1; display: flex; overflow: hidden; }
+    nav { width: 200px; background: var(--brand-blue); display: flex; flex-direction: column; }
+    nav a { color: white; text-decoration: none; padding: 1em; }
+    nav a.active, nav a:hover { background: var(--dark-blue); }
+    .main { flex: 1; overflow-y: auto; padding: 1em; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .card { background: white; border: 1px solid var(--border-gray); border-radius: 4px; padding: 1em; margin-bottom: 1em; }
+    h2 { margin-bottom: 0.5em; color: var(--dark-blue); }
+    h3 { margin-bottom: 0.5em; color: var(--brand-blue); }
+    label { display: block; margin: 0.5em 0 0.25em; font-weight: bold; }
+    input[type="text"], textarea, select, input[type="number"] { width: 100%; padding: 0.5em; border: 1px solid var(--border-gray); border-radius: 3px; }
+    textarea { resize: vertical; height: 80px; }
+    button { margin-top: 0.5em; background: var(--brand-blue); color: white; border: none; padding: 0.5em 1em; border-radius: 3px; cursor: pointer; }
+    button.delete { background: #d9534f; margin-left: 0.5em; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5em; }
+    th, td { border: 1px solid var(--border-gray); padding: 0.5em; text-align: left; }
+    th { background: var(--light-gray); }
+    .search-input { width: calc(100% - 2px); margin-bottom: 0.5em; }
+    .remove-btn { background: transparent; color: #d9534f; border: none; cursor: pointer; }
+    .update-btn { background: transparent; color: #1589ee; border: none; cursor: pointer; margin-left:0.5em;}
+    .wizard-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; }
+    .wizard-content { background: white; padding: 1em; border-radius: 5px; width: 600px; max-height: 90%; overflow-y: auto; }
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+    .wizard-buttons { text-align: right; margin-top: 1em; }
+    .wizard-buttons button { margin-left: 0.5em; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header><h1>Configuration Hub <!-- bundles-v9 --></h1></header>
+    <div class="body">
+      <nav>
+        <a href="#" data-target="cohorts" class="active">Cohorts</a>
+        <a href="#" data-target="submission-bundles">Submission Bundles</a>
+        <a href="#" data-target="review-bundles">Review Bundles</a>
+        <a href="#" data-target="submission-library">Submission Library</a>
+        <a href="#" data-target="review-library">Review Library</a>
+        <a href="#" data-target="deliverables">Deliverables</a>
+      </nav>
+      <div class="main">
+        <section id="cohorts" class="section active">
+          <h2>Cohorts</h2>
+          <button id="open-cohort-wizard">Create Cohort (Wizard)</button>
+          <div class="card">
+            <label for="cohort-name">Cohort Name</label>
+            <input type="text" id="cohort-name" placeholder="Enter cohort name">
+            <label for="cohort-desc">Description</label>
+            <textarea id="cohort-desc" placeholder="Enter a description"></textarea>
+            <label for="cohort-tags">Tags (comma-separated)</label>
+            <input type="text" id="cohort-tags" placeholder="e.g., rural, pilot">
+            <label for="cohort-program">Program</label>
+            <select id="cohort-program">
+              <option value="">-- select program --</option>
+              <option value="330">FQHC 330</option>
+              <option value="LGP">Loan Guarantee Program</option>
+              <option value="LAL">Look-Alike Program</option>
+            </select>
+            <label for="cohort-type">Entity Type</label>
+            <select id="cohort-type">
+              <option value="">-- select entity type --</option>
+              <option value="applications">Applications</option>
+              <option value="awards">Awards</option>
+              <option value="organizations">Organizations</option>
+            </select>
+            <label for="cohort-entities">Entities</label>
+            <select id="cohort-entities" multiple size="5"></select>
+            <button id="add-cohort">Create Cohort</button>
+          </div>
+          <div class="card">
+            <h3>Current Cohorts</h3>
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Program</th><th>Type</th><th>Entities</th><th>Tags</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="cohort-list"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="submission-bundles" class="section">
+          <h2>Submission Bundles</h2>
+          <div class="card">
+            <button id="open-sb-wizard">Create Bundle (Wizard)</button>
+          </div>
+          <div class="card">
+            <label for="submission-bundle-grid-search">Search Bundles</label>
+            <input type="text" id="submission-bundle-grid-search" class="search-input" placeholder="Search bundles...">
+            <table>
+              <thead><tr><th>Name</th><th>Description</th><th>Forms</th><th>Actions</th></tr></thead>
+              <tbody id="submission-bundle-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="review-bundles" class="section">
+          <h2>Review Bundles</h2>
+          <div class="card">
+            <button id="open-rb-wizard">Create Review Bundle (Wizard)</button>
+          </div>
+          <div class="card">
+            <label for="review-bundle-grid-search">Search Bundles</label>
+            <input type="text" id="review-bundle-grid-search" class="search-input" placeholder="Search bundles...">
+            <table>
+              <thead><tr><th>Name</th><th>Description</th><th>Forms</th><th>Actions</th></tr></thead>
+              <tbody id="review-bundle-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="submission-library" class="section">
+          <h2>Submission Library</h2>
+          <button id="open-lib-wizard">Add Submission Form (Wizard)</button>
+          <div class="card">
+            <label for="submission-grid-search">Search Submissions</label>
+            <input type="text" id="submission-grid-search" class="search-input" placeholder="Search submissions...">
+            <table>
+              <thead><tr><th>Form Name</th><th>Description</th></tr></thead>
+              <tbody id="submission-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="review-library" class="section">
+          <h2>Review Library</h2>
+          <button id="open-rlib-wizard">Add Review Form (Wizard)</button>
+          <div class="card">
+            <label for="review-grid-search">Search Reviews</label>
+            <input type="text" id="review-grid-search" class="search-input" placeholder="Search reviews...">
+            <table>
+              <thead><tr><th>Review Name</th><th>Description</th></tr></thead>
+              <tbody id="review-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="deliverables" class="section">
+          <h2>Deliverables</h2>
+          <div class="card">
+            <label for="deliverable-name">Deliverable Name</label>
+            <input type="text" id="deliverable-name" placeholder="Enter deliverable name">
+            <label for="deliverable-cohort">Select Cohort</label>
+            <select id="deliverable-cohort"><option value="">-- select cohort --</option></select>
+            <label for="deliverable-bundle">Select Submission Bundle</label>
+            <select id="deliverable-bundle"><option value="">-- select bundle --</option></select>
+            <button id="create-deliverable">Create Deliverable</button>
+          </div>
+          <div class="card">
+            <label for="deliverable-grid-search">Search Deliverables</label>
+            <input type="text" id="deliverable-grid-search" class="search-input" placeholder="Search deliverables...">
+            <table>
+              <thead><tr><th>Name</th><th>Cohort</th><th>Bundle</th><th>Actions</th></tr></thead>
+              <tbody id="deliverable-grid"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <div id="step-1" class="wizard-step active">
+        <h3>Step 1: Basic Info</h3>
+        <label for="wiz-name">Bundle Name</label>
+        <input type="text" id="wiz-name">
+        <label for="wiz-desc">Description</label>
+        <textarea id="wiz-desc"></textarea>
+      </div>
+      <div id="step-2" class="wizard-step">
+        <h3>Step 2: Select Forms</h3>
+        <label for="wiz-search">Search</label>
+        <input type="text" id="wiz-search" class="search-input">
+        <table>
+          <thead><tr><th>Select</th><th>Name</th><th>Description</th></tr></thead>
+          <tbody id="wiz-table"></tbody>
+        </table>
+      </div>
+      <div id="step-3" class="wizard-step">
+        <h3>Step 3: Configure Selected Form</h3>
+        <label for="wiz-form-select">Choose Form</label>
+        <select id="wiz-form-select"></select>
+        <div id="wiz-form-config"></div>
+      </div>
+      <div id="step-4" class="wizard-step">
+        <h3>Step 4: Review Bundle</h3>
+        <table>
+          <thead><tr><th>Form</th><th>Config Summary</th><th>Actions</th></tr></thead>
+          <tbody id="wiz-review-table"></tbody>
+        </table>
+      </div>
+      <div class="wizard-buttons">
+        <button id="wiz-prev">Back</button>
+        <button id="wiz-next">Next</button>
+        <button id="wiz-finish">Finish</button>
+        <button id="wiz-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cohort-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <div id="cw-step-1" class="wizard-step active">
+        <h3>Cohort - Step 1: Basic Info</h3>
+        <label for="cw-name">Name</label>
+        <input type="text" id="cw-name">
+        <label for="cw-desc">Description</label>
+        <textarea id="cw-desc"></textarea>
+        <label for="cw-tags">Tags (comma-separated)</label>
+        <input type="text" id="cw-tags">
+      </div>
+      <div id="cw-step-2" class="wizard-step">
+        <h3>Cohort - Step 2: Program & Type</h3>
+        <label for="cw-program">Program</label>
+        <select id="cw-program">
+          <option value="">-- select program --</option>
+          <option value="330">FQHC 330</option>
+          <option value="LGP">Loan Guarantee Program</option>
+          <option value="LAL">Look-Alike Program</option>
+        </select>
+        <label for="cw-type">Entity Type</label>
+        <select id="cw-type">
+          <option value="">-- select entity type --</option>
+          <option value="applications">Applications</option>
+          <option value="awards">Awards</option>
+          <option value="organizations">Organizations</option>
+        </select>
+      </div>
+      <div id="cw-step-3" class="wizard-step">
+        <h3>Cohort - Step 3: Select Entities</h3>
+        <select id="cw-entities" multiple size="6" style="width:100%"></select>
+      </div>
+      <div id="cw-step-4" class="wizard-step">
+        <h3>Cohort - Step 4: Review & Confirm</h3>
+        <p><strong>Name:</strong> <span id="cw-review-name"></span></p>
+        <p><strong>Description:</strong> <span id="cw-review-desc"></span></p>
+        <p><strong>Tags:</strong> <span id="cw-review-tags"></span></p>
+        <p><strong>Program:</strong> <span id="cw-review-program"></span></p>
+        <p><strong>Type:</strong> <span id="cw-review-type"></span></p>
+        <p><strong>Entities:</strong> <span id="cw-review-entities"></span></p>
+      </div>
+      <div class="wizard-buttons">
+        <button id="cw-prev">Back</button>
+        <button id="cw-next">Next</button>
+        <button id="cw-finish">Finish</button>
+        <button id="cw-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="lib-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <div id="lw-step-1" class="wizard-step active">
+        <h3>Library - Step 1: Form Info</h3>
+        <label for="lw-name">Form Name</label>
+        <input type="text" id="lw-name">
+        <label for="lw-desc">Description</label>
+        <textarea id="lw-desc"></textarea>
+      </div>
+      <div id="lw-step-2" class="wizard-step">
+        <h3>Library - Step 2: Confirm</h3>
+        <p><strong>Name:</strong> <span id="lw-review-name"></span></p>
+        <p><strong>Description:</strong> <span id="lw-review-desc"></span></p>
+      </div>
+      <div class="wizard-buttons">
+        <button id="lw-prev">Back</button>
+        <button id="lw-next">Next</button>
+        <button id="lw-finish">Finish</button>
+        <button id="lw-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Navigation
+    document.querySelectorAll('nav a').forEach(link=>{
+      link.onclick=e=>{
+        e.preventDefault();
+        document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+        link.classList.add('active');
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        document.getElementById(link.dataset.target).classList.add('active');
+      };
+    });
+
+    // In-memory data
+    const dataStore = {
+      330: { applications:['App A1','App A2','App A3','App A4'], awards:['Award A1','Award A2','Award A3','Award A4'], organizations:['Org A','Org B','Org C','Org D'] },
+      LGP:{ applications:['LGP App1','LGP App2','LGP App3'], awards:['LGP Award1','LGP Award2','LGP Award3'], organizations:['LGP Org1','LGP Org2'] },
+      LAL:{ applications:['LAL App1','LAL App2','LAL App3'], awards:['LAL Award1','LAL Award2','LAL Award3','LAL Award4'], organizations:['LAL Org1','LAL Org2','LAL Org3'] }
+    };
+    let cohorts=[
+      {name:'East Awards',desc:'Cohort for east region awards',tags:'east,2025',program:'330',type:'awards',entities:['Award A1','Award A2']},
+      {name:'West Apps',desc:'Cohort for west region applicants',tags:'west,app',program:'LGP',type:'applications',entities:['LGP App1','LGP App2']},
+      {name:'Central Orgs',desc:'Central region organizations',tags:'central,org',program:'LAL',type:'organizations',entities:['LAL Org1','LAL Org2']},
+      {name:'North Mix',desc:'Mixed cohort',tags:'north,mix',program:'330',type:'applications',entities:['App A1','App A2']},
+      {name:'Pilot Users',desc:'Pilot cohort users',tags:'pilot,rural',program:'LAL',type:'awards',entities:['LAL Award1','LAL Award3']}
+    ];
+    const submissionLibrary=[
+      {name:'Form 1A',desc:'General Info Worksheet'},{name:'Form 5A',desc:'Site Details Form'},
+      {name:'Form 5B',desc:'Services Details Form'},{name:'Form 5C',desc:'Activities Form'},
+      {name:'Assurances',desc:'Legal Assurances Document'},{name:'Consolidated Budget',desc:'Budget Summary'},
+      {name:'Site Map',desc:'Site Layout Document'}
+    ];
+    const reviewLibrary=[
+      {name:'Scope PO Review',desc:'Project Officer scope validation'},
+      {name:'Scope PQC Review',desc:'Quality control review for scope'},
+      {name:'TAR Checklist',desc:'Technical/Admin Review checklist'},
+      {name:'GAR Recommendation',desc:'Grant Award Review Recommendation'},
+      {name:'PQC Final Review',desc:'Final quality control review'},
+      {name:'Compliance Check',desc:'Compliance condition verification'}
+    ];
+    let submissionBundles=[
+      {name:'Initial Scope Bundle',desc:'Bundled forms for initial scope',forms:['Form 5A','Form 5B','Form 5C'],config:{}},
+      {name:'Progress Report Bundle',desc:'Bundle for progress reporting',forms:['Form 1A','Assurances'],config:{}},
+      {name:'Budget & Documents',desc:'Budget and legal docs',forms:['Consolidated Budget','Assurances'],config:{}},
+      {name:'Site Details Bundle',desc:'Site map and details',forms:['Form 5A','Site Map'],config:{}},
+      {name:'Compliance Bundle',desc:'Compliance forms',forms:['Assurances'],config:{}}
+    ];
+    let reviewBundles=[
+      {name:'Scope Review Bundle',desc:'Review scope steps',forms:['Scope PO Review','Scope PQC Review'],config:{}},
+      {name:'Technical Review Bundle',desc:'Eng and env reviews',forms:['TAR Checklist','GAR Recommendation'],config:{}},
+      {name:'Compliance Review',desc:'Compliance condition check',forms:['Compliance Check'],config:{}},
+      {name:'Final QC Bundle',desc:'Final QC steps',forms:['PQC Final Review','Compliance Check'],config:{}},
+      {name:'Full Review',desc:'All review steps',forms:['Scope PO Review','Scope PQC Review','TAR Checklist','GAR Recommendation','Compliance Check'],config:{}}
+    ];
+    let deliverables=[
+      {name:'2025 Q1 Report',cohort:'East Awards',bundle:'Progress Report Bundle'},
+      {name:'Site Expansion',cohort:'West Apps',bundle:'Initial Scope Bundle'},
+      {name:'Budget Revision',cohort:'Central Orgs',bundle:'Budget & Documents'},
+      {name:'Compliance Update',cohort:'Pilot Users',bundle:'Compliance Bundle'},
+      {name:'Annual Audit',cohort:'North Mix',bundle:'Full Review'}
+    ];
+
+    // Cohorts direct create
+    const progSel=document.getElementById('cohort-program'),
+          typeSel=document.getElementById('cohort-type'),
+          entSel=document.getElementById('cohort-entities'),
+          cohortList=document.getElementById('cohort-list');
+    function populateEntities(){
+      entSel.innerHTML='';
+      const p=progSel.value,t=typeSel.value;
+      if(dataStore[p]&&dataStore[p][t]) dataStore[p][t].forEach(item=>{
+        const o=document.createElement('option'); o.value=item; o.textContent=item; entSel.appendChild(o);
+      });
+    }
+    progSel.onchange=typeSel.onchange=populateEntities;
+    document.getElementById('add-cohort').onclick=()=>{
+      const name=document.getElementById('cohort-name').value.trim(),
+            desc=document.getElementById('cohort-desc').value.trim(),
+            tags=document.getElementById('cohort-tags').value.trim(),
+            program=progSel.value, type=typeSel.value,
+            entities=Array.from(entSel.selectedOptions).map(o=>o.value);
+      if(name&&program&&type&&entities.length){
+        cohorts.push({name,desc,tags,program,type,entities});
+        renderCohorts(); updateDeliverableSelects();
+        ['cohort-name','cohort-desc','cohort-tags'].forEach(id=>document.getElementById(id).value='');
+        progSel.value=''; typeSel.value=''; entSel.innerHTML='';
+      }
+    };
+    function renderCohorts(){
+      cohortList.innerHTML='';
+      cohorts.forEach((c,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${c.name}</td><td>${c.program}</td><td>${c.type}</td><td>${c.entities.join(', ')}</td><td>${c.tags}</td><td><button class="remove-btn" data-i="${i}">Delete</button></td>`;
+        cohortList.appendChild(tr);
+      });
+      cohortList.querySelectorAll('.remove-btn').forEach(btn=>{
+        btn.onclick=()=>{
+          cohorts.splice(btn.dataset.i,1); renderCohorts(); updateDeliverableSelects();
+        };
+      });
+    }
+
+    // Submission Bundles
+    const sbGrid=document.getElementById('submission-bundle-grid'),
+          sbGridSearch=document.getElementById('submission-bundle-grid-search');
+    function renderSubmissionBundles(){
+      sbGrid.innerHTML='';
+      const q=sbGridSearch.value.toLowerCase();
+      submissionBundles.filter(b=>b.name.toLowerCase().includes(q)||b.desc.toLowerCase().includes(q)).forEach((b,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${b.name}</td><td>${b.desc}</td><td>${b.forms.join(', ')}</td><td><button class="remove-btn" data-i="${i}">Delete</button><button class="update-btn" data-i="${i}">Update</button></td>`;
+        sbGrid.appendChild(tr);
+      });
+      sbGrid.querySelectorAll('.remove-btn').forEach(btn=>{
+        btn.onclick=()=>{
+          submissionBundles.splice(btn.dataset.i,1); renderSubmissionBundles(); updateDeliverableSelects();
+        };
+      });
+      sbGrid.querySelectorAll('.update-btn').forEach(btn=>{
+        btn.onclick=()=>{
+          const idx=btn.dataset.i, bundle=submissionBundles[idx];
+          wiz={step:1,mode:'edit',type:'submission',editIndex:idx,name:bundle.name,desc:bundle.desc,selected:[...bundle.forms],config:JSON.parse(JSON.stringify(bundle.config))};
+          overlay.style.display='flex';
+          document.getElementById('wiz-name').value=wiz.name;
+          document.getElementById('wiz-desc').value=wiz.desc;
+          showStep();
+        };
+      });
+    }
+    sbGridSearch.oninput=renderSubmissionBundles;
+
+    // Review Bundles
+    const rbGrid=document.getElementById('review-bundle-grid'),
+          rbGridSearch=document.getElementById('review-bundle-grid-search');
+    function renderReviewBundles(){
+      rbGrid.innerHTML='';
+      const q=rbGridSearch.value.toLowerCase();
+      reviewBundles.filter(b=>b.name.toLowerCase().includes(q)||b.desc.toLowerCase().includes(q)).forEach((b,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${b.name}</td><td>${b.desc}</td><td>${b.forms.join(', ')}</td><td><button class="remove-btn" data-i="${i}">Delete</button><button class="update-btn" data-i="${i}">Update</button></td>`;
+        rbGrid.appendChild(tr);
+      });
+      rbGrid.querySelectorAll('.remove-btn').forEach(btn=>{
+        btn.onclick=()=>{
+          reviewBundles.splice(btn.dataset.i,1); renderReviewBundles();
+        };
+      });
+      rbGrid.querySelectorAll('.update-btn').forEach(btn=>{
+        const idx=btn.dataset.i, bundle=reviewBundles[idx];
+        btn.onclick=()=>{
+          wiz={step:1,mode:'edit',type:'review',editIndex:idx,name:bundle.name,desc:bundle.desc,selected:[...bundle.forms],config:JSON.parse(JSON.stringify(bundle.config))};
+          overlay.style.display='flex';
+          document.getElementById('wiz-name').value=wiz.name;
+          document.getElementById('wiz-desc').value=wiz.desc;
+          showStep();
+        };
+      });
+    }
+    rbGridSearch.oninput=renderReviewBundles;
+
+    // Submission Library
+    const subGrid=document.getElementById('submission-grid'),
+          subSearch=document.getElementById('submission-grid-search');
+    function renderSubmission(){
+      subGrid.innerHTML='';
+      const q=subSearch.value.toLowerCase();
+      submissionLibrary.filter(f=>f.name.toLowerCase().includes(q)||f.desc.toLowerCase().includes(q)).forEach(f=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${f.name}</td><td>${f.desc}</td>`;
+        subGrid.appendChild(tr);
+      });
+    }
+    subSearch.oninput=renderSubmission; renderSubmission();
+
+    // Review Library
+    const revGrid=document.getElementById('review-grid'),
+          revSearch=document.getElementById('review-grid-search');
+    function renderReview(){
+      revGrid.innerHTML='';
+      const q=revSearch.value.toLowerCase();
+      reviewLibrary.filter(r=>r.name.toLowerCase().includes(q)||r.desc.toLowerCase().includes(q)).forEach(r=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${r.name}</td><td>${r.desc}</td>`;
+        revGrid.appendChild(tr);
+      });
+    }
+    revSearch.oninput=renderReview; renderReview();
+
+    // Deliverables
+    const delGrid=document.getElementById('deliverable-grid'),
+          delSearch=document.getElementById('deliverable-grid-search'),
+          delCohort=document.getElementById('deliverable-cohort'),
+          delBundle=document.getElementById('deliverable-bundle');
+    function updateDeliverableSelects(){
+      delCohort.innerHTML='<option value="">-- select cohort --</option>';
+      cohorts.forEach(c=>delCohort.appendChild(new Option(c.name,c.name)));
+      delBundle.innerHTML='<option value="">-- select bundle --</option>';
+      submissionBundles.forEach(b=>delBundle.appendChild(new Option(b.name,b.name)));
+    }
+    updateDeliverableSelects();
+    document.getElementById('create-deliverable').onclick=()=>{
+      const name=document.getElementById('deliverable-name').value.trim(),
+            cohort=delCohort.value, bundle=delBundle.value;
+      if(name&&cohort&&bundle){
+        deliverables.push({name,cohort,bundle});
+        renderDeliverables();
+        document.getElementById('deliverable-name').value=''; delCohort.value=''; delBundle.value='';
+      }
+    };
+    function renderDeliverables(){
+      delGrid.innerHTML='';
+      const q=delSearch.value.toLowerCase();
+      deliverables.filter(d=>d.name.toLowerCase().includes(q)||d.cohort.toLowerCase().includes(q)||d.bundle.toLowerCase().includes(q))
+      .forEach((d,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${d.name}</td><td>${d.cohort}</td><td>${d.bundle}</td><td><button class="remove-btn" data-i="${i}">Delete</button></td>`;
+        delGrid.appendChild(tr);
+      });
+      delGrid.querySelectorAll('.remove-btn').forEach(btn=>{
+        btn.onclick=()=>{
+          deliverables.splice(btn.dataset.i,1); renderDeliverables();
+        };
+      });
+    }
+    delSearch.oninput=renderDeliverables; renderDeliverables();
+
+    // Bundle Wizard
+    const overlay=document.getElementById('wizard-overlay');
+    const steps=[1,2,3,4];
+    let wiz={step:1};
+    const formConfigTemplates = {
+      'Form 1A': [{key:'editableSections',label:'Editable Sections',type:'number',default:1}],
+      'Form 5A': [{key:'allowSelfUpdate',label:'Allow Self Update',type:'checkbox',default:true},{key:'maxSites',label:'Max Sites',type:'number',default:5}],
+      'Form 5B': [{key:'gridColumns',label:'Grid Columns',type:'text',default:'service,type'}],
+      'Form 5C': [{key:'limitActivities',label:'Limit Activities',type:'number',default:10}],
+      'Assurances': [{key:'includeSignature',label:'Include Signature Section',type:'checkbox',default:false}],
+      'Consolidated Budget': [{key:'breakdownByYear',label:'Breakdown By Year',type:'checkbox',default:true}],
+      'Site Map': [{key:'showLegend',label:'Show Legend',type:'checkbox',default:true}],
+      'Scope PO Review': [{key:'POTimeout',label:'PO Timeout (days)',type:'number',default:7}],
+      'Scope PQC Review': [{key:'requireComments',label:'Require Comments',type:'checkbox',default:true}],
+      'TAR Checklist': [{key:'showDetails',label:'Show Details',type:'checkbox',default:false}],
+      'GAR Recommendation': [{key:'autoApproveSmall',label:'Auto Approve Small',type:'checkbox',default:false}],
+      'PQC Final Review': [{key:'finalSignOff',label:'Final Sign Off',type:'checkbox',default:true}],
+      'Compliance Check': [{key:'systemCheck',label:'Enable System Check',type:'checkbox',default:true}]
+    };
+    function showStep(){
+      steps.forEach(s=>document.getElementById('step-'+s).classList.remove('active'));
+      document.getElementById('step-'+wiz.step).classList.add('active');
+      document.getElementById('wiz-prev').style.display=wiz.step>1?'inline-block':'none';
+      document.getElementById('wiz-next').style.display=wiz.step<4?'inline-block':'none';
+      document.getElementById('wiz-finish').style.display=wiz.step===4?'inline-block':'none';
+      if(wiz.step===2) populateWizardList();
+      if(wiz.step===3) populateWizardConfig();
+      if(wiz.step===4) populateWizardReview();
+    }
+    document.getElementById('open-sb-wizard').onclick=()=>{
+      wiz={step:1,mode:'create',type:'submission',name:'',desc:'',selected:[],config:{}};
+      overlay.style.display='flex'; document.getElementById('wiz-name').value=''; document.getElementById('wiz-desc').value='';
+      showStep();
+    };
+    document.getElementById('open-rb-wizard').onclick=()=>{
+      wiz={step:1,mode:'create',type:'review',name:'',desc:'',selected:[],config:{}};
+      overlay.style.display='flex'; document.getElementById('wiz-name').value=''; document.getElementById('wiz-desc').value='';
+      showStep();
+    };
+    document.getElementById('wiz-cancel').onclick=()=>{ overlay.style.display='none'; };
+    document.getElementById('wiz-next').onclick=()=>{
+      if(wiz.step===1){
+        wiz.name=document.getElementById('wiz-name').value.trim();
+        wiz.desc=document.getElementById('wiz-desc').value.trim();
+        if(!wiz.name){ alert('Enter a name'); return; }
+      }
+      if(wiz.step<4) wiz.step++; showStep();
+    };
+    document.getElementById('wiz-prev').onclick=()=>{
+      if(wiz.step>1) wiz.step--; showStep();
+    };
+    function populateWizardList(){
+      const list=document.getElementById('wiz-table'), search=document.getElementById('wiz-search');
+      list.innerHTML=''; search.value=''; search.oninput=filterList;
+      filterList();
+      function filterList(){
+        list.innerHTML='';
+        const q=search.value.toLowerCase();
+        const lib = wiz.type==='submission'?submissionLibrary:reviewLibrary;
+        lib.filter(f=>f.name.toLowerCase().includes(q)||f.desc.toLowerCase().includes(q))
+        .forEach(f=>{
+          const tr=document.createElement('tr');
+          const checked = wiz.selected.includes(f.name)?'checked':'';
+          tr.innerHTML=`<td><input type="checkbox" value="${f.name}" ${checked}></td><td>${f.name}</td><td>${f.desc}</td>`;
+          list.appendChild(tr);
+        });
+      }
+    }
+    function populateWizardConfig(){
+      const sel=document.getElementById('wiz-form-select'), cfg=document.getElementById('wiz-form-config');
+      sel.innerHTML='';
+      wiz.selected.forEach(name=>sel.appendChild(new Option(name,name)));
+      sel.onchange=renderConfig;
+      function renderConfig(){
+        const name=sel.value; cfg.innerHTML='';
+        if(!wiz.config[name]) wiz.config[name]={};
+        const templates = formConfigTemplates[name]||[];
+        templates.forEach(opt=>{
+          const id='cfg_'+opt.key;
+          const wrap=document.createElement('div');
+          const labelEl=document.createElement('label'); labelEl.textContent=opt.label;
+          let inp;
+          if(opt.type==='checkbox'){
+            inp=document.createElement('input'); inp.type='checkbox'; inp.checked = (wiz.config[name][opt.key]!==undefined?wiz.config[name][opt.key]:opt.default);
+          } else {
+            inp=document.createElement('input'); inp.type=opt.type; inp.value = (wiz.config[name][opt.key]!==undefined?wiz.config[name][opt.key]:opt.default);
+          }
+          inp.id=id; inp.onchange=()=>{ wiz.config[name][opt.key] = opt.type==='checkbox'?inp.checked:inp.value; };
+          wrap.appendChild(labelEl); wrap.appendChild(inp);
+          cfg.appendChild(wrap);
+        });
+      }
+      renderConfig();
+    }
+    function populateWizardReview(){
+      const rt=document.getElementById('wiz-review-table');
+      rt.innerHTML='';
+      wiz.selected.forEach(name=>{
+        const cfg=wiz.config[name]||{};
+        const summary=Object.entries(cfg).map(([k,v])=>`${k}: ${v}`).join('; ');
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${name}</td><td>${summary}</td><td><button class="update-btn" data-name="${name}">Configure</button><button class="remove-btn" data-name="${name}">Remove</button></td>`;
+        rt.appendChild(tr);
+      });
+      rt.querySelectorAll('.remove-btn').forEach(btn=>{
+        btn.onclick=()=>{
+          wiz.selected=wiz.selected.filter(n=>n!==btn.dataset.name);
+          popu
+
+lateWizardReview();
+        };
+      });
+      rt.querySelectorAll('.update-btn').forEach(btn=>{
+        btn.onclick=()=>{
+          const name=btn.dataset.name;
+          wiz.step=3;
+          document.getElementById('wiz-form-select').value=name;
+          populateWizardConfig();
+          showStep();
+        };
+      });
+    }
+    document.getElementById('wiz-finish').onclick=()=>{
+      if(wiz.mode==='create'){
+        const bundle={name:wiz.name,desc:wiz.desc,forms:wiz.selected,config:wiz.config};
+        if(wiz.type==='submission') submissionBundles.push(bundle); else reviewBundles.push(bundle);
+      } else {
+        const bundle={name:wiz.name,desc:wiz.desc,forms:wiz.selected,config:wiz.config};
+        if(wiz.type==='submission') submissionBundles[wiz.editIndex]=bundle; else reviewBundles[wiz.editIndex]=bundle;
+      }
+      renderSubmissionBundles(); renderReviewBundles(); updateDeliverableSelects();
+      overlay.style.display='none';
+    };
+
+    // Cohort Wizard
+    const coOverlay=document.getElementById('cohort-wizard-overlay');
+    let cwiz={step:1};
+    const cwSteps=[1,2,3,4];
+    function showCohortStep(){
+      cwSteps.forEach(s=>document.getElementById('cw-step-'+s).classList.remove('active'));
+      document.getElementById('cw-step-'+cwiz.step).classList.add('active');
+      document.getElementById('cw-prev').style.display=cwiz.step>1?'inline-block':'none';
+      document.getElementById('cw-next').style.display=cwiz.step<4?'inline-block':'none';
+      document.getElementById('cw-finish').style.display=cwiz.step===4?'inline-block':'none';
+      if(cwiz.step===3){
+        const entSel=document.getElementById('cw-entities');
+        entSel.innerHTML='';
+        if(dataStore[cwiz.program]&&dataStore[cwiz.program][cwiz.type]){
+          dataStore[cwiz.program][cwiz.type].forEach(item=>{
+            const o=document.createElement('option'); o.value=item; o.textContent=item; entSel.appendChild(o);
+          });
+        }
+      }
+      if(cwiz.step===4){
+        document.getElementById('cw-review-name').textContent=cwiz.name;
+        document.getElementById('cw-review-desc').textContent=cwiz.desc;
+        document.getElementById('cw-review-tags').textContent=cwiz.tags;
+        document.getElementById('cw-review-program').textContent=cwiz.program;
+        document.getElementById('cw-review-type').textContent=cwiz.type;
+        document.getElementById('cw-review-entities').textContent=(cwiz.entities||[]).join(', ');
+      }
+    }
+    document.getElementById('open-cohort-wizard').onclick=()=>{
+      cwiz={step:1,name:'',desc:'',tags:'',program:'',type:'',entities:[]};
+      coOverlay.style.display='flex';
+      ['cw-name','cw-desc','cw-tags'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('cw-program').value=''; document.getElementById('cw-type').value='';
+      showCohortStep();
+    };
+    document.getElementById('cw-cancel').onclick=()=>{ coOverlay.style.display='none'; };
+    document.getElementById('cw-next').onclick=()=>{
+      if(cwiz.step===1){
+        cwiz.name=document.getElementById('cw-name').value.trim();
+        cwiz.desc=document.getElementById('cw-desc').value.trim();
+        cwiz.tags=document.getElementById('cw-tags').value.trim();
+        if(!cwiz.name){alert('Enter cohort name');return;}
+      }
+      if(cwiz.step===2){
+        cwiz.program=document.getElementById('cw-program').value;
+        cwiz.type=document.getElementById('cw-type').value;
+        if(!cwiz.program||!cwiz.type){alert('Select program and type');return;}
+      }
+      if(cwiz.step<4) cwiz.step++; showCohortStep();
+    };
+    document.getElementById('cw-prev').onclick=()=>{
+      if(cwiz.step>1) cwiz.step--; showCohortStep();
+    };
+    document.getElementById('cw-finish').onclick=()=>{
+      const sel=Array.from(document.getElementById('cw-entities').selectedOptions).map(o=>o.value);
+      if(!sel.length){alert('Select entities');return;}
+      cwiz.entities=sel;
+      cohorts.push({name:cwiz.name,desc:cwiz.desc,tags:cwiz.tags,program:cwiz.program,type:cwiz.type,entities:cwiz.entities});
+      renderCohorts(); updateDeliverableSelects();
+      coOverlay.style.display='none';
+    };
+
+    // Library Wizard
+    const lwOverlay=document.getElementById('lib-wizard-overlay');
+    let lwiz={step:1,mode:''};
+    function showLibStep(){
+      [1,2].forEach(s=>document.getElementById('lw-step-'+s).classList.remove('active'));
+      document.getElementById('lw-step-'+lwiz.step).classList.add('active');
+      document.getElementById('lw-prev').style.display=lwiz.step>1?'inline-block':'none';
+      document.getElementById('lw-next').style.display=lwiz.step<2?'inline-block':'none';
+      document.getElementById('lw-finish').style.display=lwiz.step===2?'inline-block':'none';
+      if(lwiz.step===2){
+        document.getElementById('lw-review-name').textContent=lwiz.name;
+        document.getElementById('lw-review-desc').textContent=lwiz.desc;
+      }
+    }
+    document.getElementById('open-lib-wizard').onclick=()=>{
+      lwiz={step:1,mode:'submissionLibrary',name:'',desc:''};
+      ['lw-name','lw-desc'].forEach(id=>document.getElementById(id).value='');
+      lwOverlay.style.display='flex'; showLibStep();
+    };
+    document.getElementById('open-rlib-wizard').onclick=()=>{
+      lwiz={step:1,mode:'reviewLibrary',name:'',desc:''};
+      ['lw-name','lw-desc'].forEach(id=>document.getElementById(id).value='');
+      lwOverlay.style.display='flex'; showLibStep();
+    };
+    document.getElementById('lw-cancel').onclick=()=>{ lwOverlay.style.display='none'; };
+    document.getElementById('lw-next').onclick=()=>{
+      lwiz.name=document.getElementById('lw-name').value.trim();
+      lwiz.desc=document.getElementById('lw-desc').value.trim();
+      if(!lwiz.name){alert('Enter name');return;}
+      lwiz.step++; showLibStep();
+    };
+    document.getElementById('lw-prev').onclick=()=>{
+      if(lwiz.step>1) lwiz.step--; showLibStep();
+    };
+    document.getElementById('lw-finish').onclick=()=>{
+      if(lwiz.mode==='submissionLibrary'){
+        submissionLibrary.push({name:lwiz.name, desc:lwiz.desc});
+        renderSubmission();
+      } else {
+        reviewLibrary.push({name:lwiz.name, desc:lwiz.desc});
+        renderReview();
+      }
+      lwOverlay.style.display='none';
+    };
+
+    // Initial renders
+    renderCohorts(); renderSubmissionBundles(); renderReviewBundles();
+  </script>
+</body>
+</html>

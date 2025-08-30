@@ -1,0 +1,849 @@
+# file: index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuration Hub</title>
+  <style>
+    :root {
+      --brand-blue: #1589ee;
+      --dark-blue: #16325c;
+      --light-gray: #f4f6f9;
+      --border-gray: #d8dde6;
+      --text-dark: #1a1a1a;
+      --text-light: #63737a;
+      --font: Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: var(--font); background: var(--light-gray); color: var(--text-dark); }
+    .app-container { display: flex; flex-direction: column; height: 100%; }
+    header { background: var(--dark-blue); color: white; padding: 0 1em; display: flex; align-items: center; height: 50px; }
+    header h1 { font-size: 1.2em; }
+    .body { flex: 1; display: flex; overflow: hidden; }
+    nav { width: 220px; background: var(--brand-blue); display: flex; flex-direction: column; }
+    nav a { color: white; text-decoration: none; padding: 1em; }
+    nav a.active, nav a:hover { background: var(--dark-blue); }
+    .main { flex: 1; overflow-y: auto; padding: 1em; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .card { background: white; border: 1px solid var(--border-gray); border-radius: 4px; padding: 1em; margin-bottom: 1em; }
+    h2 { margin-bottom: 0.5em; color: var(--dark-blue); }
+    label { display: block; margin: 0.5em 0 0.25em; font-weight: bold; }
+    input[type="text"], textarea, select, input[type="number"], input[type="date"] { width: 100%; padding: 0.5em; border: 1px solid var(--border-gray); border-radius: 3px; }
+    textarea { resize: vertical; height: 80px; }
+    button { margin-top: 0.5em; background: var(--brand-blue); color: white; border: none; padding: 0.5em 1em; border-radius: 3px; cursor: pointer; }
+    button.delete { background: #d9534f; margin-left: 0.5em; }
+    button.update { background: #ffc107; color: #1a1a1a; margin-left: 0.5em;}
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5em; }
+    th, td { border: 1px solid var(--border-gray); padding: 0.5em; text-align: left; }
+    th { background: var(--light-gray); }
+    .search-input { width: calc(100% - 2px); margin-bottom: 0.5em; }
+    .wizard-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; }
+    .wizard-content { background: white; padding: 1em; border-radius: 5px; width: 600px; max-height: 90%; overflow-y: auto; }
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+    .wizard-buttons { text-align: right; margin-top: 1em; }
+    .wizard-buttons button { margin-left: 0.5em; }
+    .order-list { list-style: none; padding: 0; }
+    .order-list li { margin: 0.25em 0; display: flex; justify-content: space-between; align-items: center; background: var(--light-gray); padding: 0.5em; border-radius: 3px; }
+    .order-btn { background: transparent; border: none; cursor: pointer; color: var(--brand-blue); margin-left: 0.5em; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header><h1>Configuration Hub</h1></header>
+    <div class="body">
+      <nav>
+        <a href="#" data-target="submission-library" class="active">Manage Submission Form Library</a>
+        <a href="#" data-target="review-library">Manage Review Form Library</a>
+        <a href="#" data-target="cohorts">Manage Cohorts</a>
+        <a href="#" data-target="bundles">Manage Bundles</a>
+        <a href="#" data-target="deliverables">Manage Deliverables</a>
+      </nav>
+      <div class="main">
+        <!-- Submission Form Library -->
+        <section id="submission-library" class="section active">
+          <h2>Manage Submission Form Library</h2>
+          <button id="open-lib-wizard">Register Submission Form</button>
+          <div class="card">
+            <label for="submission-grid-search">Search Forms</label>
+            <input type="text" id="submission-grid-search" class="search-input" placeholder="Search...">
+            <table>
+              <thead><tr><th><input type="checkbox" id="sub-select-all"></th><th>Name</th><th>Description</th><th>Actions</th></tr></thead>
+              <tbody id="submission-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <!-- Review Form Library -->
+        <section id="review-library" class="section">
+          <h2>Manage Review Form Library</h2>
+          <button id="open-rlib-wizard">Register Review Form</button>
+          <div class="card">
+            <label for="review-grid-search">Search Forms</label>
+            <input type="text" id="review-grid-search" class="search-input" placeholder="Search...">
+            <table>
+              <thead><tr><th><input type="checkbox" id="rev-select-all"></th><th>Name</th><th>Description</th><th>Actions</th></tr></thead>
+              <tbody id="review-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <!-- Cohorts -->
+        <section id="cohorts" class="section">
+          <h2>Manage Cohorts</h2>
+          <button id="open-cohort-wizard">New Cohort</button>
+          <div class="card">
+            <table>
+              <thead><tr><th><input type="checkbox" id="cohort-select-all"></th><th>Name</th><th>Program</th><th>Type</th><th>Entities</th><th>Tags</th><th>Actions</th></tr></thead>
+              <tbody id="cohort-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <!-- Bundles -->
+        <section id="bundles" class="section">
+          <h2>Manage Bundles</h2>
+          <button id="open-bundle-wizard">New Bundle</button>
+          <div class="card">
+            <label for="bundle-grid-search">Search Bundles</label>
+            <input type="text" id="bundle-grid-search" class="search-input" placeholder="Search bundles...">
+            <table>
+              <thead><tr><th><input type="checkbox" id="bundle-select-all"></th><th>Name</th><th>Program</th><th>Tags</th><th>Submission Forms</th><th>Review Forms</th><th>Actions</th></tr></thead>
+              <tbody id="bundle-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <!-- Deliverables -->
+        <section id="deliverables" class="section">
+          <h2>Manage Deliverables</h2>
+          <button id="open-deliverable-wizard">New Deliverable</button>
+          <div class="card">
+            <label for="deliverable-grid-search">Search Deliverables</label>
+            <input type="text" id="deliverable-grid-search" class="search-input" placeholder="Search...">
+            <table>
+              <thead><tr><th><input type="checkbox" id="del-select-all"></th><th>Name</th><th>Cohort</th><th>Bundle</th><th>Schedule</th><th>Actions</th></tr></thead>
+              <tbody id="deliverable-grid"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wizards -->
+  <div id="lib-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <div id="lw-step-1" class="wizard-step active">
+        <h3>Step 1: Form Metadata</h3>
+        <label for="lw-name">Form Name</label>
+        <input type="text" id="lw-name">
+        <label for="lw-endpoint">Endpoint URL</label>
+        <input type="text" id="lw-endpoint">
+        <label for="lw-auth">Auth Method</label>
+        <input type="text" id="lw-auth">
+        <label for="lw-schema">Schema Path</label>
+        <input type="text" id="lw-schema">
+      </div>
+      <div id="lw-step-2" class="wizard-step">
+        <h3>Step 2: Validate & Confirm</h3>
+        <button id="lw-validate">Run Validation Tests</button>
+        <p id="lw-validate-status"></p>
+        <p><strong>Name:</strong> <span id="lw-review-name"></span></p>
+        <p><strong>Endpoint:</strong> <span id="lw-review-endpoint"></span></p>
+        <p><strong>Auth:</strong> <span id="lw-review-auth"></span></p>
+        <p><strong>Schema:</strong> <span id="lw-review-schema"></span></p>
+      </div>
+      <div class="wizard-buttons">
+        <button id="lw-prev">Back</button>
+        <button id="lw-next">Next</button>
+        <button id="lw-finish">Finish</button>
+        <button id="lw-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="rlib-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <div id="rlw-step-1" class="wizard-step active">
+        <h3>Step 1: Form Metadata</h3>
+        <label for="rlw-name">Form Name</label>
+        <input type="text" id="rlw-name">
+        <label for="rlw-endpoint">Endpoint URL</label>
+        <input type="text" id="rlw-endpoint">
+        <label for="rlw-auth">Auth Method</label>
+        <input type="text" id="rlw-auth">
+        <label for="rlw-schema">Schema Path</label>
+        <input type="text" id="rlw-schema">
+      </div>
+      <div id="rlw-step-2" class="wizard-step">
+        <h3>Step 2: Validate & Confirm</h3>
+        <button id="rlw-validate">Run Validation Tests</button>
+        <p id="rlw-validate-status"></p>
+        <p><strong>Name:</strong> <span id="rlw-review-name"></span></p>
+        <p><strong>Endpoint:</strong> <span id="rlw-review-endpoint"></span></p>
+        <p><strong>Auth:</strong> <span id="rlw-review-auth"></span></p>
+        <p><strong>Schema:</strong> <span id="rlw-review-schema"></span></p>
+      </div>
+      <div class="wizard-buttons">
+        <button id="rlw-prev">Back</button>
+        <button id="rlw-next">Next</button>
+        <button id="rlw-finish">Finish</button>
+        <button id="rlw-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cohort-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <div id="cw-step-1" class="wizard-step active">
+        <h3>Step 1: Basic Info</h3>
+        <label for="cw-name">Name</label>
+        <input type="text" id="cw-name">
+        <label for="cw-desc">Description</label>
+        <textarea id="cw-desc"></textarea>
+        <label for="cw-tags">Tags</label>
+        <input type="text" id="cw-tags">
+      </div>
+      <div id="cw-step-2" class="wizard-step">
+        <h3>Step 2: Select Program & Type</h3>
+        <label for="cw-program">Program</label>
+        <select id="cw-program">
+          <option value="">-- select --</option>
+          <option value="330">FQHC 330</option>
+          <option value="LGP">Loan Guarantee Program</option>
+          <option value="LAL">Look-Alike Program</option>
+        </select>
+        <label for="cw-type">Entity Type</label>
+        <select id="cw-type">
+          <option value="">-- select --</option>
+          <option value="applications">Applications</option>
+          <option value="awards">Awards</option>
+          <option value="organizations">Organizations</option>
+        </select>
+      </div>
+      <div id="cw-step-3" class="wizard-step">
+        <h3>Step 3: Pick Entities</h3>
+        <select id="cw-entities" multiple size="6" style="width:100%"></select>
+      </div>
+      <div id="cw-step-4" class="wizard-step">
+        <h3>Step 4: Review & Save</h3>
+        <p><strong>Name:</strong> <span id="cw-review-name"></span></p>
+        <p><strong>Description:</strong> <span id="cw-review-desc"></span></p>
+        <p><strong>Tags:</strong> <span id="cw-review-tags"></span></p>
+        <p><strong>Program:</strong> <span id="cw-review-program"></span></p>
+        <p><strong>Type:</strong> <span id="cw-review-type"></span></p>
+        <p><strong>Entities:</strong> <span id="cw-review-entities"></span></p>
+      </div>
+      <div class="wizard-buttons">
+        <button id="cw-prev">Back</button>
+        <button id="cw-next">Next</button>
+        <button id="cw-finish">Finish</button>
+        <button id="cw-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bundle-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <div id="bw-step-1" class="wizard-step active">
+        <h3>Step 1: Basics</h3>
+        <label for="bw-name">Bundle Name</label>
+        <input type="text" id="bw-name">
+        <label for="bw-desc">Description</label>
+        <textarea id="bw-desc"></textarea>
+        <label for="bw-program">Program</label>
+        <select id="bw-program">
+          <option value="330">FQHC 330</option>
+          <option value="LGP">Loan Guarantee Program</option>
+          <option value="LAL">Look-Alike Program</option>
+        </select>
+        <label for="bw-tags">Tags</label>
+        <input type="text" id="bw-tags" placeholder="comma-separated">
+      </div>
+      <div id="bw-step-2" class="wizard-step">
+        <h3>Step 2: Submission Phase</h3>
+        <label for="bw-sub-search">Search Submission Forms</label>
+        <input type="text" id="bw-sub-search" class="search-input">
+        <table>
+          <thead><tr><th>Select</th><th>Name</th></tr></thead>
+          <tbody id="bw-sub-list"></tbody>
+        </table>
+        <h4>Order Selected</h4>
+        <ul id="bw-order-list" class="order-list"></ul>
+      </div>
+      <div id="bw-step-3" class="wizard-step">
+        <h3>Step 3: Review Phase</h3>
+        <label><input type="checkbox" id="bw-review-enabled"> Enable Review</label>
+        <div id="bw-review-section">
+          <label for="bw-rev-search">Search Review Forms</label>
+          <input type="text" id="bw-rev-search" class="search-input">
+          <table>
+            <thead><tr><th>Select</th><th>Name</th></tr></thead>
+            <tbody id="bw-rev-list"></tbody>
+          </table>
+          <h4>Configure Review Sequence</h4>
+          <ul id="bw-rev-order-list" class="order-list"></ul>
+        </div>
+      </div>
+      <div id="bw-step-4" class="wizard-step">
+        <h3>Step 4: Summary & Save</h3>
+        <p><strong>Name:</strong> <span id="bw-review-name"></span></p>
+        <p><strong>Program:</strong> <span id="bw-review-program"></span></p>
+        <p><strong>Tags:</strong> <span id="bw-review-tags"></span></p>
+        <p><strong>Submission Forms:</strong> <span id="bw-review-sub"></span></p>
+        <p><strong>Review Enabled:</strong> <span id="bw-review-enabled"></span></p>
+        <p><strong>Review Forms:</strong> <span id="bw-review-rev"></span></p>
+      </div>
+      <div class="wizard-buttons">
+        <button id="bw-prev">Back</button>
+        <button id="bw-next">Next</button>
+        <button id="bw-finish">Finish</button>
+        <button id="bw-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="deliverable-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <div id="dw-step-1" class="wizard-step active">
+        <h3>Step 1: Basic Info</h3>
+        <label for="dw-name">Deliverable Name</label>
+        <input type="text" id="dw-name">
+        <label for="dw-cohort">Select Cohort</label>
+        <select id="dw-cohort"></select>
+        <label for="dw-bundle">Select Bundle</label>
+        <select id="dw-bundle"></select>
+      </div>
+      <div id="dw-step-2" class="wizard-step">
+        <h3>Step 2: Schedule</h3>
+        <label for="dw-schedule-date">One-Time Date</label>
+        <input type="date" id="dw-schedule-date">
+        <label for="dw-schedule-rec">Or Recurrence (cron)</label>
+        <input type="text" id="dw-schedule-rec" placeholder="e.g., 0 9 * * MON">
+      </div>
+      <div id="dw-step-3" class="wizard-step">
+        <h3>Step 3: Notifications</h3>
+        <label for="dw-notify-template">Email Template</label>
+        <textarea id="dw-notify-template"></textarea>
+        <label for="dw-notify-reminders">Reminders (days before)</label>
+        <input type="text" id="dw-notify-reminders" placeholder="e.g., 7,1">
+      </div>
+      <div id="dw-step-4" class="wizard-step">
+        <h3>Step 4: Review & Save</h3>
+        <p><strong>Name:</strong> <span id="dw-review-name"></span></p>
+        <p><strong>Cohort:</strong> <span id="dw-review-cohort"></span></p>
+        <p><strong>Bundle:</strong> <span id="dw-review-bundle"></span></p>
+        <p><strong>Schedule:</strong> <span id="dw-review-schedule"></span></p>
+        <p><strong>Notifications:</strong> <span id="dw-review-notify"></span></p>
+      </div>
+      <div class="wizard-buttons">
+        <button id="dw-prev">Back</button>
+        <button id="dw-next">Next</button>
+        <button id="dw-finish">Finish</button>
+        <button id="dw-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Navigation
+    document.querySelectorAll('nav a').forEach(a=>{
+      a.onclick=e=>{
+        e.preventDefault();
+        document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        document.getElementById(a.dataset.target).classList.add('active');
+      };
+    });
+
+    // Data Stores
+    const submissionLibrary = [
+      {name:'Form 1A',desc:'General Info Worksheet'},
+      {name:'Form 5A',desc:'Site Details Form'},
+      {name:'Form 5B',desc:'Services Details Form'},
+      {name:'Form 5C',desc:'Activities Form'},
+      {name:'Assurances',desc:'Legal Assurances Document'},
+      {name:'Consolidated Budget',desc:'Budget Summary'},
+      {name:'Site Map',desc:'Site Layout Document'},
+      {name:'Emergency Prep',desc:'Emergency Preparedness Report'}
+    ];
+    const reviewLibrary = [
+      {name:'Scope PO Review',desc:'Project Officer scope validation'},
+      {name:'Scope PQC Review',desc:'Quality control review for scope'},
+      {name:'TAR Checklist',desc:'Technical/Admin Review checklist'},
+      {name:'GAR Recommendation',desc:'Grant Award Review Recommendation'},
+      {name:'PQC Final Review',desc:'Final quality control review'},
+      {name:'Compliance Check',desc:'Compliance condition verification'},
+      {name:'Environmental Review',desc:'NEPA/Historic Preservation review'}
+    ];
+    const dataStore = {
+      330:{applications:['App1','App2'],awards:['Award1'],organizations:['Org1']},
+      LGP:{applications:['LGP App1'],awards:['LGP Award1'],organizations:['LGP Org1']},
+      LAL:{applications:['LAL App1'],awards:['LAL Award1'],organizations:['LAL Org1']}
+    };
+    let cohorts = [];
+    let bundles = [];
+    let deliverables = [];
+
+    // Common render functions
+    function renderGrid(grid, data, columns){
+      grid.innerHTML = '';
+      data.forEach((item,i)=>{
+        const tr = document.createElement('tr');
+        const cells = [];
+        cells.push(`<td><input type="checkbox" data-i="${i}"></td>`);
+        columns.forEach(col=>{
+          const v = typeof col==='function'?col(item):item[col]||'';
+          cells.push(`<td>${v}</td>`);
+        });
+        cells.push(`<td>
+          <button class="update" data-i="${i}">Update</button>
+          <button class="delete" data-i="${i}">Delete</button>
+        </td>`);
+        tr.innerHTML = cells.join('');
+        grid.appendChild(tr);
+      });
+    }
+
+    // Submission Library
+    const subGrid = document.getElementById('submission-grid');
+    const subSearch = document.getElementById('submission-grid-search');
+    function renderSubmissionLibrary(){
+      const q = subSearch.value.toLowerCase();
+      const filtered = submissionLibrary.filter(f=>f.name.toLowerCase().includes(q)||f.desc.toLowerCase().includes(q));
+      renderGrid(subGrid, filtered, ['name','desc']);
+    }
+    subSearch.oninput = renderSubmissionLibrary;
+    renderSubmissionLibrary();
+
+    // Review Library
+    const revGrid = document.getElementById('review-grid');
+    const revSearch = document.getElementById('review-grid-search');
+    function renderReviewLibrary(){
+      const q = revSearch.value.toLowerCase();
+      const filtered = reviewLibrary.filter(f=>f.name.toLowerCase().includes(q)||f.desc.toLowerCase().includes(q));
+      renderGrid(revGrid, filtered, ['name','desc']);
+    }
+    revSearch.oninput = renderReviewLibrary;
+    renderReviewLibrary();
+
+    // Cohorts
+    const cohGrid = document.getElementById('cohort-grid');
+    function renderCohorts(){
+      renderGrid(cohGrid, cohorts, [c=>'', 'name', 'program','type',c=>c.entities.join(', '),'tags']);
+      cohGrid.querySelectorAll('.delete').forEach(b=>{
+        b.onclick=()=>{ cohorts.splice(b.dataset.i,1); renderCohorts(); };
+      });
+    }
+
+    // Bundles
+    const bundleGrid = document.getElementById('bundle-grid');
+    const bundleSearch = document.getElementById('bundle-grid-search');
+    function renderBundles(){
+      const q = bundleSearch.value.toLowerCase();
+      const filtered = bundles.filter(b=>b.name.toLowerCase().includes(q)||b.tags.toLowerCase().includes(q));
+      renderGrid(bundleGrid, filtered, ['name','program','tags',b=>b.submissionForms.join(', '),b=>b.reviewEnabled?b.reviewForms.join(', '):'']);
+      bundleGrid.querySelectorAll('.delete').forEach(b=>{
+        b.onclick=()=>{ bundles.splice(b.dataset.i,1); renderBundles(); };
+      });
+      bundleGrid.querySelectorAll('.update').forEach(b=>{
+        b.onclick=()=>{ openBundleWizard('edit', +b.dataset.i); };
+      });
+    }
+    bundleSearch.oninput = renderBundles;
+    renderBundles();
+
+    // Deliverables
+    const delGrid = document.getElementById('deliverable-grid');
+    const delSearch = document.getElementById('deliverable-grid-search');
+    function renderDeliverables(){
+      const q = delSearch.value.toLowerCase();
+      const filtered = deliverables.filter(d=>d.name.toLowerCase().includes(q)||d.cohort.toLowerCase().includes(q));
+      renderGrid(delGrid, filtered, ['name','cohort','bundle','schedule']);
+      delGrid.querySelectorAll('.delete').forEach(b=>{
+        b.onclick=()=>{ deliverables.splice(b.dataset.i,1); renderDeliverables(); };
+      });
+      delGrid.querySelectorAll('.update').forEach(b=>{
+        b.onclick=()=>{ openDeliverableWizard('edit', +b.dataset.i); };
+      });
+    }
+    delSearch.oninput = renderDeliverables;
+    renderDeliverables();
+
+    // Wizards logic helpers
+    function setupSelectAll(masterId, grid){
+      const master = document.getElementById(masterId);
+      master.onclick = ()=>{
+        const checked = master.checked;
+        grid.querySelectorAll('tbody input[type="checkbox"]').forEach(cb=>cb.checked=checked);
+      };
+    }
+    setupSelectAll('sub-select-all', document.getElementById('submission-library'));
+    setupSelectAll('rev-select-all', document.getElementById('review-library'));
+    setupSelectAll('cohort-select-all', document.getElementById('cohorts'));
+    setupSelectAll('bundle-select-all', document.getElementById('bundles'));
+    setupSelectAll('del-select-all', document.getElementById('deliverables'));
+
+    // Submission Library Wizard
+    const lwOverlay = document.getElementById('lib-wizard-overlay');
+    let lwState = {step:1, mode:'', name:'', endpoint:'', auth:'', schema:''};
+    function showLibStep(){
+      [1,2].forEach(s=>document.getElementById('lw-step-'+s).classList.remove('active'));
+      document.getElementById('lw-step-'+lwState.step).classList.add('active');
+      document.getElementById('lw-prev').style.display=lwState.step>1?'inline-block':'none';
+      document.getElementById('lw-next').style.display=lwState.step<2?'inline-block':'none';
+      document.getElementById('lw-finish').style.display=lwState.step===2?'inline-block':'none';
+      if(lwState.step===2){
+        document.getElementById('lw-review-name').textContent=lwState.name;
+        document.getElementById('lw-review-endpoint').textContent=lwState.endpoint;
+        document.getElementById('lw-review-auth').textContent=lwState.auth;
+        document.getElementById('lw-review-schema').textContent=lwState.schema;
+      }
+    }
+    document.getElementById('open-lib-wizard').onclick=()=>{
+      lwState={step:1,mode:'submission',name:'',endpoint:'',auth:'',schema:''};
+      ['lw-name','lw-endpoint','lw-auth','lw-schema'].forEach(id=>document.getElementById(id).value='');
+      lwOverlay.style.display='flex'; showLibStep();
+    };
+    document.getElementById('lw-cancel').onclick=()=>{ lwOverlay.style.display='none'; };
+    document.getElementById('lw-validate').onclick=()=>{
+      document.getElementById('lw-validate-status').textContent='Running tests...';
+      setTimeout(()=>document.getElementById('lw-validate-status').textContent='Validation successful',500);
+    };
+    document.getElementById('lw-next').onclick=()=>{
+      lwState.name=document.getElementById('lw-name').value.trim();
+      lwState.endpoint=document.getElementById('lw-endpoint').value.trim();
+      lwState.auth=document.getElementById('lw-auth').value.trim();
+      lwState.schema=document.getElementById('lw-schema').value.trim();
+      if(!lwState.name||!lwState.endpoint){ alert('Name and endpoint required'); return; }
+      lwState.step++; showLibStep();
+    };
+    document.getElementById('lw-prev').onclick=()=>{
+      if(lwState.step>1) lwState.step--; showLibStep();
+    };
+    document.getElementById('lw-finish').onclick=()=>{
+      submissionLibrary.push({name:lwState.name, desc:'', endpoint:lwState.endpoint, auth:lwState.auth, schema:lwState.schema});
+      renderSubmissionLibrary();
+      lwOverlay.style.display='none';
+    };
+
+    // Review Library Wizard
+    const rlOverlay = document.getElementById('rlib-wizard-overlay');
+    let rlState = {step:1,mode:'',name:'',endpoint:'',auth:'',schema:''};
+    function showRLibStep(){
+      [1,2].forEach(s=>document.getElementById('rlw-step-'+s).classList.remove('active'));
+      document.getElementById('rlw-step-'+rlState.step).classList.add('active');
+      document.getElementById('rlw-prev').style.display=rlState.step>1?'inline-block':'none';
+      document.getElementById('rlw-next').style.display=rlState.step<2?'inline-block':'none';
+      document.getElementById('rlw-finish').style.display=rlState.step===2?'inline-block':'none';
+      if(rlState.step===2){
+        document.getElementById('rlw-review-name').textContent=rlState.name;
+        document.getElementById('rlw-review-endpoint').textContent=rlState.endpoint;
+        document.getElementById('rlw-review-auth').textContent=rlState.auth;
+        document.getElementById('rlw-review-schema').textContent=rlState.schema;
+      }
+    }
+    document.getElementById('open-rlib-wizard').onclick=()=>{
+      rlState={step:1,mode:'review',name:'',endpoint:'',auth:'',schema:''};
+      ['rlw-name','rlw-endpoint','rlw-auth','rlw-schema'].forEach(id=>document.getElementById(id).value='');
+      rlOverlay.style.display='flex'; showRLibStep();
+    };
+    document.getElementById('rlw-cancel').onclick=()=>{ rlOverlay.style.display='none'; };
+    document.getElementById('rlw-validate').onclick=()=>{
+      document.getElementById('rlw-validate-status').textContent='Running tests...';
+      setTimeout(()=>document.getElementById('rlw-validate-status').textContent='Validation successful',500);
+    };
+    document.getElementById('rlw-next').onclick=()=>{
+      rlState.name=document.getElementById('rlw-name').value.trim();
+      rlState.endpoint=document.getElementById('rlw-endpoint').value.trim();
+      rlState.auth=document.getElementById('rlw-auth').value.trim();
+      rlState.schema=document.getElementById('rlw-schema').value.trim();
+      if(!rlState.name||!rlState.endpoint){ alert('Name and endpoint required'); return; }
+      rlState.step++; showRLibStep();
+    };
+    document.getElementById('rlw-prev').onclick=()=>{
+      if(rlState.step>1) rlState.step--; showRLibStep();
+    };
+    document.getElementById('rlw-finish').onclick=()=>{
+      reviewLibrary.push({name:rlState.name, desc:'', endpoint:rlState.endpoint, auth:rlState.auth, schema:rlState.schema});
+      renderReviewLibrary();
+      rlOverlay.style.display='none';
+    };
+
+    // Cohort Wizard
+    const cwOverlay = document.getElementById('cohort-wizard-overlay');
+    let cwState = {step:1,name:'',desc:'',tags:'',program:'',type:'',entities:[]};
+    function showCohortStep(){
+      [1,2,3,4].forEach(s=>document.getElementById('cw-step-'+s).classList.remove('active'));
+      document.getElementById('cw-step-'+cwState.step).classList.add('active');
+      document.getElementById('cw-prev').style.display=cwState.step>1?'inline-block':'none';
+      document.getElementById('cw-next').style.display=cwState.step<4?'inline-block':'none';
+      document.getElementById('cw-finish').style.display=cwState.step===4?'inline-block':'none';
+      if(cwState.step===3){
+        const ent = document.getElementById('cw-entities');
+        ent.innerHTML='';
+        if(dataStore[cwState.program] && dataStore[cwState.program][cwState.type]){
+          dataStore[cwState.program][cwState.type].forEach(v=>{
+            const o = document.createElement('option'); o.value=v; o.textContent=v; ent.appendChild(o);
+          });
+        }
+      }
+      if(cwState.step===4){
+        document.getElementById('cw-review-name').textContent=cwState.name;
+        document.getElementById('cw-review-desc').textContent=cwState.desc;
+        document.getElementById('cw-review-tags').textContent=cwState.tags;
+        document.getElementById('cw-review-program').textContent=cwState.program;
+        document.getElementById('cw-review-type').textContent=cwState.type;
+        document.getElementById('cw-review-entities').textContent=cwState.entities.join(', ');
+      }
+    }
+    document.getElementById('open-cohort-wizard').onclick=()=>{
+      cwState={step:1,name:'',desc:'',tags:'',program:'',type:'',entities:[]};
+      ['cw-name','cw-desc','cw-tags'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('cw-program').value=''; document.getElementById('cw-type').value='';
+      cwOverlay.style.display='flex'; showCohortStep();
+    };
+    document.getElementById('cw-cancel').onclick=()=>{ cwOverlay.style.display='none'; };
+    document.getElementById('cw-next').onclick=()=>{
+      if(cwState.step===1){
+        cwState.name=document.getElementById('cw-name').value.trim();
+        cwState.desc=document.getElementById('cw-desc').value.trim();
+        cwState.tags=document.getElementById('cw-tags').value.trim();
+        if(!cwState.name){alert('Name required');return;}
+      }
+      if(cwState.step===2){
+        cwState.program=document.getElementById('cw-program').value;
+        cwState.type=document.getElementById('cw-type').value;
+        if(!cwState.program||!cwState.type){alert('Select program and type');return;}
+      }
+      if(cwState.step<4) cwState.step++; showCohortStep();
+    };
+    document.getElementById('cw-prev').onclick=()=>{
+      if(cwState.step>1) cwState.step--; showCohortStep();
+    };
+    document.getElementById('cw-finish').onclick=()=>{
+      const sel = Array.from(document.getElementById('cw-entities').selectedOptions).map(o=>o.value);
+      if(!sel.length){alert('Select at least one');return;}
+      cwState.entities = sel;
+      cohorts.push({...cwState});
+      renderCohorts();
+      cwOverlay.style.display='none';
+    };
+
+    // Bundle Wizard
+    const bwOverlay = document.getElementById('bundle-wizard-overlay');
+    let bwState = {step:1, mode:'', editIndex:null, name:'', desc:'', program:'330', tags:'', submissionForms:[], reviewEnabled:false, reviewForms:[]};
+    function showBundleStep(){
+      [1,2,3,4].forEach(s=>document.getElementById('bw-step-'+s).classList.remove('active'));
+      document.getElementById('bw-step-'+bwState.step).classList.add('active');
+      document.getElementById('bw-prev').style.display=bwState.step>1?'inline-block':'none';
+      document.getElementById('bw-next').style.display=bwState.step<4?'inline-block':'none';
+      document.getElementById('bw-finish').style.display=bwState.step===4?'inline-block':'none';
+      if(bwState.step===2) populateSubList();
+      if(bwState.step===3) populateRevList();
+      if(bwState.step===4) populateBundleReview();
+    }
+    document.getElementById('open-bundle-wizard').onclick=()=>{
+      bwState={step:1,mode:'create',editIndex:null,name:'',desc:'',program:'330',tags:'',submissionForms:[],reviewEnabled:false,reviewForms:[]};
+      ['bw-name','bw-desc','bw-program','bw-tags'].forEach(id=>document.getElementById(id).value=bwState[id.split('-')[1]]);
+      document.getElementById('bw-review-enabled').checked=false;
+      bwOverlay.style.display='flex'; showBundleStep();
+    };
+    function openBundleWizard(mode,i){
+      const b = bundles[i];
+      bwState={step:1,mode:'edit',editIndex:i,name:b.name,desc:b.desc,program:b.program,tags:b.tags,submissionForms:[...b.submissionForms],reviewEnabled:b.reviewEnabled,reviewForms:[...(b.reviewForms||[])]};
+      document.getElementById('bw-name').value=bwState.name;
+      document.getElementById('bw-desc').value=bwState.desc;
+      document.getElementById('bw-program').value=bwState.program;
+      document.getElementById('bw-tags').value=bwState.tags;
+      document.getElementById('bw-review-enabled').checked=bwState.reviewEnabled;
+      bwOverlay.style.display='flex'; showBundleStep();
+    }
+    document.getElementById('bw-cancel').onclick=()=>{ bwOverlay.style.display='none'; };
+    document.getElementById('bw-next').onclick=()=>{
+      if(bwState.step===1){
+        bwState.name=document.getElementById('bw-name').value.trim();
+        bwState.desc=document.getElementById('bw-desc').value.trim();
+        bwState.program=document.getElementById('bw-program').value;
+        bwState.tags=document.getElementById('bw-tags').value.trim();
+        if(!bwState.name||!bwState.program){ alert('Name and program required'); return;}
+      }
+      if(bwState.step<4) bwState.step++; showBundleStep();
+    };
+    document.getElementById('bw-prev').onclick=()=>{
+      if(bwState.step>1) bwState.step--; showBundleStep();
+    };
+    // Step 2 Submission List
+    function populateSubList(){
+      const list = document.getElementById('bw-sub-list');
+      const search = document.getElementById('bw-sub-search');
+      list.innerHTML=''; search.value='';
+      search.oninput = ()=>filter();
+      function filter(){
+        list.innerHTML='';
+        const q = search.value.toLowerCase();
+        submissionLibrary.filter(f=>f.name.toLowerCase().includes(q)).forEach(f=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML=`<td><input type="checkbox" value="${f.name}" ${bwState.submissionForms.includes(f.name)?'checked':''}></td><td>${f.name}</td>`;
+          list.appendChild(tr);
+        });
+      }
+      list.onclick=e=>{
+        if(e.target.tagName==='INPUT'){
+          const v=e.target.value;
+          if(e.target.checked) bwState.submissionForms.push(v); else bwState.submissionForms=bwState.submissionForms.filter(x=>x!==v);
+          renderOrderList();
+        }
+      };
+      filter(); renderOrderList();
+    }
+    function renderOrderList(){
+      const ol = document.getElementById('bw-order-list');
+      ol.innerHTML='';
+      bwState.submissionForms.forEach((n,i)=>{
+        const li=document.createElement('li');
+        li.textContent=n;
+        const up=document.createElement('button'); up.textContent='↑'; up.className='order-btn';
+        const dn=document.createElement('button'); dn.textContent='↓'; dn.className='order-btn';
+        up.onclick=()=>{ if(i>0){[bwState.submissionForms[i-1],bwState.submissionForms[i]]=[bwState.submissionForms[i],bwState.submissionForms[i-1]]; renderOrderList(); }};
+        dn.onclick=()=>{ if(i<bwState.submissionForms.length-1){[bwState.submissionForms[i+1],bwState.submissionForms[i]]=[bwState.submissionForms[i],bwState.submissionForms[i+1]]; renderOrderList(); }};
+        li.appendChild(up); li.appendChild(dn);
+        ol.appendChild(li);
+      });
+    }
+
+    // Step 3 Review List
+    document.getElementById('bw-review-enabled').onchange=e=>{
+      bwState.reviewEnabled=e.target.checked;
+      document.getElementById('bw-review-section').style.display=bwState.reviewEnabled?'block':'none';
+    };
+    function populateRevList(){
+      document.getElementById('bw-review-section').style.display=bwState.reviewEnabled?'block':'none';
+      const list = document.getElementById('bw-rev-list');
+      const search = document.getElementById('bw-rev-search');
+      list.innerHTML=''; search.value='';
+      search.oninput = ()=>filter();
+      function filter(){
+        list.innerHTML='';
+        const q = search.value.toLowerCase();
+        reviewLibrary.filter(f=>f.name.toLowerCase().includes(q)).forEach(f=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML=`<td><input type="checkbox" value="${f.name}" ${bwState.reviewForms.includes(f.name)?'checked':''}></td><td>${f.name}</td>`;
+          list.appendChild(tr);
+        });
+      }
+      list.onclick=e=>{
+        if(e.target.tagName==='INPUT'){
+          const v=e.target.value;
+          if(e.target.checked) bwState.reviewForms.push(v); else bwState.reviewForms=bwState.reviewForms.filter(x=>x!==v);
+          renderRevOrderList();
+        }
+      };
+      filter(); renderRevOrderList();
+    }
+    function renderRevOrderList(){
+      const ol = document.getElementById('bw-rev-order-list');
+      ol.innerHTML='';
+      bwState.reviewForms.forEach((n,i)=>{
+        const li=document.createElement('li'); li.textContent=n;
+        const up=document.createElement('button'); up.textContent='↑'; up.className='order-btn';
+        const dn=document.createElement('button'); dn.textContent='↓'; dn.className='order-btn';
+        up.onclick=()=>{ if(i>0){[bwState.reviewForms[i-1],bwState.reviewForms[i]]=[bwState.reviewForms[i],bwState.reviewForms[i-1]]; renderRevOrderList(); }};
+        dn.onclick=()=>{ if(i<bwState.reviewForms.length-1){[bwState.reviewForms[i+1],bwState.reviewForms[i]]=[bwState.reviewForms[i],bwState.reviewForms[i+1]]; renderRevOrderList(); }};
+        li.appendChild(up); li.appendChild(dn);
+        ol.appendChild(li);
+      });
+    }
+
+    function populateBundleReview(){
+      document.getElementById('bw-review-name').textContent=bwState.name;
+      document.getElementById('bw-review-program').textContent=bwState.program;
+      document.getElementById('bw-review-tags').textContent=bwState.tags;
+      document.getElementById('bw-review-sub').textContent=bwState.submissionForms.join(', ');
+      document.getElementById('bw-review-enabled').textContent=bwState.reviewEnabled?'Yes':'No';
+      document.getElementById('bw-review-rev').textContent=bwState.reviewEnabled?bwState.reviewForms.join(', '):'N/A';
+    }
+
+    document.getElementById('bw-finish').onclick=()=>{
+      const bundle = {
+        name: bwState.name, desc: bwState.desc, program: bwState.program, tags: bwState.tags,
+        submissionForms: [...bwState.submissionForms], reviewEnabled: bwState.reviewEnabled, reviewForms: bwState.reviewEnabled?[...bwState.reviewForms]:[]
+      };
+      if(bwState.mode==='create') bundles.push(bundle);
+      else bundles[bwState.editIndex] = bundle;
+      renderBundles();
+      bwOverlay.style.display='none';
+    };
+
+    // Deliverable Wizard
+    const dwOverlay = document.getElementById('deliverable-wizard-overlay');
+    let dwState = {step:1,mode:'',editIndex:null,name:'',cohort:'',bundle:'',schedule:'',notify:'',reminders:''};
+    function showDeliverableStep(){
+      [1,2,3,4].forEach(s=>document.getElementById('dw-step-'+s).classList.remove('active'));
+      document.getElementById('dw-step-'+dwState.step).classList.add('active');
+      document.getElementById('dw-prev').style.display=dwState.step>1?'inline-block':'none';
+      document.getElementById('dw-next').style.display=dwState.step<4?'inline-block':'none';
+      document.getElementById('dw-finish').style.display=dwState.step===4?'inline-block':'none';
+      if(dwState.step===1){
+        const selC = document.getElementById('dw-cohort'); selC.innerHTML='<option value="">--select--</option>';
+        cohorts.forEach(c=>selC.appendChild(new Option(c.name,c.name)));
+        const selB = document.getElementById('dw-bundle'); selB.innerHTML='<option value="">--select--</option>';
+        bundles.forEach(b=>selB.appendChild(new Option(b.name,b.name)));
+      }
+      if(dwState.step===4){
+        document.getElementById('dw-review-name').textContent=dwState.name;
+        document.getElementById('dw-review-cohort').textContent=dwState.cohort;
+        document.getElementById('dw-review-bundle').textContent=dwState.bundle;
+        document.getElementById('dw-review-schedule').textContent=dwState.schedule;
+        document.getElementById('dw-review-notify').textContent=dwState.notify+'; reminders: '+dwState.reminders;
+      }
+    }
+    document.getElementById('open-deliverable-wizard').onclick=()=>{
+      dwState={step:1,mode:'create',editIndex:null,name:'',cohort:'',bundle:'',schedule:'',notify:'',reminders:''};
+      ['dw-name','dw-schedule-date','dw-schedule-rec','dw-notify-template','dw-notify-reminders'].forEach(id=>document.getElementById(id).value='');
+      dwOverlay.style.display='flex'; showDeliverableStep();
+    };
+    function openDeliverableWizard(mode,i){
+      const d = deliverables[i];
+      dwState={step:1,mode:'edit',editIndex:i,name:d.name,cohort:d.cohort,bundle:d.bundle,schedule:d.schedule,notify:d.notify,reminders:d.reminders};
+      document.getElementById('dw-name').value=dwState.name;
+      document.getElementById('dw-schedule-date').value=d.date||'';
+      document.getElementById('dw-schedule-rec').value=d.recurrence||'';
+      document.getElementById('dw-notify-template').value=d.notify||'';
+      document.getElementById('dw-notify-reminders').value=d.reminders||'';
+      dwOverlay.style.display='flex'; showDeliverableStep();
+    }
+    document.getElementById('dw-cancel').onclick=()=>{ dwOverlay.style.display='none'; };
+    document.getElementById('dw-next').onclick=()=>{
+      if(dwState.step===1){
+        dwState.name=document.getElementById('dw-name').value.trim();
+        dwState.cohort=document.getElementById('dw-cohort').value;
+        dwState.bundle=document.getElementById('dw-bundle').value;
+        if(!dwState.name||!dwState.cohort||!dwState.bundle){ alert('Name, cohort, bundle required'); return; }
+      }
+      if(dwState.step===2){
+        const date = document.getElementById('dw-schedule-date').value;
+        const rec = document.getElementById('dw-schedule-rec').value.trim();
+        dwState.schedule = date?date:(rec||'');
+        if(!dwState.schedule){ alert('Define schedule'); return; }
+      }
+      if(dwState.step<4) dwState.step++; showDeliverableStep();
+    };
+    document.getElementById('dw-prev').onclick=()=>{
+      if(dwState.step>1) dwState.step--; showDeliverableStep();
+    };
+    document.getElementById('dw-finish').onclick=()=>{
+      dwState.notify = document.getElementById('dw-notify-template').value.trim();
+      dwState.reminders = document.getElementById('dw-notify-reminders').value.trim();
+      const deliver = {
+        name: dwState.name, cohort: dwState.cohort, bundle: dwState.bundle,
+        schedule: dwState.schedule, notify: dwState.notify, reminders: dwState.reminders
+      };
+      if(dwState.mode==='create') deliverables.push(deliver);
+      else deliverables[dwState.editIndex] = deliver;
+      renderDeliverables();
+      dwOverlay.style.display='none';
+    };
+
+  </script>
+</body>
+</html>

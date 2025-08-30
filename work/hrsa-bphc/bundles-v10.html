@@ -1,0 +1,392 @@
+# file: index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuration Hub</title>
+  <style>
+    :root {
+      --brand-blue: #1589ee;
+      --dark-blue: #16325c;
+      --light-gray: #f4f6f9;
+      --border-gray: #d8dde6;
+      --text-dark: #1a1a1a;
+      --text-light: #63737a;
+      --font: Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: var(--font); background: var(--light-gray); color: var(--text-dark); }
+    .app-container { display: flex; flex-direction: column; height: 100%; }
+    header { background: var(--dark-blue); color: white; padding: 0 1em; display: flex; align-items: center; height: 50px; }
+    header h1 { font-size: 1.2em; }
+    .body { flex: 1; display: flex; overflow: hidden; }
+    nav { width: 200px; background: var(--brand-blue); display: flex; flex-direction: column; }
+    nav a { color: white; text-decoration: none; padding: 1em; }
+    nav a.active, nav a:hover { background: var(--dark-blue); }
+    .main { flex: 1; overflow-y: auto; padding: 1em; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .card { background: white; border: 1px solid var(--border-gray); border-radius: 4px; padding: 1em; margin-bottom: 1em; }
+    h2 { margin-bottom: 0.5em; color: var(--dark-blue); }
+    h3 { margin-bottom: 0.5em; color: var(--brand-blue); }
+    label { display: block; margin: 0.5em 0 0.25em; font-weight: bold; }
+    input[type="text"], textarea, select { width: 100%; padding: 0.5em; border: 1px solid var(--border-gray); border-radius: 3px; }
+    textarea { resize: vertical; height: 80px; }
+    button { margin-top: 0.5em; background: var(--brand-blue); color: white; border: none; padding: 0.5em 1em; border-radius: 3px; cursor: pointer; }
+    button.delete { background: #d9534f; margin-left: 0.5em; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5em; }
+    th, td { border: 1px solid var(--border-gray); padding: 0.5em; text-align: left; }
+    th { background: var(--light-gray); }
+    .search-input { width: calc(100% - 2px); margin-bottom: 0.5em; }
+    .remove-btn { background: transparent; color: #d9534f; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header><h1>Configuration Hub <!-- bundles-v9 --></h1></header>
+    <div class="body">
+      <nav>
+        <a href="#" data-target="cohorts" class="active">Cohorts</a>
+        <a href="#" data-target="submission-bundles">Submission Bundles</a>
+        <a href="#" data-target="review-bundles">Review Bundles</a>
+        <a href="#" data-target="submission-library">Submission Library</a>
+        <a href="#" data-target="review-library">Review Library</a>
+        <a href="#" data-target="deliverables">Deliverables</a>
+      </nav>
+      <div class="main">
+        <section id="cohorts" class="section active">
+          <h2>Cohorts</h2>
+          <div class="card">
+            <label for="cohort-name">Cohort Name</label>
+            <input type="text" id="cohort-name" placeholder="Enter cohort name">
+            <label for="cohort-desc">Description</label>
+            <textarea id="cohort-desc" placeholder="Enter a description"></textarea>
+            <label for="cohort-tags">Tags (comma-separated)</label>
+            <input type="text" id="cohort-tags" placeholder="e.g., rural, pilot">
+            <label for="cohort-program">Program</label>
+            <select id="cohort-program">
+              <option value="">-- select program --</option>
+              <option value="330">FQHC 330</option>
+              <option value="LGP">Loan Guarantee Program</option>
+              <option value="LAL">Look-Alike Program</option>
+            </select>
+            <label for="cohort-type">Entity Type</label>
+            <select id="cohort-type">
+              <option value="">-- select entity type --</option>
+              <option value="applications">Applications</option>
+              <option value="awards">Awards</option>
+              <option value="organizations">Organizations</option>
+            </select>
+            <label for="cohort-entities">Entities</label>
+            <select id="cohort-entities" multiple size="5"></select>
+            <button id="add-cohort">Create Cohort</button>
+          </div>
+          <div class="card">
+            <h3>Current Cohorts</h3>
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Program</th><th>Type</th><th>Entities</th><th>Tags</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="cohort-list"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="submission-bundles" class="section">
+          <h2>Submission Bundles</h2>
+          <div class="card">
+            <label for="submission-bundle-name">Bundle Name</label>
+            <input type="text" id="submission-bundle-name" placeholder="Enter bundle name">
+            <label for="submission-bundle-search">Filter Forms</label>
+            <input type="text" id="submission-bundle-search" class="search-input" placeholder="Search forms...">
+            <label for="submission-bundle-forms">Select Forms</label>
+            <select id="submission-bundle-forms" multiple size="6"></select>
+            <button id="create-submission-bundle">Create Submission Bundle</button>
+          </div>
+          <div class="card">
+            <label for="submission-bundle-grid-search">Search Bundles</label>
+            <input type="text" id="submission-bundle-grid-search" class="search-input" placeholder="Search bundles...">
+            <table>
+              <thead><tr><th>Name</th><th>Forms</th><th>Actions</th></tr></thead>
+              <tbody id="submission-bundle-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="review-bundles" class="section">
+          <h2>Review Bundles</h2>
+          <div class="card">
+            <label for="review-bundle-name">Bundle Name</label>
+            <input type="text" id="review-bundle-name" placeholder="Enter bundle name">
+            <label for="review-bundle-search">Filter Reviews</label>
+            <input type="text" id="review-bundle-search" class="search-input" placeholder="Search reviews...">
+            <label for="review-bundle-forms">Select Reviews</label>
+            <select id="review-bundle-forms" multiple size="6"></select>
+            <button id="create-review-bundle">Create Review Bundle</button>
+          </div>
+          <div class="card">
+            <label for="review-bundle-grid-search">Search Bundles</label>
+            <input type="text" id="review-bundle-grid-search" class="search-input" placeholder="Search bundles...">
+            <table>
+              <thead><tr><th>Name</th><th>Reviews</th><th>Actions</th></tr></thead>
+              <tbody id="review-bundle-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="submission-library" class="section">
+          <h2>Submission Library</h2>
+          <div class="card">
+            <label for="submission-grid-search">Search Submissions</label>
+            <input type="text" id="submission-grid-search" class="search-input" placeholder="Search submissions...">
+            <table>
+              <thead><tr><th>Form Name</th><th>Description</th></tr></thead>
+              <tbody id="submission-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="review-library" class="section">
+          <h2>Review Library</h2>
+          <div class="card">
+            <label for="review-grid-search">Search Reviews</label>
+            <input type="text" id="review-grid-search" class="search-input" placeholder="Search reviews...">
+            <table>
+              <thead><tr><th>Review Name</th><th>Description</th></tr></thead>
+              <tbody id="review-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="deliverables" class="section">
+          <h2>Deliverables</h2>
+          <div class="card">
+            <label for="deliverable-name">Deliverable Name</label>
+            <input type="text" id="deliverable-name" placeholder="Enter deliverable name">
+            <label for="deliverable-cohort">Select Cohort</label>
+            <select id="deliverable-cohort"><option value="">-- select cohort --</option></select>
+            <label for="deliverable-bundle">Select Submission Bundle</label>
+            <select id="deliverable-bundle"><option value="">-- select bundle --</option></select>
+            <button id="create-deliverable">Create Deliverable</button>
+          </div>
+          <div class="card">
+            <label for="deliverable-grid-search">Search Deliverables</label>
+            <input type="text" id="deliverable-grid-search" class="search-input" placeholder="Search deliverables...">
+            <table>
+              <thead><tr><th>Name</th><th>Cohort</th><th>Bundle</th><th>Actions</th></tr></thead>
+              <tbody id="deliverable-grid"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('nav a').forEach(link => {
+      link.onclick = e => {
+        e.preventDefault();
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(link.dataset.target).classList.add('active');
+      };
+    });
+
+    const dataStore = {
+      330: { applications: ['App A1','App A2'], awards: ['Award A1'], organizations: ['Org A','Org B'] },
+      LGP: { applications: ['LGP App1'], awards: ['LGP Award1'], organizations: ['LGP Org1'] },
+      LAL: { applications: ['LAL App1'], awards: ['LAL Award1'], organizations: ['LAL Org1'] }
+    };
+
+    let cohorts = [
+      { name:'East Awards', desc:'Cohort for east region awards', tags:'east,2025', program:'330', type:'awards', entities:['Award A1'] },
+      { name:'West Apps', desc:'Cohort for west region applicants', tags:'west,app', program:'LGP', type:'applications', entities:['LGP App1'] },
+      { name:'Central Orgs', desc:'Central region organizations', tags:'central,org', program:'LAL', type:'organizations', entities:['LAL Org1'] },
+      { name:'North Mix', desc:'Mixed cohort', tags:'north,mix', program:'330', type:'applications', entities:['App A1','App A2'] },
+      { name:'Pilot Users', desc:'Pilot cohort users', tags:'pilot,rural', program:'LAL', type:'awards', entities:['LAL Award1'] }
+    ];
+    const progSel = document.getElementById('cohort-program'), typeSel = document.getElementById('cohort-type'), entSel = document.getElementById('cohort-entities');
+    const cohortList = document.getElementById('cohort-list');
+    function populateEntities() {
+      entSel.innerHTML = '';
+      const p = progSel.value, t = typeSel.value;
+      if (dataStore[p] && dataStore[p][t]) {
+        dataStore[p][t].forEach(item => {
+          const o = document.createElement('option');
+          o.value = item; o.textContent = item;
+          entSel.appendChild(o);
+        });
+      }
+    }
+    progSel.onchange = typeSel.onchange = populateEntities;
+    document.getElementById('add-cohort').onclick = () => {
+      const name = document.getElementById('cohort-name').value.trim();
+      const desc = document.getElementById('cohort-desc').value.trim();
+      const tags = document.getElementById('cohort-tags').value.trim();
+      const program = progSel.value, type = typeSel.value;
+      const entities = Array.from(entSel.selectedOptions).map(o=>o.value);
+      if (name && program && type && entities.length) {
+        cohorts.push({ name, desc, tags, program, type, entities });
+        renderCohorts();
+        updateDeliverableSelects();
+        document.getElementById('cohort-name').value=''; document.getElementById('cohort-desc').value='';
+        document.getElementById('cohort-tags').value=''; progSel.value=''; typeSel.value=''; entSel.innerHTML='';
+      }
+    };
+    function renderCohorts(){
+      cohortList.innerHTML='';
+      cohorts.forEach((c,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${c.name}</td><td>${c.program}</td><td>${c.type}</td><td>${c.entities.join(', ')}</td><td>${c.tags}</td><td><button class="remove-btn" data-i="${i}">Delete</button></td>`;
+        cohortList.appendChild(tr);
+      });
+      cohortList.querySelectorAll('.remove-btn').forEach(btn=>{
+        btn.onclick=()=>{ cohorts.splice(btn.dataset.i,1); renderCohorts(); updateDeliverableSelects(); };
+      });
+    }
+
+    const submissionLibrary = [
+      { name:'Form 1A', desc:'General Info Worksheet' },
+      { name:'Form 5A', desc:'Site Details Form' },
+      { name:'Form 5B', desc:'Services Details Form' },
+      { name:'Form 5C', desc:'Activities Form' },
+      { name:'Assurances', desc:'Legal Assurances Document' },
+      { name:'Consolidated Budget', desc:'Budget Summary' },
+      { name:'Site Map', desc:'Site Layout Document' }
+    ];
+    const reviewLibrary = [
+      { name:'Scope PO Review', desc:'Project Officer scope validation' },
+      { name:'Scope PQC Review', desc:'Quality control review for scope' },
+      { name:'TAR Checklist', desc:'Technical/Admin Review checklist' },
+      { name:'GAR Recommendation', desc:'Grant Award Review Recommendation' },
+      { name:'PQC Final Review', desc:'Final quality control review' },
+      { name:'Compliance Check', desc:'Compliance condition verification' }
+    ];
+
+    let submissionBundles = [
+      { name:'Initial Scope Bundle', forms:['Form 5A','Form 5B','Form 5C'] },
+      { name:'Progress Report Bundle', forms:['Form 1A','Assurances'] },
+      { name:'Budget & Documents', forms:['Consolidated Budget','Assurances'] },
+      { name:'Site Details Bundle', forms:['Form 5A','Site Map'] },
+      { name:'Compliance Bundle', forms:['Assurances'] }
+    ];
+    const sbSearch = document.getElementById('submission-bundle-search'), sbSel = document.getElementById('submission-bundle-forms');
+    const sbGridSearch = document.getElementById('submission-bundle-grid-search'), sbGrid = document.getElementById('submission-bundle-grid');
+    function filterSubmissionBundleOptions(){
+      const q=sbSearch.value.toLowerCase();
+      sbSel.innerHTML='';
+      submissionLibrary.filter(f=>f.name.toLowerCase().includes(q)).forEach(f=>sbSel.appendChild(new Option(f.name,f.name)));
+    }
+    sbSearch.oninput=filterSubmissionBundleOptions; filterSubmissionBundleOptions();
+    document.getElementById('create-submission-bundle').onclick=()=>{
+      const name=document.getElementById('submission-bundle-name').value.trim();
+      const forms=Array.from(sbSel.selectedOptions).map(o=>o.value);
+      if(name&&forms.length){
+        submissionBundles.push({name,forms});
+        renderSubmissionBundles();
+        updateDeliverableSelects();
+        document.getElementById('submission-bundle-name').value=''; sbSel.selectedIndex=-1;
+      }
+    };
+    sbGridSearch.oninput=renderSubmissionBundles;
+    function renderSubmissionBundles(){
+      sbGrid.innerHTML='';
+      const q=sbGridSearch.value.toLowerCase();
+      submissionBundles.filter(b=>b.name.toLowerCase().includes(q)).forEach((b,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${b.name}</td><td>${b.forms.join(', ')}</td><td><button class="remove-btn" data-i="${i}">Delete</button></td>`;
+        sbGrid.appendChild(tr);
+      });
+      sbGrid.querySelectorAll('.remove-btn').forEach(btn=>{ btn.onclick=()=>{ submissionBundles.splice(btn.dataset.i,1); renderSubmissionBundles(); updateDeliverableSelects(); }; });
+    }
+
+    let reviewBundles = [
+      { name:'Scope Review Bundle', forms:['Scope PO Review','Scope PQC Review'] },
+      { name:'Technical Review Bundle', forms:['TAR Checklist','GAR Recommendation'] },
+      { name:'Compliance Review', forms:['Compliance Check'] },
+      { name:'Final QC Bundle', forms:['PQC Final Review','Compliance Check'] },
+      { name:'Full Review', forms:['Scope PO Review','Scope PQC Review','TAR Checklist','GAR Recommendation','Compliance Check'] }
+    ];
+    const rbSearch = document.getElementById('review-bundle-search'), rbSel = document.getElementById('review-bundle-forms');
+    const rbGridSearch = document.getElementById('review-bundle-grid-search'), rbGrid = document.getElementById('review-bundle-grid');
+    function filterReviewBundleOptions(){
+      const q=rbSearch.value.toLowerCase();
+      rbSel.innerHTML='';
+      reviewLibrary.filter(r=>r.name.toLowerCase().includes(q)).forEach(r=>rbSel.appendChild(new Option(r.name,r.name)));
+    }
+    rbSearch.oninput=filterReviewBundleOptions; filterReviewBundleOptions();
+    document.getElementById('create-review-bundle').onclick=()=>{
+      const name=document.getElementById('review-bundle-name').value.trim();
+      const forms=Array.from(rbSel.selectedOptions).map(o=>o.value);
+      if(name&&forms.length){
+        reviewBundles.push({name,forms});
+        renderReviewBundles();
+        document.getElementById('review-bundle-name').value=''; rbSel.selectedIndex=-1;
+      }
+    };
+    rbGridSearch.oninput=renderReviewBundles;
+    function renderReviewBundles(){
+      rbGrid.innerHTML='';
+      const q=rbGridSearch.value.toLowerCase();
+      reviewBundles.filter(b=>b.name.toLowerCase().includes(q)).forEach((b,i)=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${b.name}</td><td>${b.forms.join(', ')}</td><td><button class="remove-btn" data-i="${i}">Delete</button></td>`;
+        rbGrid.appendChild(tr);
+      });
+      rbGrid.querySelectorAll('.remove-btn').forEach(btn=>{ btn.onclick=()=>{ reviewBundles.splice(btn.dataset.i,1); renderReviewBundles(); }; });
+    }
+
+    const subGrid = document.getElementById('submission-grid'), subSearch = document.getElementById('submission-grid-search');
+    subSearch.oninput=renderSubmission; function renderSubmission(){
+      subGrid.innerHTML=''; const q=subSearch.value.toLowerCase();
+      submissionLibrary.filter(s=>s.name.toLowerCase().includes(q)||s.desc.toLowerCase().includes(q)).forEach(s=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${s.name}</td><td>${s.desc}</td>`; subGrid.appendChild(tr);
+      });
+    }
+    renderSubmission();
+    const revGrid = document.getElementById('review-grid'), revSearch = document.getElementById('review-grid-search');
+    revSearch.oninput=renderReview; function renderReview(){
+      revGrid.innerHTML=''; const q=revSearch.value.toLowerCase();
+      reviewLibrary.filter(r=>r.name.toLowerCase().includes(q)||r.desc.toLowerCase().includes(q)).forEach(r=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${r.name}</td><td>${r.desc}</td>`; revGrid.appendChild(tr);
+      });
+    }
+    renderReview();
+
+    let deliverables = [
+      { name:'2025 Q1 Report', cohort:'East Awards', bundle:'Progress Report Bundle' },
+      { name:'Site Expansion', cohort:'West Apps', bundle:'Initial Scope Bundle' },
+      { name:'Budget Revision', cohort:'Central Orgs', bundle:'Budget & Documents' },
+      { name:'Compliance Update', cohort:'Pilot Users', bundle:'Compliance Bundle' },
+      { name:'Annual Audit', cohort:'North Mix', bundle:'Full Review' }
+    ];
+    const delName = document.getElementById('deliverable-name'), delCohort = document.getElementById('deliverable-cohort'), delBundle = document.getElementById('deliverable-bundle');
+    const delGridSearch = document.getElementById('deliverable-grid-search'), delGrid = document.getElementById('deliverable-grid');
+    function updateDeliverableSelects(){
+      delCohort.innerHTML='<option value="">-- select cohort --</option>';
+      cohorts.forEach(c=>delCohort.appendChild(new Option(c.name,c.name)));
+      delBundle.innerHTML='<option value="">-- select bundle --</option>';
+      submissionBundles.forEach(b=>delBundle.appendChild(new Option(b.name,b.name)));
+    }
+    updateDeliverableSelects();
+    document.getElementById('create-deliverable').onclick=()=>{
+      const name=delName.value.trim(), cohort=delCohort.value, bundle=delBundle.value;
+      if(name&&cohort&&bundle){
+        deliverables.push({name,cohort,bundle});
+        renderDeliverables();
+        delName.value=''; delCohort.value=''; delBundle.value='';
+      }
+    };
+    delGridSearch.oninput=renderDeliverables;
+    function renderDeliverables(){
+      delGrid.innerHTML=''; const q=delGridSearch.value.toLowerCase();
+      deliverables.filter(d=>d.name.toLowerCase().includes(q)||d.cohort.toLowerCase().includes(q)||d.bundle.toLowerCase().includes(q))
+        .forEach((d,i)=>{
+          const tr=document.createElement('tr');
+          tr.innerHTML=`<td>${d.name}</td><td>${d.cohort}</td><td>${d.bundle}</td><td><button class="remove-btn" data-i="${i}">Delete</button></td>`;
+          delGrid.appendChild(tr);
+        });
+      delGrid.querySelectorAll('.remove-btn').forEach(btn=>{ btn.onclick=()=>{ deliverables.splice(btn.dataset.i,1); renderDeliverables(); }; });
+    }
+    renderCohorts(); renderSubmissionBundles(); renderReviewBundles(); renderDeliverables();
+  </script>
+</body>
+</html>
