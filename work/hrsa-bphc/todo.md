@@ -1,16 +1,21 @@
 # HRSA-BPHC Project To-Dos
 
 # Bundles
-- [x] ask: enhance the user workflow for
-  - started: 2025-08-31 14:04 | completed: 2025-08-31 14:05 | know_tokens: 2075 | prompt_tokens: 3056 | total_tokens: 5131
+- [~] ask: enhance the user workflow for
+  - started: 2025-08-31 14:18 | know_tokens: 2075 | prompt_tokens: 3145 | total_tokens: 5220
   - include: pattern=*bundles-v20.html recursive`
-  - focus: file=C:\projects\concepts\work\hrsa-bphc\dist\bundles-v21.html
+  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-v23.html
 ```code
-A0. enhance bundles-v20.html
+A0. enhance bundles-v21.html
 A1. only change ubmission Library  Review Library 
-A2. add/update the column types in Submission Library  Review Library 
-A3. Check that you did not remove any feautes
-
+A2. for the grid, just show which API features are supported .e.g., Create Draft, Update Draft. We dont need to show the entire URL
+A3. In the wizard show a grid for each of the API featres Create Draft, Update Draft, List Forms, Get Form Details, Delete Form, List Versions, Get Version, , Restore Version, Health and let the user enter the api spec.
+A3. Check that you did not remove any feautes. make sure all the button clicks still work.
+A4. Do not change any flows in. make sure the wizards still work
+     – Cohorts  
+     – Submission Bundles  
+     – Review Bundles  
+     – Deliverables  
 
 REFERENCE FEATUES: existing features: Do not remove
 1. Menu Navigation  
@@ -83,6 +88,7 @@ REFERENCE FEATUES: existing features: Do not remove
         - List Versions GET /api/forms/{formId}/versions  
         - Get Version Details GET /api/forms/{formId}/versions/{version}  
         - Restore Version → new draft from v POST /api/forms/{formId}/versions/{version}/restore
+        - Health GET /api/health
       – Schema (YAML)  
       – Validation Status  
       - Options
