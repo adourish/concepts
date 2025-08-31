@@ -1,2 +1,38 @@
-https://adourish.github.io/concepts/work/hrsa-bphc/bundles-v5.html
-https://adourish.github.io/concepts/work/hrsa-bphc/scope-review-v3.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Index of HTML Files</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    h1    { margin-bottom: 1rem; }
+    ul    { list-style: none; padding-left: 0; }
+    li    { margin: .5rem 0; }
+    a     { text-decoration: none; color: #0366d6; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Index of HTML Files</h1>
+  <ul id="file-list"></ul>
+
+  <script>
+    // === EDIT THIS LIST whenever you add/remove .html files in /dist ===
+    const files = [
+      'bundles-v5.html',
+      'scope-review-v3.html'
+      // add your other .html filenames here…
+    ];
+
+    const ul = document.getElementById('file-list');
+    files.forEach(filename => {
+      const li = document.createElement('li');
+      const a  = document.createElement('a');
+      a.href         = filename;
+      a.textContent  = filename;
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+  </script>
+</body>
+</html>
