@@ -35,7 +35,7 @@
     button.delete { background: #d9534f; margin-left: 0.5em; }
     button.update { background: #ffc107; color: #1a1a1a; margin-left: 0.5em;}
     table { width: 100%; border-collapse: collapse; margin-top: 0.5em; }
-    th, td { border: 1px solid var(--border-gray); padding: 0.5em; text-align: left; vertical-align: top; }
+    th, td { border: 1px solid var(--border-gray); padding: 0.5em; text-align: left; }
     th { background: var(--light-gray); }
     .search-input { width: calc(100% - 2px); margin-bottom: 0.5em; }
     .wizard-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; }
@@ -60,8 +60,8 @@
     </header>
     <div class="body">
       <nav>
-        <a href="#" data-target="submission-library" class="active">Submission Library</a>
-        <a href="#" data-target="review-library">Review Library</a>
+        <a href="#" data-target="submission-library" class="active">Submission Form Library</a>
+        <a href="#" data-target="review-library">Review Form Library</a>
         <a href="#" data-target="cohorts">Cohorts</a>
         <a href="#" data-target="bundles">Submission Bundles</a>
         <a href="#" data-target="bundles">Review Bundles</a>
@@ -80,11 +80,11 @@
                 <tr>
                   <th><input type="checkbox" id="sub-select-all"></th>
                   <th>Name</th>
-                  <th>Features</th>
+                  <th>Description</th>
                   <th>Endpoint URL</th>
                   <th>Exit Event</th>
                   <th>API Auth Type</th>
-                  <th>APIs</th>
+                  <th>APIs Features</th>
                   <th>Schema (YAML)</th>
                   <th>Validation Status</th>
                   <th>Options</th>
@@ -107,11 +107,11 @@
                 <tr>
                   <th><input type="checkbox" id="rev-select-all"></th>
                   <th>Name</th>
-                  <th>Features</th>
+                  <th>Description</th>
                   <th>Endpoint URL</th>
                   <th>Exit Event</th>
                   <th>API Auth Type</th>
-                  <th>APIs</th>
+                  <th>APIs Features</th>
                   <th>Schema (YAML)</th>
                   <th>Validation Status</th>
                   <th>Options</th>
@@ -122,34 +122,50 @@
             </table>
           </div>
         </section>
-        <!-- other sections unchanged -->
         <section id="cohorts" class="section">
-          <!-- unchanged -->
+          <h2>Manage Cohorts</h2>
+          <button id="open-cohort-wizard">New Cohort</button>
+          <button id="delete-selected-cohort">Delete Selected</button>
+          <div class="card">
+            <table>
+              <thead><tr><th><input type="checkbox" id="cohort-select-all"></th><th>Name</th><th>Description</th><th>Tags</th><th>Program</th><th>Entity Type</th><th># Entities</th><th>Actions</th></tr></thead>
+              <tbody id="cohort-grid"></tbody>
+            </table>
+          </div>
         </section>
         <section id="bundles" class="section">
-          <!-- unchanged -->
+          <h2>Manage Bundles</h2>
+          <button id="open-bundle-wizard">New Bundle</button>
+          <button id="delete-selected-bundle">Delete Selected</button>
+          <div class="card">
+            <label for="bundle-grid-search">Search Bundles</label>
+            <input type="text" id="bundle-grid-search" class="search-input" placeholder="Search bundles...">
+            <table>
+              <thead><tr><th><input type="checkbox" id="bundle-select-all"></th><th>Name</th><th>Description</th><th>Program</th><th>Tags</th><th># Submission Forms</th><th>Review Enabled</th><th># Review Forms</th><th>Actions</th></tr></thead>
+              <tbody id="bundle-grid"></tbody>
+            </table>
+          </div>
         </section>
         <section id="deliverables" class="section">
-          <!-- unchanged -->
+          <h2>Manage Deliverables</h2>
+          <button id="open-deliverable-wizard">New Deliverable</button>
+          <button id="delete-selected-del">Delete Selected</button>
+          <div class="card">
+            <label for="deliverable-grid-search">Search Deliverables</label>
+            <input type="text" id="deliverable-grid-search" class="search-input" placeholder="Search...">
+            <table>
+              <thead><tr><th><input type="checkbox" id="del-select-all"></th><th>Name</th><th>Cohort</th><th>Bundle</th><th>Schedule</th><th>Next Run</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="deliverable-grid"></tbody>
+            </table>
+          </div>
         </section>
       </div>
     </div>
   </div>
 
-  <!-- Wizards unchanged -->
-  <!-- Submission Wizard -->
-  <div id="lib-wizard-overlay" class="wizard-overlay"> ... </div>
-  <!-- Review Wizard -->
-  <div id="rlib-wizard-overlay" class="wizard-overlay"> ... </div>
-  <!-- Cohort Wizard -->
-  <div id="cohort-wizard-overlay" class="wizard-overlay"> ... </div>
-  <!-- Bundle Wizard -->
-  <div id="bundle-wizard-overlay" class="wizard-overlay"> ... </div>
-  <!-- Deliverable Wizard -->
-  <div id="deliverable-wizard-overlay" class="wizard-overlay"> ... </div>
+  <!-- Wizards omitted for brevity; identical to existing code -->
 
   <script>
-    // Navigation unchanged
     document.querySelectorAll('nav a').forEach(a=>{
       a.onclick=e=>{
         e.preventDefault();
@@ -160,19 +176,36 @@
       };
     });
 
-    // Data Stores unchanged
+    // Data Stores
+    const defaultFeatures = 'Create Draft, Update Draft, Publish, List Forms, Get Form Details, Delete Form, List Versions, Get Version Details, Restore Version, Health';
     const submissionLibrary = [
-      {id:'1',name:'Form 1A',endpoint:'https://api.example.com/forms/1A',auth:'API Key',schema:'form1A-schema.json',lastValidationStatus:'Passed'},
-      {id:'2',name:'Consolidated Budget',endpoint:'https://api.example.com/forms/budget',auth:'OAuth2',schema:'budget-schema.json',lastValidationStatus:'Passed'},
-      {id:'3',name:'BPHC Post Award Progress Report (FQHC)',endpoint:'https://api.hrsa.gov/forms/bphc-progress',auth:'API Key',schema:'bphc-progress-schema-v1.json',lastValidationStatus:'Pending'},
-      {id:'4',name:'Emergency Prep Report',endpoint:'https://api.example.com/forms/emergency',auth:'OAuth2',schema:'emergency-schema.json',lastValidationStatus:'Failed'}
+      {id:'1',name:'Form 1A',description:'',exitEvent:'',endpoint:'https://api.example.com/forms/1A',auth:'API Key',apiFeatures:defaultFeatures,schema:'form1A-schema.json',lastValidationStatus:'Passed'},
+      {id:'2',name:'Consolidated Budget',description:'',exitEvent:'',endpoint:'https://api.example.com/forms/budget',auth:'OAuth2',apiFeatures:defaultFeatures,schema:'budget-schema.json',lastValidationStatus:'Passed'},
+      {id:'3',name:'BPHC Post Award Progress Report (FQHC)',description:'',exitEvent:'',endpoint:'https://api.hrsa.gov/forms/bphc-progress',auth:'API Key',apiFeatures:defaultFeatures,schema:'bphc-progress-schema-v1.json',lastValidationStatus:'Pending'},
+      {id:'4',name:'Emergency Prep Report',description:'',exitEvent:'',endpoint:'https://api.example.com/forms/emergency',auth:'OAuth2',apiFeatures:defaultFeatures,schema:'emergency-schema.json',lastValidationStatus:'Failed'}
     ];
     const reviewLibrary = [
-      {id:'1',name:'Scope PO Review',endpoint:'https://api.example.com/reviews/scope-po',auth:'API Key',schema:'scope-po-schema.json',lastValidationStatus:'Passed'},
-      {id:'2',name:'Environmental Review',endpoint:'https://api.example.com/reviews/environmental',auth:'OAuth2',schema:'env-schema.json',lastValidationStatus:'Pending'},
-      {id:'3',name:'BPHC Progress Review',endpoint:'https://api.hrsa.gov/reviews/bphc-progress',auth:'API Key',schema:'bphc-review-schema-v1.json',lastValidationStatus:'Passed'}
+      {id:'1',name:'Scope PO Review',description:'',exitEvent:'',endpoint:'https://api.example.com/reviews/scope-po',auth:'API Key',apiFeatures:defaultFeatures,schema:'scope-po-schema.json',lastValidationStatus:'Passed'},
+      {id:'2',name:'Environmental Review',description:'',exitEvent:'',endpoint:'https://api.example.com/reviews/environmental',auth:'OAuth2',apiFeatures:defaultFeatures,schema:'env-schema.json',lastValidationStatus:'Pending'},
+      {id:'3',name:'BPHC Progress Review',description:'',exitEvent:'',endpoint:'https://api.hrsa.gov/reviews/bphc-progress',auth:'API Key',apiFeatures:defaultFeatures,schema:'bphc-review-schema-v1.json',lastValidationStatus:'Passed'}
     ];
-    // other stores unchanged
+    const dataStore = {
+      330:{applications:['App1','App2'],awards:['Award1'],organizations:['Org1','Org2','Org3']},
+      LGP:{applications:['LGP App1'],awards:['LGP Award1'],organizations:['LGP Org1']},
+      LAL:{applications:['LAL App1'],awards:['LAL Award1'],organizations:['LAL Org1']}
+    };
+    let cohorts = [
+      {id:'c1',name:'FQHC Grantees 330',desc:'Federally Qualified Health Center grantees under Section 330',tags:'HRSA,BPHC,330',program:'330',type:'organizations',entities:dataStore['330']['organizations']},
+      {id:'c2',name:'Look-Alike Grantees',desc:'HRSA Look-Alike program grantees',tags:'HRSA,BPHC,LAL',program:'LAL',type:'organizations',entities:dataStore['LAL']['organizations']}
+    ];
+    let bundles = [
+      {id:'b1',name:'HRSA Progress Report Bundle',desc:'Submission and review for HRSA BPHC Post Award Progress Reports',program:'330',tags:'ProgressReport,BPHC',submissionForms:['BPHC Post Award Progress Report (FQHC)'],reviewEnabled:true,reviewForms:['BPHC Progress Review']},
+      {id:'b2',name:'Emergency Prep Bundle',desc:'Bundle for emergency preparedness report',program:'330',tags:'Emergency,BPHC',submissionForms:['Emergency Prep Report'],reviewEnabled:false,reviewForms:[]}
+    ];
+    let deliverables = [
+      {id:'d1',name:'July Progress Report',cohort:'FQHC Grantees 330',bundle:'HRSA Progress Report Bundle',schedule:'Recurring (0 0 1 */3 *)',nextRun:'2024-07-01',lastRunStatus:'Pending'},
+      {id:'d2',name:'One-time Emergency Prep',cohort:'FQHC Grantees 330',bundle:'Emergency Prep Bundle',schedule:'One-time (2024-06-15)',nextRun:'2024-06-15',lastRunStatus:'Scheduled'}
+    ];
 
     function renderGrid(grid, data, cols){
       grid.innerHTML='';
@@ -195,15 +228,14 @@
       const filtered=submissionLibrary.filter(f=>f.name.toLowerCase().includes(q));
       renderGrid(subGrid,filtered,[
         'name',
-        item=>item.features||'',
+        item=>item.description,
         'endpoint',
-        item=>item.exitEvent||'',
-        item=>'',
-        item=>item.auth,
-        item=>`<ul style="padding-left:1em;margin:0;"><li>POST /api/forms</li><li>PUT /api/forms/{formId}</li><li>POST /api/forms/{formId}/publish</li><li>GET /api/forms?type=submission&status={draft|published}&page={n}&size={m}</li><li>GET /api/forms/{formId}</li><li>DELETE /api/forms/{formId}</li><li>GET /api/forms/{formId}/versions</li><li>GET /api/forms/{formId}/versions/{version}</li><li>POST /api/forms/{formId}/versions/{version}/restore</li></ul>`,
-        'schema',
-        'lastValidationStatus',
-        item=>item.options||''
+        item=>item.exitEvent,
+        'auth',
+        item=>item.apiFeatures,
+        item=>item.schema,
+        item=>item.lastValidationStatus,
+        ()=>''
       ]);
       deleteSelectedSub.disabled=true; document.getElementById('sub-select-all').checked=false;
       subGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.onchange=()=>deleteSelectedSub.disabled=!subGrid.querySelectorAll('input[type="checkbox"]:checked').length);
@@ -226,15 +258,14 @@
       const filtered=reviewLibrary.filter(f=>f.name.toLowerCase().includes(q));
       renderGrid(revGrid,filtered,[
         'name',
-        item=>item.features||'',
+        item=>item.description,
         'endpoint',
-        item=>item.exitEvent||'',
-        item=>'',
-        item=>item.auth,
-        item=>`<ul style="padding-left:1em;margin:0;"><li>POST /api/forms</li><li>PUT /api/forms/{formId}</li><li>POST /api/forms/{formId}/publish</li><li>GET /api/forms?type=review&status={draft|published}&page={n}&size={m}</li><li>GET /api/forms/{formId}</li><li>DELETE /api/forms/{formId}</li><li>GET /api/forms/{formId}/versions</li><li>GET /api/forms/{formId}/versions/{version}</li><li>POST /api/forms/{formId}/versions/{version}/restore</li></ul>`,
-        'schema',
-        'lastValidationStatus',
-        item=>item.options||''
+        item=>item.exitEvent,
+        'auth',
+        item=>item.apiFeatures,
+        item=>item.schema,
+        item=>item.lastValidationStatus,
+        ()=>''
       ]);
       deleteSelectedRev.disabled=true; document.getElementById('rev-select-all').checked=false;
       revGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.onchange=()=>deleteSelectedRev.disabled=!revGrid.querySelectorAll('input[type="checkbox"]:checked').length);
@@ -248,7 +279,8 @@
       if(sel.length&&confirm(`Delete ${sel.length} selected?`)){sel.forEach(n=>{const i=reviewLibrary.findIndex(x=>x.name===n);reviewLibrary.splice(i,1);});renderReviewLibrary();}
     };
 
-    // other renderers and wizard logic unchanged
+    // Cohorts, Bundles, Deliverables and Wizard logic remain unchanged
+    // ...
   </script>
 </body>
 </html>

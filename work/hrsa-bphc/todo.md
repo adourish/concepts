@@ -1,34 +1,36 @@
 # HRSA-BPHC Project To-Dos
 
 # Bundles
-- [~] ask: enhance the user workflow for
-  - started: 2025-08-31 14:18 | know_tokens: 2075 | prompt_tokens: 3145 | total_tokens: 5220
-  - include: pattern=*bundles-v20.html recursive`
-  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-v23.html
+- [x] ask: enhance the user workflow for
+  - started: 2025-08-31 14:49 | completed: 2025-08-31 14:52 | know_tokens: 3116 | prompt_tokens: 4211 | total_tokens: 7327
+  - include: pattern=*bundles-v24.html recursive`
+  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-v25.html
 ```code
-A0. enhance bundles-v21.html
-A1. only change ubmission Library  Review Library 
-A2. for the grid, just show which API features are supported .e.g., Create Draft, Update Draft. We dont need to show the entire URL
-A3. In the wizard show a grid for each of the API featres Create Draft, Update Draft, List Forms, Get Form Details, Delete Form, List Versions, Get Version, , Restore Version, Health and let the user enter the api spec.
-A3. Check that you did not remove any feautes. make sure all the button clicks still work.
-A4. Do not change any flows in. make sure the wizards still work
+A0. enhance bundles-v24.html
+A1. Update the Wizard Step Details for each of the main features
+     – Submission Form Library  
+     – Review Form Library  
+A3. Give me a better way to enter the api features. each feature needs a way to update the feature, api, and verb. Use postman as an example. 
+A4. Do not change any features. do not remove the wizards of page actions
+     – Submission Form Library  
+     – Review Form Library  
      – Cohorts  
      – Submission Bundles  
      – Review Bundles  
      – Deliverables  
 
 REFERENCE FEATUES: existing features: Do not remove
-1. Menu Navigation  
+- Menu Navigation  
    • Accessible from global nav → “Configuration Hub”  
    • Side-Nav (always visible):  
-     – Submission Library  
-     – Review Library  
+     – Submission Form Library  
+     – Review Form Library  
      – Cohorts  
      – Submission Bundles  
      – Review Bundles  
      – Deliverables  
 
-2. High-Level User Flow  
+- High-Level User Flow  
    1. User lands on Configuration Hub (requires authentication)  
    2. Page loads Header (title, user menu), Side-Nav, Main area defaults to Submission Library  
    3. User clicks a Side-Nav link → section view loads  
@@ -50,7 +52,7 @@ REFERENCE FEATUES: existing features: Do not remove
       • Finish → validate required fields → save create/update → close → refresh table  
    7. After wizard closes user returns to section view; may switch sections or log out  
 
-3. Features & Behaviors  
+- Features & Behaviors  
    • Responsive layout (desktop/tablet)  
    • Live search/filtering  
    • Bulk select + bulk delete (if at least one checkbox)  
@@ -61,9 +63,9 @@ REFERENCE FEATUES: existing features: Do not remove
    • Cron or one-time schedule picker for deliverables  
    • Email template lookup + reminder-days input  
 
-4. Data Objects & Table Columns  
+- Data Objects & Table Columns  
 
-  4.1 Submission Form  
+  - Submission Form Library
     • id (UUID)  
     • name (string)  
     • endpointUrl (string)  
@@ -74,11 +76,13 @@ REFERENCE FEATUES: existing features: Do not remove
     Table columns:  
       – checkbox  
       – Name  
-      - Features
+      - Description
       – Endpoint URL  
       – Exit Event
       - API Auth Type
-      - APIs
+      - APIs Features
+        - Column should show which features are supported in a comma separated list (Create Draft, Update Draft, List Forms, Get Form Details, Delete Form, List Versions, Get Version, , Restore Version, Health)
+        - The wizard should show a grid to allow configuring the features.
         - Create Draft POST /api/forms  
         - Update Draft PUT /api/forms/{formId}  
         - Publish POST /api/forms/{formId}/publish  
@@ -94,11 +98,11 @@ REFERENCE FEATUES: existing features: Do not remove
       - Options
       – Actions  
 
-  4.2 Review Form  
+  - Review Form Library
     • same fields as Submission Form  
     Table columns same as Submission Library  
 
-  4.3 Cohort  
+  - Cohort  
     • id  
     • name  
     • description  
@@ -117,7 +121,7 @@ REFERENCE FEATUES: existing features: Do not remove
       – # Entities  
       – Actions  
 
-  4.4 Bundle (v19 schema)  
+  - Bundle (v19 schema)  
     • id  
     • name  
     • description  
@@ -134,7 +138,7 @@ REFERENCE FEATUES: existing features: Do not remove
       – Endpoint URL  
       – Exit Event
       - API Auth Type
-      - APIs
+      - API Features
         - Create Draft POST /api/forms  
         - Update Draft PUT /api/forms/{formId}  
         - Publish POST /api/forms/{formId}/publish  
@@ -149,7 +153,7 @@ REFERENCE FEATUES: existing features: Do not remove
       - Options
       – Actions  
 
-  4.5 Deliverable  
+  - Deliverable  
     • id  
     • name  
     • cohortId  
@@ -172,26 +176,27 @@ REFERENCE FEATUES: existing features: Do not remove
       – Status  
       – Actions  
 
-5. Wizard Step Details  
+- Wizard Step Details  
 
-  5.1 Form Wizard (Submission & Review) – 2 steps  
+  - Form Wizard (Submission & Review) – 2 steps  
     Step 1: Metadata  
       • Name (required)  
       • Endpoint URL (required, URL format)  
       • Auth Type (dropdown) + credentials fields  
+      * API Features table with features
       • Schema (dropdown)  
     Step 2: Validation  
       • Run Validation Tests button → shows status/messages  
       • Read-only view of entered metadata  
       • Finish  
 
-  5.2 Cohort Wizard – 4 steps  
+  - Cohort Wizard – 4 steps  
     1. Basic Info (Name, Description, Tags)  
     2. Program & Entity Type (dropdowns)  
     3. Pick Entities (multi-select list filtered by step 2)  
     4. Review & Finish  
 
-  5.3 Bundle Wizard – 4 steps  
+  - Bundle Wizard – 4 steps  
     1. Basics (Name, Description, Program, Tags)  
     2. Submission Phase  
        – Search field → filter available submission forms  
@@ -202,19 +207,19 @@ REFERENCE FEATUES: existing features: Do not remove
        – If on: same pattern with review forms  
     4. Summary & Finish  
 
-  5.4 Deliverable Wizard – 4 steps  
+  - Deliverable Wizard – 4 steps  
     1. Basic Info (Name, Cohort picker, Bundle picker)  
     2. Schedule (One-time date picker OR cron expression input + helper)  
     3. Notifications (Email template picker, Reminder days multi-select)  
     4. Review summary & Finish  
 
-6. Validation Rules & Error Handling  
+- Validation Rules & Error Handling  
    • All required fields enforced before Next/Finish  
    • Inline field errors + summary at top on validation fail  
    • Wizard cannot proceed if any step invalid  
    • Delete actions prompt confirmation dialog  
 
-7. State Management & Persistence  
+- State Management & Persistence  
    • Table views fetch paged data via REST API  
    • Searches apply query param to API calls  
    • Wizards maintain local state until Finish  
