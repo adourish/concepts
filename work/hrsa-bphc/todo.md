@@ -2,8 +2,8 @@
 
 
 # Confiruation Hub
-- [x] ask: configuration hub
-  - started: 2025-09-01 19:38 | completed: 2025-09-01 19:39 | know_tokens: 7338 | prompt_tokens: 7479 | total_tokens: 14817
+- [~] ask: configuration hub
+  - started: 2025-09-01 20:24 | know_tokens: 7338 | prompt_tokens: 7479 | total_tokens: 14817
   - include: pattern=*bundles-v25.html|*features.md recursive`
   - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-v26.html
 ```knowledge
