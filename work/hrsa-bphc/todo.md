@@ -1,36 +1,39 @@
 # HRSA-BPHC Project To-Dos
 
 # Bundles
-- [x] ask: enhance the user workflow for
-  - started: 2025-08-31 14:49 | completed: 2025-08-31 14:52 | know_tokens: 3116 | prompt_tokens: 4211 | total_tokens: 7327
-  - include: pattern=*bundles-v24.html recursive`
-  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-v25.html
+- [~] ask: enhance the user workflow for
+  - started: 2025-09-01 00:12 | know_tokens: 3098 | prompt_tokens: 4359 | total_tokens: 7457
+  - include: pattern=*bundles-v25.html recursive`
+  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-v26.html
 ```code
-A0. enhance bundles-v24.html
-A1. Update the Wizard Step Details for each of the main features
-     – Submission Form Library  
-     – Review Form Library  
-A3. Give me a better way to enter the api features. each feature needs a way to update the feature, api, and verb. Use postman as an example. 
+A0. enhance bundles-v25.html
+A1. Add the entities and tenents side menu items
+A2. Add the entities and tenents wizards
+A3. Add the entities and tenents search feature
 A4. Do not change any features. do not remove the wizards of page actions
      – Submission Form Library  
-     – Review Form Library  
+     – Review Form Library
+     - Tenents
+     - Entities  
      – Cohorts  
      – Submission Bundles  
      – Review Bundles  
      – Deliverables  
 
 REFERENCE FEATUES: existing features: Do not remove
-- Menu Navigation  
+# Menu Navigation  
    • Accessible from global nav → “Configuration Hub”  
    • Side-Nav (always visible):  
+     – Tenents (BPHC, HAB, etc.)
      – Submission Form Library  
      – Review Form Library  
+     - Entities (organizations, awards, applications, projects, groups, associations, networks)
      – Cohorts  
      – Submission Bundles  
      – Review Bundles  
      – Deliverables  
 
-- High-Level User Flow  
+# High-Level User Flow  
    1. User lands on Configuration Hub (requires authentication)  
    2. Page loads Header (title, user menu), Side-Nav, Main area defaults to Submission Library  
    3. User clicks a Side-Nav link → section view loads  
@@ -52,7 +55,7 @@ REFERENCE FEATUES: existing features: Do not remove
       • Finish → validate required fields → save create/update → close → refresh table  
    7. After wizard closes user returns to section view; may switch sections or log out  
 
-- Features & Behaviors  
+# Features & Behaviors  
    • Responsive layout (desktop/tablet)  
    • Live search/filtering  
    • Bulk select + bulk delete (if at least one checkbox)  
@@ -63,7 +66,7 @@ REFERENCE FEATUES: existing features: Do not remove
    • Cron or one-time schedule picker for deliverables  
    • Email template lookup + reminder-days input  
 
-- Data Objects & Table Columns  
+# Data Objects & Table Columns  
 
   - Submission Form Library
     • id (UUID)  
@@ -105,6 +108,7 @@ REFERENCE FEATUES: existing features: Do not remove
   - Cohort  
     • id  
     • name  
+    • Entities (organization, award, application, cohorts)
     • description  
     • tags (list of strings)  
     • programId (ref)  
@@ -118,8 +122,35 @@ REFERENCE FEATUES: existing features: Do not remove
       – Tags  
       – Program  
       – Entity Type  
-      – # Entities  
+      – Entities  
       – Actions  
+
+  - Tenant  
+    • id (UUID)  
+    • name (string)  
+    • description (string)  
+    • createdAt, updatedAt (timestamps)  
+    Table columns:  
+      – checkbox  
+      – Name  
+      – Description  
+      – Actions  
+
+  - Entity Definition  
+    • id (UUID)  
+    • name (string)  
+    • type (system | user)  
+    • parentEntityId (UUID, nullable)  
+    • attributes (array of { name, dataType, required })  
+    • createdAt, updatedAt (timestamps)  
+    Table columns:  
+      – checkbox  
+      – Name  
+      – Type  
+      – Parent Entity  
+      – # Child Entities  
+      – Actions  
+
 
   - Bundle (v19 schema)  
     • id  
@@ -188,6 +219,27 @@ REFERENCE FEATUES: existing features: Do not remove
     Step 2: Validation  
       • Run Validation Tests button → shows status/messages  
       • Read-only view of entered metadata  
+      • Finish  
+
+  - Tenant Wizard – 2 steps  
+    Step 1: Basic Info  
+      • Name (required)  
+      • Description  
+    Step 2: Review & Finish  
+      • Read-only summary of values  
+      • Finish  
+
+  - Entity Definition Wizard – 4 steps  
+    Step 1: Basic Info  
+      • Name (required)  
+      • Type (system | user)  
+    Step 2: Hierarchy  
+      • Parent Entity (tree selector of existing definitions)  
+    Step 3: Attributes  
+      • [ + Add Field ] → name, data type (string, number, boolean, date, enum), required toggle  
+      • Reorder fields (drag/drop)  
+    Step 4: Review & Finish  
+      • Read-only summary of all settings  
       • Finish  
 
   - Cohort Wizard – 4 steps  
