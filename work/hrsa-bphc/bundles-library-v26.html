@@ -1,4 +1,4 @@
-# file: bundles-v25.html
+# file: bundles-v26.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,7 +77,7 @@
         <section id="submission-library" class="section active">
           <h2>Manage Submission Form Library</h2>
           <button id="open-lib-wizard">New Submission Form</button>
-          <button id="delete-selected-sub">Delete Selected</button>
+          <button id="delete-selected-sub" disabled>Delete Selected</button>
           <div class="card">
             <label for="submission-grid-search">Search Forms</label>
             <input type="text" id="submission-grid-search" class="search-input" placeholder="Search...">
@@ -93,7 +93,6 @@
                   <th>API Features</th>
                   <th>Schema</th>
                   <th>Validation Status</th>
-                  <th>Options</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -104,7 +103,7 @@
         <section id="review-library" class="section">
           <h2>Manage Review Form Library</h2>
           <button id="open-rlib-wizard">New Review Form</button>
-          <button id="delete-selected-rev">Delete Selected</button>
+          <button id="delete-selected-rev" disabled>Delete Selected</button>
           <div class="card">
             <label for="review-grid-search">Search Forms</label>
             <input type="text" id="review-grid-search" class="search-input" placeholder="Search...">
@@ -120,7 +119,6 @@
                   <th>API Features</th>
                   <th>Schema</th>
                   <th>Validation Status</th>
-                  <th>Options</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -131,7 +129,7 @@
         <section id="cohorts" class="section">
           <h2>Manage Cohorts</h2>
           <button id="open-cohort-wizard">New Cohort</button>
-          <button id="delete-selected-cohort">Delete Selected</button>
+          <button id="delete-selected-cohort" disabled>Delete Selected</button>
           <div class="card">
             <table>
               <thead><tr><th><input type="checkbox" id="cohort-select-all"></th><th>Name</th><th>Description</th><th>Tags</th><th>Program</th><th>Resource Type</th><th># Resources</th><th>Actions</th></tr></thead>
@@ -142,7 +140,7 @@
         <section id="bundles" class="section">
           <h2>Manage Submission Bundles</h2>
           <button id="open-bundle-wizard">New Bundle</button>
-          <button id="delete-selected-bundle">Delete Selected</button>
+          <button id="delete-selected-bundle" disabled>Delete Selected</button>
           <div class="card">
             <label for="bundle-grid-search">Search Bundles</label>
             <input type="text" id="bundle-grid-search" class="search-input" placeholder="Search bundles...">
@@ -155,7 +153,7 @@
         <section id="rbundles" class="section">
           <h2>Manage Review Bundles</h2>
           <button id="open-rbundle-wizard">New Review Bundle</button>
-          <button id="delete-selected-rbundle">Delete Selected</button>
+          <button id="delete-selected-rbundle" disabled>Delete Selected</button>
           <div class="card">
             <label for="rbundle-grid-search">Search Bundles</label>
             <input type="text" id="rbundle-grid-search" class="search-input" placeholder="Search bundles...">
@@ -168,7 +166,7 @@
         <section id="deliverables" class="section">
           <h2>Manage Deliverables</h2>
           <button id="open-deliverable-wizard">New Deliverable</button>
-          <button id="delete-selected-del">Delete Selected</button>
+          <button id="delete-selected-del" disabled>Delete Selected</button>
           <div class="card">
             <label for="deliverable-grid-search">Search Deliverables</label>
             <input type="text" id="deliverable-grid-search" class="search-input" placeholder="Search...">
@@ -344,8 +342,16 @@
       {name:'Restore Version', verb:'POST', endpoint:'/api/forms/{formId}/versions/{version}/restore'},
       {name:'Health', verb:'GET', endpoint:'/api/health'}
     ];
-    const submissionLibrary = [ /* existing data */ ];
-    const reviewLibrary = [ /* existing data */ ];
+
+    // test data
+    const submissionLibrary = [
+      {id:'1', name:'BPHC Application Form', desc:'Form for BPHC funding applications', endpointUrl:'/api/bphc/applications', exitEvent:'onComplete', authType:'OAuth2', features: defaultFeatures.map(f=>f.name), schema:'schema1.json', lastValidationStatus:'Passed'},
+      {id:'2', name:'BPHC Reporting Form', desc:'Reporting form for BPHC grants', endpointUrl:'/api/bphc/reports', exitEvent:'onSubmit', authType:'API Key', features:['Create Draft','List Forms','Health'], schema:'schema2.json', lastValidationStatus:'Pending'}
+    ];
+    const reviewLibrary = [
+      {id:'1', name:'BPHC Review Form', desc:'Review form for BPHC applications', endpointUrl:'/api/bphc/reviews', exitEvent:'onReviewComplete', authType:'OAuth2', features: defaultFeatures.map(f=>f.name), schema:'schemaA.json', lastValidationStatus:'Failed'},
+      {id:'2', name:'BPHC Post-Award Review', desc:'Post-award review form', endpointUrl:'/api/bphc/postreview', exitEvent:'onSubmit', authType:'API Key', features:['List Forms','Get Form Details','Health'], schema:'schemaB.json', lastValidationStatus:'Passed'}
+    ];
     const dataStore = { /* existing dataStore */ };
     let cohorts = [ /* existing cohorts */ ];
     let bundles = [ /* existing bundles */ ];
@@ -366,9 +372,249 @@
       });
     }
 
-    // Submission, Review, Bundles, RBundles, Deliverables rendering (unchanged)
+    // Submission Form Library
+    const subGrid=document.getElementById('submission-grid'), delSub=document.getElementById('delete-selected-sub');
+    document.getElementById('submission-grid-search').oninput=()=>{
+      const q=event.target.value.toLowerCase();
+      const filtered=submissionLibrary.filter(item=>item.name.toLowerCase().includes(q)||item.desc.toLowerCase().includes(q));
+      renderSubmissionLibrary(filtered);
+    };
+    document.getElementById('sub-select-all').onclick=e=>{
+      subGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=e.target.checked);
+      delSub.disabled=!e.target.checked;
+    };
+    delSub.onclick=()=>{
+      const sel=Array.from(subGrid.querySelectorAll('input[type="checkbox"]:checked')).map(cb=>cb.dataset.name);
+      if(sel.length&&confirm(`Delete ${sel.length} selected?`)){
+        sel.forEach(n=>{const i=submissionLibrary.findIndex(x=>x.name===n); if(i>-1) submissionLibrary.splice(i,1);});
+        renderSubmissionLibrary(submissionLibrary);
+      }
+    };
+    function renderSubmissionLibrary(data){
+      renderGrid(subGrid,data,[
+        'name',
+        item=>item.desc,
+        'endpointUrl',
+        'exitEvent',
+        'authType',
+        item=>item.features.join(', '),
+        'schema',
+        'lastValidationStatus'
+      ]);
+      delSub.disabled=true; document.getElementById('sub-select-all').checked=false;
+      subGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.onchange=()=>delSub.disabled=!subGrid.querySelectorAll('input[type="checkbox"]:checked').length);
+      subGrid.querySelectorAll('.delete').forEach(btn=>{btn.onclick=()=>{
+        const n=btn.dataset.name;
+        if(confirm(`Delete form "${n}"?`)){
+          const i=submissionLibrary.findIndex(x=>x.name===n);
+          submissionLibrary.splice(i,1);
+          renderSubmissionLibrary(submissionLibrary);
+        }
+      }});
+      subGrid.querySelectorAll('.update').forEach(btn=>btn.onclick=()=>openLibWizard('edit',btn.dataset.name));
+    }
+    renderSubmissionLibrary(submissionLibrary);
 
-    // Cohorts rendering
+    // Review Form Library
+    const revGrid=document.getElementById('review-grid'), delRev=document.getElementById('delete-selected-rev');
+    document.getElementById('review-grid-search').oninput=()=>{
+      const q=event.target.value.toLowerCase();
+      const filtered=reviewLibrary.filter(item=>item.name.toLowerCase().includes(q)||item.desc.toLowerCase().includes(q));
+      renderReviewLibrary(filtered);
+    };
+    document.getElementById('rev-select-all').onclick=e=>{
+      revGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=e.target.checked);
+      delRev.disabled=!e.target.checked;
+    };
+    delRev.onclick=()=>{
+      const sel=Array.from(revGrid.querySelectorAll('input[type="checkbox"]:checked')).map(cb=>cb.dataset.name);
+      if(sel.length&&confirm(`Delete ${sel.length} selected?`)){
+        sel.forEach(n=>{const i=reviewLibrary.findIndex(x=>x.name===n); if(i>-1) reviewLibrary.splice(i,1);});
+        renderReviewLibrary(reviewLibrary);
+      }
+    };
+    function renderReviewLibrary(data){
+      renderGrid(revGrid,data,[
+        'name',
+        item=>item.desc,
+        'endpointUrl',
+        'exitEvent',
+        'authType',
+        item=>item.features.join(', '),
+        'schema',
+        'lastValidationStatus'
+      ]);
+      delRev.disabled=true; document.getElementById('rev-select-all').checked=false;
+      revGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.onchange=()=>delRev.disabled=!revGrid.querySelectorAll('input[type="checkbox"]:checked').length);
+      revGrid.querySelectorAll('.delete').forEach(btn=>{btn.onclick=()=>{
+        const n=btn.dataset.name;
+        if(confirm(`Delete form "${n}"?`)){
+          const i=reviewLibrary.findIndex(x=>x.name===n);
+          reviewLibrary.splice(i,1);
+          renderReviewLibrary(reviewLibrary);
+        }
+      }});
+      revGrid.querySelectorAll('.update').forEach(btn=>btn.onclick=()=>openRlibWizard('edit',btn.dataset.name));
+    }
+    renderReviewLibrary(reviewLibrary);
+
+    // Submission Wizard logic
+    let libState={}, libMode='create';
+    const lwOverlay=document.getElementById('lib-wizard-overlay');
+    function openLibWizard(mode,name){
+      libMode=mode; libState={features:defaultFeatures.map(f=>f.name)};
+      lwOverlay.style.display='flex';
+      document.getElementById('lib-wizard-title').innerText= mode==='edit'?'Edit Submission Form':'New Submission Form';
+      document.querySelectorAll('#lib-wizard-overlay input, #lib-wizard-overlay select, #lib-wizard-overlay textarea').forEach(el=>el.value='');
+      document.querySelectorAll('#lib-wizard-overlay .error').forEach(e=>e.innerText='');
+      populateLibFeatures();
+      showLibStep(1);
+      if(mode==='edit'){
+        const item=submissionLibrary.find(x=>x.name===name);
+        libState=JSON.parse(JSON.stringify(item));
+        document.getElementById('lib-name').value=item.name;
+        document.getElementById('lib-desc').value=item.desc;
+        document.getElementById('lib-endpoint').value=item.endpointUrl;
+        document.getElementById('lib-exit').value=item.exitEvent;
+        document.getElementById('lib-auth').value=item.authType;
+        document.getElementById('lib-schema').value=item.schema;
+      }
+    }
+    document.getElementById('open-lib-wizard').onclick=()=>openLibWizard('create');
+    document.getElementById('lib-cancel').onclick=()=>lwOverlay.style.display='none';
+    function populateLibFeatures(){
+      const tbody=document.querySelector('#lib-features-table tbody'); tbody.innerHTML='';
+      defaultFeatures.forEach(f=>{const tr=document.createElement('tr'); tr.innerHTML=`<td>${f.name}</td><td>${f.verb}</td><td>${f.endpoint}</td>`; tbody.appendChild(tr);});
+    }
+    function showLibStep(n){
+      document.getElementById('lib-step-1').classList.toggle('active',n===1);
+      document.getElementById('lib-step-2').classList.toggle('active',n===2);
+      document.getElementById('lib-prev').style.display=n>1?'inline-block':'none';
+      document.getElementById('lib-next').style.display=n<2?'inline-block':'none';
+      document.getElementById('lib-finish').style.display=n===2?'inline-block':'none';
+      lwOverlay.dataset.step=n;
+      if(n===2){
+        const review=document.getElementById('lib-review');
+        review.innerHTML=`
+          <p><strong>Name:</strong> ${libState.name}</p>
+          <p><strong>Description:</strong> ${libState.desc}</p>
+          <p><strong>Endpoint URL:</strong> ${libState.endpointUrl}</p>
+          <p><strong>Exit Event:</strong> ${libState.exitEvent}</p>
+          <p><strong>Auth Type:</strong> ${libState.authType}</p>
+          <p><strong>Schema:</strong> ${libState.schema}</p>`;
+      }
+    }
+    document.getElementById('lib-next').onclick=()=>{
+      let ok=true;
+      if(!document.getElementById('lib-name').value.trim()){document.getElementById('lib-name-error').innerText='Required'; ok=false;} else document.getElementById('lib-name-error').innerText='';
+      if(!document.getElementById('lib-endpoint').value.trim()){document.getElementById('lib-endpoint-error').innerText='Required'; ok=false;} else document.getElementById('lib-endpoint-error').innerText='';
+      if(!document.getElementById('lib-auth').value){document.getElementById('lib-auth-error').innerText='Required'; ok=false;} else document.getElementById('lib-auth-error').innerText='';
+      if(!document.getElementById('lib-schema').value){document.getElementById('lib-schema-error').innerText='Required'; ok=false;} else document.getElementById('lib-schema-error').innerText='';
+      if(ok){
+        libState.name=document.getElementById('lib-name').value.trim();
+        libState.desc=document.getElementById('lib-desc').value;
+        libState.endpointUrl=document.getElementById('lib-endpoint').value;
+        libState.exitEvent=document.getElementById('lib-exit').value;
+        libState.authType=document.getElementById('lib-auth').value;
+        libState.schema=document.getElementById('lib-schema').value;
+        showLibStep(2);
+      }
+    };
+    document.getElementById('lib-prev').onclick=()=>showLibStep(1);
+    document.getElementById('lib-run-tests').onclick=()=>{
+      document.getElementById('lib-test-status').innerText='Validation Passed';
+      libState.lastValidationStatus='Passed';
+    };
+    document.getElementById('lib-finish').onclick=()=>{
+      libState.id=libMode==='create'?Date.now().toString():libState.id;
+      if(libMode==='create') submissionLibrary.push(libState);
+      else {
+        const idx=submissionLibrary.findIndex(x=>x.id===libState.id);
+        submissionLibrary[idx]=libState;
+      }
+      lwOverlay.style.display='none';
+      renderSubmissionLibrary(submissionLibrary);
+    };
+
+    // Review Wizard logic
+    let rlibState={}, rlibMode='create';
+    const rwOverlay=document.getElementById('rlib-wizard-overlay');
+    function openRlibWizard(mode,name){
+      rlibMode=mode; rlibState={features:defaultFeatures.map(f=>f.name)};
+      rwOverlay.style.display='flex';
+      document.getElementById('rlib-wizard-title').innerText= mode==='edit'?'Edit Review Form':'New Review Form';
+      document.querySelectorAll('#rlib-wizard-overlay input, #rlib-wizard-overlay select, #rlib-wizard-overlay textarea').forEach(el=>el.value='');
+      document.querySelectorAll('#rlib-wizard-overlay .error').forEach(e=>e.innerText='');
+      populateRlibFeatures();
+      showRlibStep(1);
+      if(mode==='edit'){
+        const item=reviewLibrary.find(x=>x.name===name);
+        rlibState=JSON.parse(JSON.stringify(item));
+        document.getElementById('rlib-name').value=item.name;
+        document.getElementById('rlib-desc').value=item.desc;
+        document.getElementById('rlib-endpoint').value=item.endpointUrl;
+        document.getElementById('rlib-exit').value=item.exitEvent;
+        document.getElementById('rlib-auth').value=item.authType;
+        document.getElementById('rlib-schema').value=item.schema;
+      }
+    }
+    document.getElementById('open-rlib-wizard').onclick=()=>openRlibWizard('create');
+    document.getElementById('rlib-cancel').onclick=()=>rwOverlay.style.display='none';
+    function populateRlibFeatures(){
+      const tbody=document.querySelector('#rlib-features-table tbody'); tbody.innerHTML='';
+      defaultFeatures.forEach(f=>{const tr=document.createElement('tr'); tr.innerHTML=`<td>${f.name}</td><td>${f.verb}</td><td>${f.endpoint}</td>`; tbody.appendChild(tr);});
+    }
+    function showRlibStep(n){
+      document.getElementById('rlib-step-1').classList.toggle('active',n===1);
+      document.getElementById('rlib-step-2').classList.toggle('active',n===2);
+      document.getElementById('rlib-prev').style.display=n>1?'inline-block':'none';
+      document.getElementById('rlib-next').style.display=n<2?'inline-block':'none';
+      document.getElementById('rlib-finish').style.display=n===2?'inline-block':'none';
+      rwOverlay.dataset.step=n;
+      if(n===2){
+        const review=document.getElementById('rlib-review');
+        review.innerHTML=`
+          <p><strong>Name:</strong> ${rlibState.name}</p>
+          <p><strong>Description:</strong> ${rlibState.desc}</p>
+          <p><strong>Endpoint URL:</strong> ${rlibState.endpointUrl}</p>
+          <p><strong>Exit Event:</strong> ${rlibState.exitEvent}</p>
+          <p><strong>Auth Type:</strong> ${rlibState.authType}</p>
+          <p><strong>Schema:</strong> ${rlibState.schema}</p>`;
+      }
+    }
+    document.getElementById('rlib-next').onclick=()=>{
+      let ok=true;
+      if(!document.getElementById('rlib-name').value.trim()){document.getElementById('rlib-name-error').innerText='Required'; ok=false;} else document.getElementById('rlib-name-error').innerText='';
+      if(!document.getElementById('rlib-endpoint').value.trim()){document.getElementById('rlib-endpoint-error').innerText='Required'; ok=false;} else document.getElementById('rlib-endpoint-error').innerText='';
+      if(!document.getElementById('rlib-auth').value){document.getElementById('rlib-auth-error').innerText='Required'; ok=false;} else document.getElementById('rlib-auth-error').innerText='';
+      if(!document.getElementById('rlib-schema').value){document.getElementById('rlib-schema-error').innerText='Required'; ok=false;} else document.getElementById('rlib-schema-error').innerText='';
+      if(ok){
+        rlibState.name=document.getElementById('rlib-name').value.trim();
+        rlibState.desc=document.getElementById('rlib-desc').value;
+        rlibState.endpointUrl=document.getElementById('rlib-endpoint').value;
+        rlibState.exitEvent=document.getElementById('rlib-exit').value;
+        rlibState.authType=document.getElementById('rlib-auth').value;
+        rlibState.schema=document.getElementById('rlib-schema').value;
+        showRlibStep(2);
+      }
+    };
+    document.getElementById('rlib-prev').onclick=()=>showRlibStep(1);
+    document.getElementById('rlib-run-tests').onclick=()=>{
+      document.getElementById('rlib-test-status').innerText='Validation Passed';
+      rlibState.lastValidationStatus='Passed';
+    };
+    document.getElementById('rlib-finish').onclick=()=>{
+      rlibState.id=rlibMode==='create'?Date.now().toString():rlibState.id;
+      if(rlibMode==='create') reviewLibrary.push(rlibState);
+      else {
+        const idx=reviewLibrary.findIndex(x=>x.id===rlibState.id);
+        reviewLibrary[idx]=rlibState;
+      }
+      rwOverlay.style.display='none';
+      renderReviewLibrary(reviewLibrary);
+    };
+
+    // Cohorts rendering and wizard logic unchanged...
     const cohortGrid=document.getElementById('cohort-grid'), deleteSelectedCoh=document.getElementById('delete-selected-cohort');
     function renderCohorts(){
       renderGrid(cohortGrid,cohorts,[
@@ -385,16 +631,11 @@
       cohortGrid.querySelectorAll('.update').forEach(btn=>btn.onclick=()=>openCohortWizard('edit',btn.dataset.name));
     }
     renderCohorts();
-
     document.getElementById('cohort-select-all').onclick=e=>{cohortGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=e.target.checked);deleteSelectedCoh.disabled=!e.target.checked;};
     deleteSelectedCoh.onclick=()=>{
       const sel=Array.from(cohortGrid.querySelectorAll('input[type="checkbox"]:checked')).map(cb=>cb.dataset.name);
       if(sel.length&&confirm(`Delete ${sel.length} selected?`)){sel.forEach(n=>{const i=cohorts.findIndex(x=>x.name===n);cohorts.splice(i,1);});renderCohorts();}
     };
-
-    // Wizards (submission, review, bundle, rbundle, deliverable unchanged)
-
-    // Cohort Wizard logic
     let cohortState={}, cohortMode='create';
     const cwOverlay=document.getElementById('cohort-wizard-overlay');
     function openCohortWizard(mode,name){
@@ -496,7 +737,7 @@
       cwOverlay.style.display='none'; renderCohorts();
     };
 
-    // Remaining script functions unchanged
+    // Bundle, RBundles, Deliverables rendering unchanged...
   </script>
 </body>
 </html>

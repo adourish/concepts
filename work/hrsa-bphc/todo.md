@@ -1,30 +1,120 @@
 # HRSA-BPHC Project To-Dos
 
 
-# Confiruation Hub
+# Form Library
 - [~] ask: configuration hub
-  - started: 2025-09-01 20:24 | know_tokens: 7338 | prompt_tokens: 7479 | total_tokens: 14817
-  - include: pattern=*bundles-v25.html|*features.md recursive`
-  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-v26.html
+  - started: 2025-09-02 12:36 | know_tokens: 7532 | prompt_tokens: 7778 | total_tokens: 15310
+  - include: pattern=*bundles-v26.html|*features.md recursive`
+  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-library-v26.html
 ```knowledge
 
-A0. enhance bundles-v25.html. use this as your starting point
-A1. Add the entities and tenents side menu items
-A2. Add the entities and tenents wizards
-A3. Add the entities and tenents search feature
+A0. look at bundles-v26.html. use this as your starting point
 A4. DO NOT REMOVE ANY DATA. DO NOT REMOVE THE EXISTING FEATURES
 A5. Do not remove any wizards 
 A6. Do not remove any data
 A7. Do not remove any features. 
+     – Tenents
      – Submission Form Library  
      – Review Form Library
-     - Tenents <-add
-     - Entities  <-add
+     - Tenents
+     - Entities <-rename to Resources
      – Cohorts  
      – Submission Bundles  
      – Review Bundles  
      – Deliverables  
 
+task 1: add the form libraries feature
+task 2: implement the wizard feature for Submission Form Library and Review Form Library
+task 3: implement the data table and search feature for Submission Form Library and Review Form Library
+task 4: add test data that is hrsa bphc themed
+
+```
+
+# Tenents
+- [x] ask: configuration hub
+  - started: 2025-09-02 12:44 | completed: 2025-09-02 12:45 | know_tokens: 7532 | prompt_tokens: 7685 | total_tokens: 15217
+  - include: pattern=*bundles-v26.html|*features.md recursive`
+  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-tenents-v26.html
+```knowledge
+
+A0. look at bundles-v26.html. use this as your starting point
+A4. DO NOT REMOVE ANY DATA. DO NOT REMOVE THE EXISTING FEATURES
+A5. Do not remove any wizards 
+A6. Do not remove any data
+A7. Do not remove any features. 
+     – Tenents
+     – Submission Form Library  
+     – Review Form Library
+     - Tenents
+     - Entities <-rename to Resources
+     – Cohorts  
+     – Submission Bundles  
+     – Review Bundles  
+     – Deliverables  
+
+task 1: add the "Tenents" feature
+task 2: implement the wizard Tenents
+task 3: implement the data table and search feature for Tenents
+task 4: add test data. Add HRSA\BPHC, HRSA\HAB, HRSA\BHW
+
+```
+
+
+# Cohorts
+- [x] ask: configuration hub
+  - started: 2025-09-02 12:46 | completed: 2025-09-02 12:47 | know_tokens: 7532 | prompt_tokens: 7685 | total_tokens: 15217
+  - include: pattern=*bundles-v26.html|*features.md recursive`
+  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-cohorts-v26.html
+```knowledge
+
+A0. look at bundles-v26.html. use this as your starting point
+A4. DO NOT REMOVE ANY DATA. DO NOT REMOVE THE EXISTING FEATURES
+A5. Do not remove any wizards 
+A6. Do not remove any data
+A7. Do not remove any features. 
+     – Tenents
+     – Submission Form Library  
+     – Review Form Library
+     - Tenents
+     - Resources 
+     – Cohorts  
+     – Submission Bundles  
+     – Review Bundles  
+     – Deliverables  
+
+task 1: add the Cohorts feature
+task 2: implement the wizard feature for Cohorts
+task 3: implement the data table and search feature for Cohorts
+task 4: add test data that is hrsa bphc themed
+
+```
+
+# Bundles
+- [~] ask: configuration hub
+  - started: 2025-09-02 12:36 | know_tokens: 7532 | prompt_tokens: 7778 | total_tokens: 15310
+  - include: pattern=*bundles-v26.html|*features.md recursive`
+  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-bundles-v26.html
+```knowledge
+
+A0. look at bundles-v26.html. use this as your starting point
+A4. DO NOT REMOVE ANY DATA. DO NOT REMOVE THE EXISTING FEATURES
+A5. Do not remove any wizards 
+A6. Do not remove any data
+A7. Do not remove any features. 
+     – Tenents
+     – Submission Form Library  
+     – Review Form Library
+     - Tenents
+     - Resources 
+     – Cohorts  
+     – Submission Bundles  
+     – Review Bundles  
+     – Deliverables  
+
+task 1: add the Bundles feature
+task 2: implement the wizard feature for Bundles
+task 3: implement the data table and search feature for Bundles
+task 4: add test data that is hrsa bphc themed
 
 ```
 

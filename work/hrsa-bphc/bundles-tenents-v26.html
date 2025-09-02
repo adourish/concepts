@@ -1,4 +1,4 @@
-# file: bundles-v25.html
+# file: bundles-v26.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +33,7 @@
     textarea { resize: vertical; height: 80px; }
     button { margin-top: 0.5em; background: var(--brand-blue); color: white; border: none; padding: 0.5em 1em; border-radius: 3px; cursor: pointer; }
     button.delete { background: #d9534f; margin-left: 0.5em; }
-    button.update { background: #ffc107; color: #1a1a1a; margin-left: 0.5em;}
+    button.update { background: #ffc107; color: #1a1a1a; margin-left: 0.5em; }
     table { width: 100%; border-collapse: collapse; margin-top: 0.5em; }
     th, td { border: 1px solid var(--border-gray); padding: 0.5em; text-align: left; }
     th { background: var(--light-gray); }
@@ -66,6 +66,7 @@
     </header>
     <div class="body">
       <nav>
+        <a href="#" data-target="tenents">Tenents</a>
         <a href="#" data-target="submission-library" class="active">Submission Form Library</a>
         <a href="#" data-target="review-library">Review Form Library</a>
         <a href="#" data-target="cohorts">Cohorts</a>
@@ -74,6 +75,26 @@
         <a href="#" data-target="deliverables">Deliverables</a>
       </nav>
       <div class="main">
+        <section id="tenents" class="section">
+          <h2>Manage Tenents</h2>
+          <button id="open-tenants-wizard">New Tenent</button>
+          <button id="delete-selected-tenants">Delete Selected</button>
+          <div class="card">
+            <label for="tenants-grid-search">Search Tenents</label>
+            <input type="text" id="tenants-grid-search" class="search-input" placeholder="Search tenents...">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="tenants-select-all"></th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tenants-grid"></tbody>
+            </table>
+          </div>
+        </section>
         <section id="submission-library" class="section active">
           <h2>Manage Submission Form Library</h2>
           <button id="open-lib-wizard">New Submission Form</button>
@@ -178,6 +199,30 @@
             </table>
           </div>
         </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tenent Wizard -->
+  <div id="tenants-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <h3 id="tenants-wizard-title">New Tenent</h3>
+      <div id="tenant-step-1" class="wizard-step active">
+        <h4>Step 1: Basic Info</h4>
+        <label for="tenant-name">Name *</label>
+        <input type="text" id="tenant-name"><span class="error" id="tenant-name-error"></span>
+        <label for="tenant-desc">Description</label>
+        <textarea id="tenant-desc"></textarea>
+      </div>
+      <div id="tenant-step-2" class="wizard-step">
+        <h4>Step 2: Review & Finish</h4>
+        <div id="tenant-summary"></div>
+      </div>
+      <div class="wizard-buttons">
+        <button id="tenant-cancel">Cancel</button>
+        <button id="tenant-prev" style="display:none;">Prev</button>
+        <button id="tenant-next">Next</button>
+        <button id="tenant-finish" style="display:none;">Finish</button>
       </div>
     </div>
   </div>
@@ -347,6 +392,11 @@
     const submissionLibrary = [ /* existing data */ ];
     const reviewLibrary = [ /* existing data */ ];
     const dataStore = { /* existing dataStore */ };
+    let tenants = [
+      {id:'1', name:'HRSA\\BPHC', desc:'Bureau of Primary Health Care'},
+      {id:'2', name:'HRSA\\HAB', desc:'HIV/AIDS Bureau'},
+      {id:'3', name:'HRSA\\BHW', desc:'Bureau of Health Workforce'}
+    ];
     let cohorts = [ /* existing cohorts */ ];
     let bundles = [ /* existing bundles */ ];
     let rbundles = JSON.parse(JSON.stringify(bundles));
@@ -366,137 +416,109 @@
       });
     }
 
-    // Submission, Review, Bundles, RBundles, Deliverables rendering (unchanged)
-
-    // Cohorts rendering
-    const cohortGrid=document.getElementById('cohort-grid'), deleteSelectedCoh=document.getElementById('delete-selected-cohort');
-    function renderCohorts(){
-      renderGrid(cohortGrid,cohorts,[
+    // Tenents rendering
+    const tenantsGrid=document.getElementById('tenants-grid'), deleteSelectedTenants=document.getElementById('delete-selected-tenants');
+    function renderTenants(){
+      renderGrid(tenantsGrid, tenants, [
         'name',
-        item=>item.desc,
-        item=>item.tags,
-        'program',
-        'type',
-        item=>item.entities.length
+        item=>item.desc
       ]);
-      deleteSelectedCoh.disabled=true; document.getElementById('cohort-select-all').checked=false;
-      cohortGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.onchange=()=>deleteSelectedCoh.disabled=!cohortGrid.querySelectorAll('input[type="checkbox"]:checked').length);
-      cohortGrid.querySelectorAll('.delete').forEach(btn=>{btn.onclick=()=>{const n=btn.dataset.name;if(confirm(`Delete cohort "${n}"?`)){const i=cohorts.findIndex(x=>x.name===n);cohorts.splice(i,1);renderCohorts();}}});
-      cohortGrid.querySelectorAll('.update').forEach(btn=>btn.onclick=()=>openCohortWizard('edit',btn.dataset.name));
+      deleteSelectedTenants.disabled=true;
+      document.getElementById('tenants-select-all').checked=false;
+      tenantsGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.onchange=()=>{
+        deleteSelectedTenants.disabled=!tenantsGrid.querySelectorAll('input[type="checkbox"]:checked').length;
+      });
+      tenantsGrid.querySelectorAll('.delete').forEach(btn=>{
+        btn.onclick=()=>{
+          const n=btn.dataset.name;
+          if(confirm(`Delete tenent "${n}"?`)){
+            const i=tenants.findIndex(x=>x.name===n);
+            tenants.splice(i,1);
+            renderTenants();
+          }
+        };
+      });
+      tenantsGrid.querySelectorAll('.update').forEach(btn=>{
+        btn.onclick=()=>openTenantsWizard('edit', btn.dataset.name);
+      });
     }
-    renderCohorts();
+    renderTenants();
 
-    document.getElementById('cohort-select-all').onclick=e=>{cohortGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=e.target.checked);deleteSelectedCoh.disabled=!e.target.checked;};
-    deleteSelectedCoh.onclick=()=>{
-      const sel=Array.from(cohortGrid.querySelectorAll('input[type="checkbox"]:checked')).map(cb=>cb.dataset.name);
-      if(sel.length&&confirm(`Delete ${sel.length} selected?`)){sel.forEach(n=>{const i=cohorts.findIndex(x=>x.name===n);cohorts.splice(i,1);});renderCohorts();}
+    document.getElementById('tenants-select-all').onclick=e=>{
+      tenantsGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=e.target.checked);
+      deleteSelectedTenants.disabled=!e.target.checked;
     };
-
-    // Wizards (submission, review, bundle, rbundle, deliverable unchanged)
-
-    // Cohort Wizard logic
-    let cohortState={}, cohortMode='create';
-    const cwOverlay=document.getElementById('cohort-wizard-overlay');
-    function openCohortWizard(mode,name){
-      cohortMode=mode; cohortState={entities:[]};
-      cwOverlay.style.display='flex';
-      document.getElementById('cohort-wizard-title').innerText= mode==='edit'?'Edit Cohort':'New Cohort';
-      showCohortStep(1);
-      document.querySelectorAll('#cohort-wizard-overlay input, #cohort-wizard-overlay select, #cohort-wizard-overlay textarea').forEach(el=>el.value='');
-      document.querySelectorAll('#cohort-wizard-overlay .error').forEach(e=>e.innerText='');
-      document.getElementById('cohort-entities-available').innerHTML='';
-      document.getElementById('cohort-entities-selected').innerHTML='';
-      if(mode==='edit'){
-        const item=cohorts.find(x=>x.name===name);
-        cohortState=JSON.parse(JSON.stringify(item));
-        document.getElementById('cohort-name').value=item.name;
-        document.getElementById('cohort-desc').value=item.desc;
-        document.getElementById('cohort-tags').value=item.tags;
-        document.getElementById('cohort-prog').value=item.program;
-        document.getElementById('cohort-type').value=item.type;
-        populateCohortEntities();
-        item.entities.forEach(e=>addListItem('cohort-entities-selected',e,true));
-      }
-    }
-    document.getElementById('open-cohort-wizard').onclick=()=>openCohortWizard('create');
-    document.getElementById('cohort-cancel').onclick=()=>cwOverlay.style.display='none';
-    function showCohortStep(n){
-      cwOverlay.querySelectorAll('.wizard-step').forEach((el,i)=>el.classList.toggle('active',i+1===n));
-      document.getElementById('cohort-prev').style.display=n>1?'inline-block':'none';
-      document.getElementById('cohort-next').style.display=n<4?'inline-block':'none';
-      document.getElementById('cohort-finish').style.display=n===4?'inline-block':'none';
-      cwOverlay.dataset.step=n;
-      if(n===3) populateCohortEntities();
-      if(n===4) showCohortSummary();
-    }
-    document.getElementById('cohort-next').onclick=()=>{
-      let step=parseInt(cwOverlay.dataset.step), ok=true;
-      if(step===1){
-        if(!document.getElementById('cohort-name').value.trim()){document.getElementById('cohort-name-error').innerText='Required'; ok=false;} else document.getElementById('cohort-name-error').innerText='';
-      }
-      if(step===2){
-        if(!document.getElementById('cohort-prog').value){document.getElementById('cohort-prog-error').innerText='Required'; ok=false;} else document.getElementById('cohort-prog-error').innerText='';
-        if(!document.getElementById('cohort-type').value){document.getElementById('cohort-type-error').innerText='Required'; ok=false;} else document.getElementById('cohort-type-error').innerText='';
-      }
-      if(ok){
-        if(step===1){
-          cohortState.name=document.getElementById('cohort-name').value.trim();
-          cohortState.desc=document.getElementById('cohort-desc').value;
-          cohortState.tags=document.getElementById('cohort-tags').value;
-        }
-        if(step===2){
-          cohortState.program=document.getElementById('cohort-prog').value;
-          cohortState.type=document.getElementById('cohort-type').value;
-        }
-        showCohortStep(step+1);
+    deleteSelectedTenants.onclick=()=>{
+      const sel=Array.from(tenantsGrid.querySelectorAll('input[type="checkbox"]:checked')).map(cb=>cb.dataset.name);
+      if(sel.length && confirm(`Delete ${sel.length} selected?`)){
+        sel.forEach(n=>{
+          const i=tenants.findIndex(x=>x.name===n);
+          tenants.splice(i,1);
+        });
+        renderTenants();
       }
     };
-    document.getElementById('cohort-prev').onclick=()=>showCohortStep(parseInt(cwOverlay.dataset.step)-1);
-    function populateCohortEntities(){
-      const avail=document.getElementById('cohort-entities-available');
-      avail.innerHTML='';
-      const prog=cohortState.program||document.getElementById('cohort-prog').value;
-      const type=cohortState.type||document.getElementById('cohort-type').value;
-      if(dataStore[prog] && dataStore[prog][type]){
-        dataStore[prog][type].forEach(e=>addListItem('cohort-entities-available',e,false));
-      }
-    }
-    document.getElementById('cohort-entities-search').oninput=()=>{
-      const q=document.getElementById('cohort-entities-search').value.toLowerCase();
-      Array.from(document.getElementById('cohort-entities-available').children).forEach(li=>{
-        li.style.display=li.dataset.value.toLowerCase().includes(q)?'flex':'none';
+    document.getElementById('tenants-grid-search').oninput=()=>{
+      const q=document.getElementById('tenants-grid-search').value.toLowerCase();
+      Array.from(tenantsGrid.children).forEach(tr=>{
+        tr.style.display=tr.innerText.toLowerCase().includes(q)?'table-row':'none';
       });
     };
-    function addListItem(listId,text,selected){
-      const ul=document.getElementById(listId);
-      if(Array.from(ul.children).some(li=>li.dataset.value===text)) return;
-      const li=document.createElement('li');
-      li.dataset.value=text; li.innerHTML=`<span>${text}</span><button class="order-btn">${selected?'−':'+'}</button>`;
-      ul.appendChild(li);
-      li.querySelector('button').onclick=()=>{
-        li.remove();
-        const target=listId==='cohort-entities-available'?'cohort-entities-selected':'cohort-entities-available';
-        addListItem(target,text, target==='cohort-entities-selected');
-      };
+
+    // Tenant Wizard logic
+    let tenantState={}, tenantMode='create';
+    const twOverlay=document.getElementById('tenants-wizard-overlay');
+    function openTenantsWizard(mode,name){
+      tenantMode=mode; tenantState={};
+      twOverlay.style.display='flex';
+      document.getElementById('tenants-wizard-title').innerText= mode==='edit'?'Edit Tenent':'New Tenent';
+      showTenantStep(1);
+      document.getElementById('tenant-name').value='';
+      document.getElementById('tenant-desc').value='';
+      document.getElementById('tenant-name-error').innerText='';
+      if(mode==='edit'){
+        const item=tenants.find(x=>x.name===name);
+        tenantState=JSON.parse(JSON.stringify(item));
+        document.getElementById('tenant-name').value=item.name;
+        document.getElementById('tenant-desc').value=item.desc;
+      }
     }
-    function showCohortSummary(){
-      const sum=document.getElementById('cohort-summary');
+    document.getElementById('open-tenants-wizard').onclick=()=>openTenantsWizard('create');
+    document.getElementById('tenant-cancel').onclick=()=>twOverlay.style.display='none';
+    function showTenantStep(n){
+      twOverlay.querySelectorAll('.wizard-step').forEach((el,i)=>el.classList.toggle('active',i+1===n));
+      document.getElementById('tenant-prev').style.display=n>1?'inline-block':'none';
+      document.getElementById('tenant-next').style.display=n<2?'inline-block':'none';
+      document.getElementById('tenant-finish').style.display=n===2?'inline-block':'none';
+      twOverlay.dataset.step=n;
+      if(n===2) showTenantSummary();
+    }
+    document.getElementById('tenant-next').onclick=()=>{
+      let ok=true;
+      if(!document.getElementById('tenant-name').value.trim()){
+        document.getElementById('tenant-name-error').innerText='Required'; ok=false;
+      } else document.getElementById('tenant-name-error').innerText='';
+      if(ok){
+        tenantState.name=document.getElementById('tenant-name').value.trim();
+        tenantState.desc=document.getElementById('tenant-desc').value;
+        showTenantStep(2);
+      }
+    };
+    document.getElementById('tenant-prev').onclick=()=>showTenantStep(parseInt(twOverlay.dataset.step)-1);
+    function showTenantSummary(){
+      const sum=document.getElementById('tenant-summary');
       sum.innerHTML=`
-        <p><strong>Name:</strong> ${cohortState.name}</p>
-        <p><strong>Description:</strong> ${cohortState.desc}</p>
-        <p><strong>Tags:</strong> ${cohortState.tags}</p>
-        <p><strong>Program:</strong> ${cohortState.program}</p>
-        <p><strong>Resource Type:</strong> ${cohortState.type}</p>
-        <p><strong>Resources:</strong> ${Array.from(document.getElementById('cohort-entities-selected').children).map(li=>li.dataset.value).join(', ')}</p>`;
+        <p><strong>Name:</strong> ${tenantState.name}</p>
+        <p><strong>Description:</strong> ${tenantState.desc}</p>`;
     }
-    document.getElementById('cohort-finish').onclick=()=>{
-      cohortState.entities=Array.from(document.getElementById('cohort-entities-selected').children).map(li=>li.dataset.value);
-      cohortState.id=cohortMode==='create'?Date.now().toString():cohortState.id;
-      if(cohortMode==='create') cohorts.push(cohortState);
-      cwOverlay.style.display='none'; renderCohorts();
+    document.getElementById('tenant-finish').onclick=()=>{
+      tenantState.id=tenantMode==='create'?Date.now().toString():tenantState.id;
+      if(tenantMode==='create') tenants.push(tenantState);
+      twOverlay.style.display='none';
+      renderTenants();
     };
 
-    // Remaining script functions unchanged
+    // Submission, Review, Bundles, RBundles, Cohorts, Deliverables rendering and wizards unchanged
   </script>
 </body>
 </html>

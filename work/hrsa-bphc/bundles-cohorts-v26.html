@@ -1,4 +1,4 @@
-# file: bundles-v25.html
+# file: bundles-v26.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,8 +133,21 @@
           <button id="open-cohort-wizard">New Cohort</button>
           <button id="delete-selected-cohort">Delete Selected</button>
           <div class="card">
+            <label for="cohort-grid-search">Search Cohorts</label>
+            <input type="text" id="cohort-grid-search" class="search-input" placeholder="Search cohorts...">
             <table>
-              <thead><tr><th><input type="checkbox" id="cohort-select-all"></th><th>Name</th><th>Description</th><th>Tags</th><th>Program</th><th>Resource Type</th><th># Resources</th><th>Actions</th></tr></thead>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="cohort-select-all"></th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Tags</th>
+                  <th>Program</th>
+                  <th>Resource Type</th>
+                  <th># Resources</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
               <tbody id="cohort-grid"></tbody>
             </table>
           </div>
@@ -286,7 +299,13 @@
       <div id="cohort-step-2" class="wizard-step">
         <h4>Step 2: Program & Resource Type</h4>
         <label for="cohort-prog">Program *</label>
-        <select id="cohort-prog"><option value="">Select</option><option>330</option><option>LGP</option><option>LAL</option></select><span class="error" id="cohort-prog-error"></span>
+        <select id="cohort-prog">
+          <option value="">Select</option>
+          <option>330</option>
+          <option>LGP</option>
+          <option>LAL</option>
+          <option>BPHC</option>
+        </select><span class="error" id="cohort-prog-error"></span>
         <label for="cohort-type">Resource Type *</label>
         <select id="cohort-type"><option value="">Select</option><option>applications</option><option>awards</option><option>organizations</option></select><span class="error" id="cohort-type-error"></span>
       </div>
@@ -346,8 +365,16 @@
     ];
     const submissionLibrary = [ /* existing data */ ];
     const reviewLibrary = [ /* existing data */ ];
-    const dataStore = { /* existing dataStore */ };
-    let cohorts = [ /* existing cohorts */ ];
+    const dataStore = {
+      330: { applications: ['App1','App2'], awards: ['Award1'], organizations:['Org1','Org2'], projects:[], groups:[], associations:[], networks:[] },
+      LGP: { applications: ['LGP App1'], awards: ['LGP Award1'], organizations:['LGP Org1'], projects:[], groups:[], associations:[], networks:[] },
+      LAL: { applications: ['LAL App1'], awards: ['LAL Award1'], organizations:['LAL Org1'], projects:[], groups:[], associations:[], networks:[] },
+      BPHC: { organizations: ['Health Center A','Health Center B','Health Center C'], applications: ['App Alpha','App Beta'], awards: ['Award X','Award Y'], projects:[], groups:[], associations:[], networks:[] }
+    };
+    let cohorts = [
+      { id:'1', name:'BPHC Metro Cohort', desc:'Primary health centers in metro area', tags:'primary, urban', program:'BPHC', type:'organizations', entities:['Health Center A','Health Center B'] },
+      { id:'2', name:'BPHC Rural Cohort', desc:'Rural outreach clinics', tags:'primary, rural', program:'BPHC', type:'applications', entities:['App Alpha','App Beta'] }
+    ];
     let bundles = [ /* existing bundles */ ];
     let rbundles = JSON.parse(JSON.stringify(bundles));
     let deliverables = [ /* existing deliverables */ ];
@@ -390,6 +417,14 @@
     deleteSelectedCoh.onclick=()=>{
       const sel=Array.from(cohortGrid.querySelectorAll('input[type="checkbox"]:checked')).map(cb=>cb.dataset.name);
       if(sel.length&&confirm(`Delete ${sel.length} selected?`)){sel.forEach(n=>{const i=cohorts.findIndex(x=>x.name===n);cohorts.splice(i,1);});renderCohorts();}
+    };
+
+    // Cohorts search
+    document.getElementById('cohort-grid-search').oninput=()=>{
+      const q=document.getElementById('cohort-grid-search').value.toLowerCase();
+      Array.from(cohortGrid.querySelectorAll('tr')).forEach(tr=>{
+        tr.style.display = tr.textContent.toLowerCase().includes(q)?'':'none';
+      });
     };
 
     // Wizards (submission, review, bundle, rbundle, deliverable unchanged)
