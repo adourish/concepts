@@ -5,7 +5,8 @@
 - [~] ask: configuration hub
   - started: 2025-09-02 12:36 | know_tokens: 7532 | prompt_tokens: 7778 | total_tokens: 15310
   - include: pattern=*bundles-v26.html|*features.md recursive`
-  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-library-v26.html
+  - out: file=C:\projects\concepts\work\hrsa-bphc\bundles-library-v27.html
+  - in: file=C:\projects\concepts\work\hrsa-bphc\bundles-library-v26.html
 ```knowledge
 
 A0. look at bundles-v26.html. use this as your starting point
@@ -34,7 +35,8 @@ task 4: add test data that is hrsa bphc themed
 - [x] ask: configuration hub
   - started: 2025-09-02 12:44 | completed: 2025-09-02 12:45 | know_tokens: 7532 | prompt_tokens: 7685 | total_tokens: 15217
   - include: pattern=*bundles-v26.html|*features.md recursive`
-  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-tenents-v26.html
+  - out: file=C:\projects\concepts\work\hrsa-bphc\bundles-tenents-v27.html
+  - in: file=C:\projects\concepts\work\hrsa-bphc\bundles-tenents-v26.html
 ```knowledge
 
 A0. look at bundles-v26.html. use this as your starting point
@@ -64,7 +66,8 @@ task 4: add test data. Add HRSA\BPHC, HRSA\HAB, HRSA\BHW
 - [x] ask: configuration hub
   - started: 2025-09-02 12:46 | completed: 2025-09-02 12:47 | know_tokens: 7532 | prompt_tokens: 7685 | total_tokens: 15217
   - include: pattern=*bundles-v26.html|*features.md recursive`
-  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-cohorts-v26.html
+  - out: file=C:\projects\concepts\work\hrsa-bphc\bundles-cohorts-v27.html
+  - in: file=C:\projects\concepts\work\hrsa-bphc\bundles-cohorts-v26.html
 ```knowledge
 
 A0. look at bundles-v26.html. use this as your starting point
@@ -93,7 +96,8 @@ task 4: add test data that is hrsa bphc themed
 - [~] ask: configuration hub
   - started: 2025-09-02 12:36 | know_tokens: 7532 | prompt_tokens: 7778 | total_tokens: 15310
   - include: pattern=*bundles-v26.html|*features.md recursive`
-  - focus: file=C:\projects\concepts\work\hrsa-bphc\bundles-bundles-v26.html
+  - out: file=C:\projects\concepts\work\hrsa-bphc\bundles-bundles-v26.html
+  - in: file=C:\projects\concepts\work\hrsa-bphc\bundles-bundles-v26.html
 ```knowledge
 
 A0. look at bundles-v26.html. use this as your starting point
@@ -122,7 +126,8 @@ task 4: add test data that is hrsa bphc themed
 - [x] ask: scope
   - started: 2025-09-01 00:17 | completed: 2025-09-01 00:23 | know_tokens: 3098 | prompt_tokens: 4383 | total_tokens: 7481
   - include: pattern=*scope-review-v3.html|*features.md recursive`
-  - focus: file=C:\projects\concepts\work\hrsa-bphc\scope-review-v4.html
+  - out: file=C:\projects\concepts\work\hrsa-bphc\scope-review-v4.html
+  - in: file=C:\projects\concepts\work\hrsa-bphc\scope-review-v3.html
 ```knowledge
 
 
