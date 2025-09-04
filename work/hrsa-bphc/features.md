@@ -1,256 +1,286 @@
-# REFERENCE FEATUES: existing features: Do not remove
-# Menu Navigation  
-   • Accessible from global nav → “Configuration Hub”  
-   • Side-Nav (always visible):  
-     – Tenents (BPHC, HAB, etc.)
-     – Submission Form Library  
-     – Review Form Library  
-     - Entities (organizations, awards, applications, projects, groups, associations, networks)
-     – Cohorts  
-     – Submission Bundles  
-     – Review Bundles  
-     – Deliverables  
-
-# High-Level User Flow  
-   1. User lands on Configuration Hub (requires authentication)  
-   2. Page loads Header (title, user menu), Side-Nav, Main area defaults to Submission Library  
-   3. User clicks a Side-Nav link → section view loads  
-   4. In each section:  
-      a. [New/Register] button  
-      b. Search box (live-filter)  
-      c. Select-all checkbox + per-row checkboxes  
-      d. Table of items with Actions (Update, Delete)  
-   5. User actions in section:  
-      • Search → filters rows immediately  
-      • Select-all → toggles every row checkbox  
-      • Click Delete (row) → confirms? → removes item → refresh table  
-      • Click Update (row) → opens wizard in edit mode  
-      • Click New/Register → opens wizard in create mode  
-   6. Wizard overlay common behavior:  
-      • Multi-step (2–4 steps, see below)  
-      • Prev / Next / Finish / Cancel buttons (Prev hidden on step 1; Finish only on last step)  
-      • Cancel → closes without saving  
-      • Finish → validate required fields → save create/update → close → refresh table  
-   7. After wizard closes user returns to section view; may switch sections or log out  
-
-# Features & Behaviors  
-   • Responsive layout (desktop/tablet)  
-   • Live search/filtering  
-   • Bulk select + bulk delete (if at least one checkbox)  
-   • Inline row actions (Update, Delete)  
-   • Wizard flows with field-level validation, progress indicators  
-   • Conditional steps (e.g. “Enable Review” toggle skips review-form selection)  
-   • Reordering lists in wizards (Up/Down controls)  
-   • Cron or one-time schedule picker for deliverables  
-   • Email template lookup + reminder-days input  
-
-# Data Objects & Table Columns  
-
-  - Submission Form Library
-    • id (UUID)  
-    • name (string)  
-    • endpointUrl (string)  
-    • authType (e.g. OAuth2, API Key)  
-    • schema (JSON schema name/reference)  
-    • lastValidationStatus (Passed/Failed/Pending)  
-    • createdAt, updatedAt (timestamps)  
-    Table columns:  
-      – checkbox  
-      – Name  
-      - Description
-      – Endpoint URL  
-      – Exit Event
-      - API Auth Type
-      - APIs Features
-        - Column should show which features are supported in a comma separated list (Create Draft, Update Draft, List Forms, Get Form Details, Delete Form, List Versions, Get Version, , Restore Version, Health)
-        - The wizard should show a grid to allow configuring the features.
-        - Create Draft POST /api/forms  
-        - Update Draft PUT /api/forms/{formId}  
-        - Publish POST /api/forms/{formId}/publish  
-        - List Forms GET /api/forms?type={submission|review}&status={draft|published}&page={n}&size={m}  
-        - Get Form Details GET /api/forms/{formId}  
-        - Delete Form DELETE /api/forms/{formId}  
-        - List Versions GET /api/forms/{formId}/versions  
-        - Get Version Details GET /api/forms/{formId}/versions/{version}  
-        - Restore Version → new draft from v POST /api/forms/{formId}/versions/{version}/restore
-        - Health GET /api/health
-      – Schema (YAML)  
-      – Validation Status  
-      - Options
-      – Actions  
-
-  - Review Form Library
-    • same fields as Submission Form  
-    Table columns same as Submission Library  
-
-  - Cohort  
-    • id  
-    • name  
-    • Entities (organization, award, application, cohorts)
-    • description  
-    • tags (list of strings)  
-    • programId (ref)  
-    • entityType (e.g. User, Device)  
-    • entityCount (computed)  
-    • createdAt, updatedAt  
-    Table columns:  
-      – checkbox  
-      – Name  
-      – Description  
-      – Tags  
-      – Program  
-      – Entity Type  
-      – Entities  
-      – Actions  
-
-  - Tenant  
-    • id (UUID)  
-    • name (string)  
-    • description (string)  
-    • createdAt, updatedAt (timestamps)  
-    Table columns:  
-      – checkbox  
-      – Name  
-      – Description  
-      – Actions  
-
-  - Entity Definition  
-    • id (UUID)  
-    • name (string)  
-    • type (system | user)  
-    • parentEntityId (UUID, nullable)  
-    • attributes (array of { name, dataType, required })  
-    • createdAt, updatedAt (timestamps)  
-    Table columns:  
-      – checkbox  
-      – Name  
-      – Type  
-      – Parent Entity  
-      – # Child Entities  
-      – Actions  
-
-
-  - Bundle (v19 schema)  
-    • id  
-    • name  
-    • description  
-    • programId  
-    • tags (list)  
-    • submissionPhaseForms (ordered list of formIds)  
-    • reviewEnabled (bool)  
-    • reviewPhaseForms (ordered list)  
-    • createdAt, updatedAt  
-    Table columns (for both Submission Bundles & Review Bundles views):  
-      – checkbox  
-      – Name  
-      - Features
-      – Endpoint URL  
-      – Exit Event
-      - API Auth Type
-      - API Features
-        - Create Draft POST /api/forms  
-        - Update Draft PUT /api/forms/{formId}  
-        - Publish POST /api/forms/{formId}/publish  
-        - List Forms GET /api/forms?type={submission|review}&status={draft|published}&page={n}&size={m}  
-        - Get Form Details GET /api/forms/{formId}  
-        - Delete Form DELETE /api/forms/{formId}  
-        - List Versions GET /api/forms/{formId}/versions  
-        - Get Version Details GET /api/forms/{formId}/versions/{version}  
-        - Restore Version → new draft from v POST /api/forms/{formId}/versions/{version}/restore
-      – Schema (YAML)  
-      – Validation Status  
-      - Options
-      – Actions  
-
-  - Deliverable  
-    • id  
-    • name  
-    • cohortId  
-    • bundleId  
-    • scheduleType (One-time / Recurring)  
-    • scheduledDate (date if one-time)  
-    • cronExpression (if recurring)  
-    • notificationTemplateId  
-    • reminderDays (array of ints)  
-    • nextRun (computed)  
-    • lastRunStatus (Success/Failure/Pending)  
-    • createdAt, updatedAt  
-    Table columns:  
-      – checkbox  
-      – Name  
-      – Cohort  
-      – Bundle  
-      – Schedule (display human-readable)  
-      – Next Run  
-      – Status  
-      – Actions  
-
-- Wizard Step Details  
-
-  - Form Wizard (Submission & Review) – 2 steps  
-    Step 1: Metadata  
-      • Name (required)  
-      • Endpoint URL (required, URL format)  
-      • Auth Type (dropdown) + credentials fields  
-      * API Features table with features
-      • Schema (dropdown)  
-    Step 2: Validation  
-      • Run Validation Tests button → shows status/messages  
-      • Read-only view of entered metadata  
-      • Finish  
-
-  - Tenant Wizard – 2 steps  
-    Step 1: Basic Info  
-      • Name (required)  
-      • Description  
-    Step 2: Review & Finish  
-      • Read-only summary of values  
-      • Finish  
-
-  - Entity Definition Wizard – 4 steps  
-    Step 1: Basic Info  
-      • Name (required)  
-      • Type (system | user)  
-    Step 2: Hierarchy  
-      • Parent Entity (tree selector of existing definitions)  
-    Step 3: Attributes  
-      • [ + Add Field ] → name, data type (string, number, boolean, date, enum), required toggle  
-      • Reorder fields (drag/drop)  
-    Step 4: Review & Finish  
-      • Read-only summary of all settings  
-      • Finish  
-
-  - Cohort Wizard – 4 steps  
-    1. Basic Info (Name, Description, Tags)  
-    2. Program & Entity Type (dropdowns)  
-    3. Pick Entities (multi-select list filtered by step 2)  
-    4. Review & Finish  
-
-  - Bundle Wizard – 4 steps  
-    1. Basics (Name, Description, Program, Tags)  
-    2. Submission Phase  
-       – Search field → filter available submission forms  
-       – Checkboxes to add → appear in “Selected” list  
-       – Up/Down to reorder  
-    3. Review Phase  
-       – Enable Review? (toggle)  
-       – If on: same pattern with review forms  
-    4. Summary & Finish  
-
-  - Deliverable Wizard – 4 steps  
-    1. Basic Info (Name, Cohort picker, Bundle picker)  
-    2. Schedule (One-time date picker OR cron expression input + helper)  
-    3. Notifications (Email template picker, Reminder days multi-select)  
-    4. Review summary & Finish  
-
-- Validation Rules & Error Handling  
-   • All required fields enforced before Next/Finish  
-   • Inline field errors + summary at top on validation fail  
-   • Wizard cannot proceed if any step invalid  
-   • Delete actions prompt confirmation dialog  
-
-- State Management & Persistence  
-   • Table views fetch paged data via REST API  
-   • Searches apply query param to API calls  
-   • Wizards maintain local state until Finish  
-   • Create/update calls return updated object → table refresh  
+	# Title: Configuration Hub
+	
+	## Menu Navigation  
+	   Global Nav → “Configuration Hub”  
+	   Side-Nav (always visible):  
+	     Tenants  
+	     Form Registry  
+	     Resource Library  
+	     Cohorts  
+	     Resource Bundles  
+	     Deliver Bundles  
+	
+	## High-Level User Flow  
+	   User lands on Configuration Hub (requires auth) → header + side-nav + main area (defaults to Submission Library)  
+	   Click side-nav → load that section view  
+	   Each section view provides:  
+	     [New/Register] button  
+	     Search box (live-filter)  
+	     Bulk-select checkbox + per-row checkboxes  
+	     Table of items with inline Actions (Update | Delete)  
+	   Actions:  
+	     Search → live filters rows  
+	     Select-all → toggles every row  
+	     Delete (row) → confirm → delete → refresh table  
+	     Update (row) → open wizard in edit mode  
+	     New/Register → open wizard in create mode  
+	   Wizard overlay (all sections)  
+	     Multi-step (2–4 steps per flow)  
+	     Prev / Next / Finish / Cancel buttons (Prev hidden on step 1; Finish only on last step)  
+	     Cancel → close without saving  
+	     Finish → validate required fields → save create/update → close → refresh table  
+	   After wizard closes, return to section view  
+	
+	## Common Features  
+	   Responsive layout (desktop/tablet)  
+	   Live search/filtering  
+	   Bulk select + bulk delete  
+	   Inline row actions (Update, Delete)  
+	   Wizard flows with field-level validation + progress indicator  
+	   Conditional steps (e.g. Enable Review toggle)  
+	   Reordering lists in wizards (Up/Down)  
+	   Cron or one-time schedule picker (deliver bundles)  
+	   Email template lookup + reminder days input  
+	
+	---
+	
+	# FORM REGISTRY FLOW
+	
+	## Form Registry Page Actions  
+	   Register New Form  
+	   Delete Selected  
+	   Search Forms  
+	
+	## Database Objects
+	
+	form_registry  
+	   id (UUID, PK)  
+	   name (varchar, NOT NULL)  
+	   description (text)  
+	   tenant_id (FK)  
+	   tags (varchar[])  
+	   entry_endpoint_url (varchar)  /scope/form5a?bundleInstanceId={id2}&resourcevalue={id1}
+	   externalSystemId  -> http://lightning.salesforce/tenent
+	   exit_event (varchar)  -> could be a status event for a form save
+	   auth_type (varchar)  
+	   schema (varchar)  
+	   last_validation_status (ENUM: Passed, Failed, Pending)  
+	   created_at (timestamp)  
+	   updated_at (timestamp)  
+	form_api_features - GetById(id), Create(id, json), CreateDraft(id, json), Search(tbd), Patch, History(id), Update(id, json), Health(id), GetFormDefinitionOptions() /scope/form5a/api/GetFormDefinitionOptions -> list of objects)
+	   id (UUID, PK)  
+	   form_id (FK → form_registry)  
+	  externalsystemId
+	   name (varchar)  
+	   url (varchar)  
+	   type (varchar)  
+	   headers (json)  
+	   query_params (json)  
+	form_options  (list of objects to configure each form and view)
+	   id (UUID, PK)  
+	   view_id  (can be global or scoped to a view)
+	   name (varchar)  
+	   value (json)
+	   description (text)  
+	   type (varchar)  
+	   default_value (varchar)  
+	form_views  (form5a create, form5a verfication, form5 ro)
+	   id (UUID, PK)  
+	   name (varchar)  
+	   description (text)  
+	
+	## Form Registry Table Columns  
+	[checkbox] | ID | Name | Program | Tenant | Tags | Description | Entry Endpoint URL | Exit Event | Auth Type | Impact | API Features | Options | Views | Last Validation Status | Created At | Updated At | Actions  
+	
+	## Form Registry Wizard  
+	Step 1: Metadata  
+	   name (required)  
+	   description (required)  
+	   tenant  
+	   entry_endpoint_url (required, URL format)  
+	   auth_type  
+	   exit_event  
+	
+	Step 2: API Features  
+	   Table of feature rows GetById(id), Create(id, json), CreateDraft(id, json), Search(tbd), Patch, History(id), Update(id, json), Health(id), GetFormDefinitionOptions() /scope/form5a/api/GetFormDefinitionOptions -> list of objects)
+	  for each row, need columns for the externalsystemId (drop down), name (varchar), url (varchar), type (varchar), headers (json), query_params (json) 
+	
+	Step 3: Options  
+	   Table of option rows (name, description, type, default_value)  
+	
+	Step 4: Validation  
+	   Run Validation Tests button → show status/messages . Go through full lifecycle of create, update, delete, to test the APIs., do health check.
+	   Read-only view of entered metadata  
+	   Finish  
+	
+	---
+	
+	#  RESOURCE LIBRARY FLOW
+	
+	## Database Objects
+	
+	resource_definitions  
+	   id (UUID, PK)  
+	   name (varchar, NOT NULL)  
+	   description (text)  
+	   resource_type (varchar)    -- e.g. application, award, organization, program  
+	   externalSystemId
+	  model (columns, data types)
+	   tenant_id (FK)  
+	   tags (varchar[])  
+	   created_at (timestamp)  
+	   updated_at (timestamp)  
+	
+	resource_items  
+	   id (UUID, PK)  
+	   resource_definition_id (FK → resource_definitions)  
+	   content (text or json)  
+	   tags (varchar[])  
+	   scope_type (varchar)     -- system | user  
+	   created_at (timestamp)  
+	   updated_at (timestamp)  
+	
+	## Resource Library Table Columns  
+	[checkbox] | ID | Name | Description | Resource Type | Tags | Tenant | Program | Scope Type | Created At | Updated At | Actions  
+	
+	## Resource Library Wizard  
+	Step 1: Metadata  
+	   name (required)  
+	   description (required)  
+	   tags  
+	   tenant  
+	   program  
+	   Finish  
+	
+	---
+	
+	# COHORTS FLOW
+	
+	## Database Object
+	
+	cohorts  
+	   id (UUID, PK)  
+	   name (varchar, NOT NULL)  
+	   description (text)  
+	   tenant_id (FK)  
+	   program_id (FK)  
+	   tags (varchar[])  
+	   resource1_name (varchar)  
+	   resource2_name (varchar)  
+	   resource1_filter (json)  
+	   resource2_filter (json)  
+	   resource1_content (json list)  
+	   resource2_content (json list)  
+	   resource_count (int, computed)  
+	   created_at (timestamp)  
+	   updated_at (timestamp)  
+	
+	## Cohorts Table Columns  
+	[checkbox] | ID | Name | Description | Tags | Program | Tenant | Resource Count | Created At | Updated At | Actions  
+	
+	## Cohort Wizard  
+	Step 1: Metadata  
+	   name (required)  
+	   description (required)  
+	   program (multi-select)  
+	   tenant (select one)  
+	   resource1_name (select resource)  
+	   resource2_name (select resource)  
+	   tags  
+	
+	Step 2: Resource1 Filter  
+	   Table of Resource Library items (Name, Tenant, Program, Tags) → filter/search → select  
+	
+	Step 3: Resource2 Filter  
+	   Table of Resource Library items → filter/search → select  
+	
+	Step 4: Summary (read-only metadata + selected content)  
+	   Finish  
+	
+	---
+	
+	# TENANTS FLOW
+	
+	## Database Object
+	
+	tenants  
+	   id (UUID, PK)  
+	   name (varchar, NOT NULL)  
+	   description (text)  
+	   program_id (FK)  
+	   created_at (timestamp)  
+	   updated_at (timestamp)  
+	
+	## Tenants Table Columns  
+	[checkbox] | ID | Name | Description | Program | Created At | Updated At | Actions  
+	
+	## Tenant Wizard  
+	Step 1: Metadata  
+	   name (required)  
+	   description (required)  
+	   program  
+	
+	Step 2: Summary (read-only)  
+	   Finish  
+	
+	---
+	
+	# RESOURCE BUNDLES FLOW
+	
+	## Database Object
+	
+	resource_bundles  
+	   id (UUID or string, PK)  
+	   identifier (varchar, optional)  
+	   type (varchar, always “collection”)  
+	   timestamp (timestamp)  
+	   meta_version_id (varchar)  
+	   meta_last_updated (timestamp)  
+	   meta_implicit_rules (varchar)  
+	   total (unsignedInt, optional, defaults to count of entries)  
+	   signature (text or json)  
+	   created_at (timestamp)  
+	   updated_at (timestamp)  
+	
+	form_items
+	   form_id (FK → form_registry)  
+	   order_index (int)  
+	   configured_options (json)  
+	
+	resource_items
+	   bundle_id (FK → resource_bundles)  
+	   resource_id (FK → resource_definitions or resource_items)  
+	   order_index (int)  
+	
+	## Resource Bundles Table Columns  
+	[checkbox] | ID | Type | Identifier | Timestamp | Total Entries | Forms Count | Resources Count | Last Updated | Actions  
+	
+	## Resource Bundle Wizard  
+	Step 1: Basics  
+	   identifier (optional)  
+	   type (collection)  
+	   timestamp (defaults to now; editable)  
+	   meta_version_id (auto)  
+	   meta_last_updated (auto)  
+	   meta_implicit_rules (URI)  
+	
+	Step 2: Forms & Context Resources  
+	   Search/Add Forms (grid of form_registry entries)  
+	  For each selected form, ability to click update. Select and change options, select and change the view, 
+	   Selected Forms list → reorder (Up/Down)  
+	
+	Step 3: Linked Context Resources  
+	   Search Resource Library items (Name, Type, Program, Tenant, Tags)  
+	   Selected Resources list → reorder (Up/Down)  
+	
+	Step 4: Metadata & Signature  
+	   total (auto = count of forms; editable)  
+	   signature (upload or paste)  
+	
+	Step 5: Summary & Save  
+	   Read-only summary of all sections  
+	   Back to any step for edits  
+	   Save (POST for new, PUT for existing)  
+	   Cancel (warn if unsaved)  
+	
+	---
