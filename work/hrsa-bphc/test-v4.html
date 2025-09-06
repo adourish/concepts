@@ -1,0 +1,340 @@
+Below is a minimal, self‐contained HTML/JS skeleton for a “Configuration Hub” app matching your updated flow.  It defines the six side‐nav sections (Tenants, Form Registry, Resource Library, Cohorts, Resource Bundles, Deliver Bundles), each with a table “card” plus New / Delete‐Selected/search controls, and a stubbed multi‐step wizard overlay per section.  All the fundamental CSS, nav‐switching, generic table‐render stubs and wizard‐step navigation are included—you can expand each section’s render logic and wizard‐step contents as needed.
+
+Save this as `index.html` and open it in a browser.  From there you can wire up your real data/store and flesh out each wizard’s step forms and table columns.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Configuration Hub</title>
+  <style>
+    :root {
+      --brand-blue: #1589ee;
+      --dark-blue: #16325c;
+      --light-gray: #f4f6f9;
+      --border-gray: #d8dde6;
+      --text-dark: #1a1a1a;
+      --font: Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body, html { height:100%; font-family:var(--font); background:var(--light-gray); color:var(--text-dark); }
+    .app-container { display:flex; flex-direction:column; height:100%; }
+    header { background:var(--dark-blue); color:white; padding:0 1em; display:flex; align-items:center; height:50px; justify-content:space-between; }
+    nav { width:200px; background:var(--brand-blue); display:flex; flex-direction:column; }
+    nav a { color:white; text-decoration:none; padding:0.8em 1em; }
+    nav a.active, nav a:hover { background:var(--dark-blue); }
+    .body { flex:1; display:flex; overflow:hidden; }
+    .main { flex:1; padding:1em; overflow-y:auto; }
+    .section { display:none; }
+    .section.active { display:block; }
+    .card { background:white; border:1px solid var(--border-gray); border-radius:4px; padding:1em; margin-top:1em; }
+    .card label { font-weight:bold; display:block; margin-bottom:0.5em; }
+    .search-input { width:100%; padding:0.5em; margin-bottom:0.5em; border:1px solid var(--border-gray); border-radius:3px; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { border:1px solid var(--border-gray); padding:0.5em; text-align:left; }
+    th { background:var(--light-gray); }
+    button { background:var(--brand-blue); color:white; border:none; padding:0.5em 1em; border-radius:3px; cursor:pointer; }
+    button.delete { background:#d9534f; }
+    button.update { background:#ffc107; color:#1a1a1a; }
+    .wizard-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); display:none; align-items:center; justify-content:center; z-index:100; }
+    .wizard-content { background:white; padding:1em; border-radius:5px; width:600px; max-height:90%; overflow-y:auto; }
+    .wizard-step { display:none; }
+    .wizard-step.active { display:block; }
+    .wizard-buttons { text-align:right; margin-top:1em; }
+    .wizard-buttons button { margin-left:0.5em; }
+    .error { color:#d9534f; font-size:0.9em; }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <header>
+    <h1>Configuration Hub</h1>
+    <div>User: admin | <a href="#" style="color:white;">Logout</a></div>
+  </header>
+  <div class="body">
+    <nav>
+      <a href="#" data-target="tenants" class="active">Tenants</a>
+      <a href="#" data-target="form-registry">Form Registry</a>
+      <a href="#" data-target="resource-library">Resource Library</a>
+      <a href="#" data-target="cohorts">Cohorts</a>
+      <a href="#" data-target="resource-bundles">Resource Bundles</a>
+      <a href="#" data-target="deliver-bundles">Deliver Bundles</a>
+    </nav>
+    <div class="main">
+      <!-- TENANTS -->
+      <section id="tenants" class="section active">
+        <h2>Manage Tenants</h2>
+        <button id="new-tenant">New Tenant</button>
+        <button id="del-tenants" disabled>Delete Selected</button>
+        <div class="card">
+          <label>Search Tenants</label>
+          <input type="text" id="search-tenants" class="search-input" placeholder="Search...">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectall-tenants"></th>
+                <th>Name</th><th>Description</th><th>Program</th><th>Created At</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-tenants">
+              <!-- rows go here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FORM REGISTRY -->
+      <section id="form-registry" class="section">
+        <h2>Manage Form Registry</h2>
+        <button id="new-form">Register New Form</button>
+        <button id="del-forms" disabled>Delete Selected</button>
+        <div class="card">
+          <label>Search Forms</label>
+          <input type="text" id="search-forms" class="search-input" placeholder="Search...">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectall-forms"></th>
+                <th>Name</th><th>Program</th><th>Tenant</th><th>Endpoint</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-forms"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- RESOURCE LIBRARY -->
+      <section id="resource-library" class="section">
+        <h2>Manage Resource Library</h2>
+        <button id="new-resource">New Resource</button>
+        <button id="del-resources" disabled>Delete Selected</button>
+        <div class="card">
+          <label>Search Resources</label>
+          <input type="text" id="search-resources" class="search-input" placeholder="Search...">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectall-resources"></th>
+                <th>Name</th><th>Type</th><th>Tags</th><th>Program</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-resources"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- COHORTS -->
+      <section id="cohorts" class="section">
+        <h2>Manage Cohorts</h2>
+        <button id="new-cohort">New Cohort</button>
+        <button id="del-cohorts" disabled>Delete Selected</button>
+        <div class="card">
+          <label>Search Cohorts</label>
+          <input type="text" id="search-cohorts" class="search-input" placeholder="Search...">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectall-cohorts"></th>
+                <th>Name</th><th>Tags</th><th>Program</th><th>Count</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-cohorts"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- RESOURCE BUNDLES -->
+      <section id="resource-bundles" class="section">
+        <h2>Manage Resource Bundles</h2>
+        <button id="new-rbundle">New Bundle</button>
+        <button id="del-rbundles" disabled>Delete Selected</button>
+        <div class="card">
+          <label>Search Bundles</label>
+          <input type="text" id="search-rbundles" class="search-input" placeholder="Search...">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectall-rbundles"></th>
+                <th>Name</th><th>Type</th><th>Entries</th><th>Updated</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-rbundles"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- DELIVER BUNDLES -->
+      <section id="deliver-bundles" class="section">
+        <h2>Manage Deliver Bundles</h2>
+        <button id="new-deliver">New Deliver Bundle</button>
+        <button id="del-delivers" disabled>Delete Selected</button>
+        <div class="card">
+          <label>Search Deliver Bundles</label>
+          <input type="text" id="search-delivers" class="search-input" placeholder="Search...">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectall-delivers"></th>
+                <th>Name</th><th>Cohort</th><th>Bundle</th><th>Schedule</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-delivers"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- GENERIC WIZARD OVERLAY -->
+<div id="wizard-overlay" class="wizard-overlay">
+  <div class="wizard-content">
+    <h3 id="wizard-title">Wizard</h3>
+    <!-- Step containers -->
+    <div class="wizard-step" data-step="1">
+      <h4>Step 1</h4>
+      <!-- your form fields here -->
+      <div class="flex-col">
+        <label>Name *</label>
+        <input type="text" id="wiz-field-1" /><span class="error" id="wiz-err-1"></span>
+      </div>
+    </div>
+    <div class="wizard-step" data-step="2">
+      <h4>Step 2</h4>
+      <!-- more fields -->
+      <p>Placeholder for step 2</p>
+    </div>
+    <div class="wizard-step" data-step="3">
+      <h4>Step 3</h4>
+      <p>Review & finish</p>
+      <div id="wiz-summary"></div>
+    </div>
+    <!-- Wizard buttons -->
+    <div class="wizard-buttons">
+      <button id="wiz-cancel">Cancel</button>
+      <button id="wiz-prev" style="display:none;">Prev</button>
+      <button id="wiz-next">Next</button>
+      <button id="wiz-finish" style="display:none;">Finish</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // NAVIGATION
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active'));
+      a.classList.add('active');
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      document.getElementById(a.dataset.target).classList.add('active');
+    });
+  });
+
+  // UTILS: placeholder data arrays
+  const tenants = [], forms = [], resources=[], cohorts=[], rbundles=[], delivers=[];
+
+  // GENERIC renderTable stub
+  function renderTable(tblId, data, cols) {
+    const tb = document.getElementById(tblId);
+    tb.innerHTML = '';
+    data.forEach(item => {
+      const tr = document.createElement('tr');
+      // first checkbox
+      const cb = document.createElement('td');
+      cb.innerHTML = '<input type="checkbox">';
+      tr.appendChild(cb);
+      // columns
+      cols.forEach(c => {
+        const td = document.createElement('td');
+        td.textContent = typeof c==='function' ? c(item) : item[c]||'';
+        tr.appendChild(td);
+      });
+      // actions
+      const td = document.createElement('td');
+      td.innerHTML = '<button class="update">Update</button> <button class="delete delete">Delete</button>';
+      tr.appendChild(td);
+      tb.appendChild(tr);
+    });
+  }
+
+  // Example: render tenants on load
+  renderTable('tbl-tenants', tenants, ['name','description','program','createdAt']);
+  // Similarly call renderTable for other sections as you hook up data...
+
+  // WIZARD GENERIC
+  let currentStep = 1;
+  const overlay = document.getElementById('wizard-overlay');
+  function showWizard(title) {
+    document.getElementById('wizard-title').textContent = title;
+    overlay.style.display = 'flex';
+    goStep(1);
+  }
+  function goStep(n) {
+    currentStep = n;
+    const steps = overlay.querySelectorAll('.wizard-step');
+    steps.forEach(div => {
+      div.classList.toggle('active', parseInt(div.dataset.step)===n);
+    });
+    document.getElementById('wiz-prev').style.display = n>1 ? 'inline-block' : 'none';
+    document.getElementById('wiz-next').style.display = n<steps.length ? 'inline-block' : 'none';
+    document.getElementById('wiz-finish').style.display = n===steps.length ? 'inline-block' : 'none';
+  }
+  document.getElementById('wiz-cancel').onclick = ()=>overlay.style.display='none';
+  document.getElementById('wiz-prev').onclick = ()=>goStep(currentStep-1);
+  document.getElementById('wiz-next').onclick = ()=>goStep(currentStep+1);
+  document.getElementById('wiz-finish').onclick = ()=>{
+    // TODO: gather data, validate, POST/PUT to store
+    overlay.style.display='none';
+    // re-render the active section
+  };
+
+  // WIRING New / Update buttons to open the wizard
+  document.getElementById('new-tenant').onclick       = ()=>showWizard('New Tenant');
+  document.getElementById('new-form').onclick         = ()=>showWizard('Register New Form');
+  document.getElementById('new-resource').onclick     = ()=>showWizard('New Resource');
+  document.getElementById('new-cohort').onclick       = ()=>showWizard('New Cohort');
+  document.getElementById('new-rbundle').onclick      = ()=>showWizard('New Resource Bundle');
+  document.getElementById('new-deliver').onclick      = ()=>showWizard('New Deliver Bundle');
+  // You would also hook up each table’s Update buttons similarly once rows are rendered.
+
+  // BULK‐DELETE toggles (example for tenants)
+  document.getElementById('tbl-tenants').addEventListener('change',() => {
+    const any = !!document.querySelectorAll('#tbl-tenants input[type=checkbox]:checked').length;
+    document.getElementById('del-tenants').disabled = !any;
+  });
+  document.getElementById('selectall-tenants').onclick = e => {
+    document.querySelectorAll('#tbl-tenants input[type=checkbox]').forEach(cb=>cb.checked=e.target.checked);
+    document.getElementById('del-tenants').disabled = !e.target.checked;
+  };
+  // Repeat that pattern for forms, resources, etc.
+
+  // DELETE SELECTED stubs
+  document.getElementById('del-tenants').onclick = () => {
+    if(!confirm('Delete selected tenants?')) return;
+    // TODO: remove from tenants[], then renderTable again
+  };
+  // etc…
+
+  // SEARCH‐FILTER stubs
+  document.getElementById('search-tenants').oninput = e => {
+    const q=e.target.value.toLowerCase();
+    // filter tenants array, then renderTable('tbl-tenants', filtered, …)
+  };
+  // repeat for forms, resources, etc…
+
+</script>
+</body>
+</html>
+```
+
+How to proceed:
+1. **Data Binding.** Replace the stub arrays (`tenants`, `forms`, etc.) and in each section’s render routine call `renderTable(...)` with the actual array and its column keys/functions.
+2. **Column Definitions.** Expand the `cols` parameter passed to `renderTable` to match your exact column list (ID, tags, timestamps, etc.).
+3. **Wizard Steps.** Inside the three `.wizard-step[data-step="X"]` blocks you’ll wire up the real fields as outlined in your “Form Registry Wizard”, “Resource Bundle Wizard” specs, etc.  Adjust the number of steps by adding or removing `.wizard-step` divs.
+4. **CRUD Logic.** In the `wiz-finish` handler and in the Delete/Update button callbacks you’ll PUT/POST/DELETE to your backend or manipulate your in-memory arrays.
+5. **Styling & Responsiveness.** Tweak the CSS (grid, flex, media queries) to your taste.
+
+This skeleton gets you the 6-item side navigation, table search/select/delete, and a generic multi-step wizard overlay that you can clone/configure per section.

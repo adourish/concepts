@@ -134,3 +134,50 @@ task 4: add test data that is hrsa bphc themed
 
 
 ```
+
+
+
+# Configuration Hub
+- [x] ask: New html javascript app
+  - started: 2025-09-03 16:07 | completed: 2025-09-03 16:07 | know_tokens: 946 | prompt_tokens: 946 | total_tokens: 1892
+  - include: pattern=*concepts*features.md recursive`
+  - out: file=C:\projects\concepts\work\hrsa-bphc\test-v5.html
+  - in: file=C:\projects\concepts\work\hrsa-bphc\bundles-v4.html
+```knowledge
+0. enhance bundles-v25
+1. create the configuration hub application using html and javascript
+2. Use the features.md as reference
+3. create a full drop in html file with css and javascript
+4. implement the side menu and each of the features.
+5. implement each of the wizards and the wizard steps.
+6. ensure that it is one drop in file with all the css, javascript, and html needed to render the application
+
+
+
+```
+
+# Configuration Hub
+- [x] ask: New angular app using modern platform
+  - started: 2025-09-05 19:57 | completed: 2025-09-05 19:57 | know_tokens: 27608 | prompt_tokens: 0 | total_tokens: 28413
+  - include: pattern=*concepts*features.md|*example.txt|*design.txt recursive`
+  - out: file=test-v6.html
+  - in: file=test-v6.html
+```knowledge
+1. review the features.md
+2. review the design.md
+3. review the example.txt
+4. You must use <pfm-topbanner <pfm-breadcrumbs <pfm-footer <pfm-sidemenu where possible.
+
+Complete the remaining work for these items.
+a. add the tenants feature
+b. add the form registry feature
+c. add the resources feature
+d. add the cohorts feature
+e. add the Resource Bundles  
+f. add the Deliver Bundles  
+
+5. create all of angular and config files needed to create this app 
+6. create the components and services needed.
+
+
+```

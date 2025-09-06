@@ -1,0 +1,407 @@
+Below is a high-level scaffold for a modern Angular “Configuration Hub” application using the PFM UI/Layout libraries.  It gives you:
+
+• Top‐level shell (AppModule / AppComponent)  
+• Side nav + header + breadcrumbs + footer via pfm-layout  
+• Angular routing into six feature areas  
+• A shared WizardOverlayComponent for all create/update flows  
+• Stubs for each of the six sections (Tenants, Form Registry, Resource Library, Cohorts, Resource Bundles, Deliver Bundles)  
+• Table + New/Delete/Search boilerplate in each feature component  
+• Example of opening the wizard to Create/Edit  
+
+You can clone this into an Angular CLI project (`ng new config-hub --routing`) and then install the pfm packages you need (`npm install pfm-ui pfm-layout pfm-ui/components pfm-ui/controls …`).  From here, wire up your real data services and flesh out each wizard step.
+
+---
+
+## 1. app.module.ts
+```ts
+import { NgModule }       from '@angular/core';
+import { BrowserModule }  from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule }    from '@angular/forms';
+
+// PFM UI & Layout
+import { TopBannerModule,
+         BreadcrumbsModule,
+         FooterModule,
+         SideMenuModule,
+         LayoutService }  from 'pfm-layout/master';
+import { CoreModule }     from 'pfm-ui/core';
+import { ControlsModule } from 'pfm-ui/controls';
+import { GridModule }     from 'pfm-ui/components';
+
+import { AppComponent }   from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+
+// Feature modules
+import { TenantsModule }         from './tenants/tenants.module';
+import { FormRegistryModule }    from './form-registry/form-registry.module';
+import { ResourceLibraryModule } from './resource-library/resource-library.module';
+import { CohortsModule }         from './cohorts/cohorts.module';
+import { ResourceBundlesModule } from './resource-bundles/resource-bundles.module';
+import { DeliverBundlesModule }  from './deliver-bundles/deliver-bundles.module';
+
+// Shared wizard
+import { WizardOverlayComponent } from './shared/wizard-overlay/wizard-overlay.component';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    CoreModule,
+    ControlsModule,
+    GridModule,
+    TopBannerModule,
+    BreadcrumbsModule,
+    SideMenuModule,
+    FooterModule,
+    TenantsModule,
+    FormRegistryModule,
+    ResourceLibraryModule,
+    CohortsModule,
+    ResourceBundlesModule,
+    DeliverBundlesModule,
+    AppRoutingModule
+  ],
+  declarations: [
+    AppComponent,
+    WizardOverlayComponent
+  ],
+  bootstrap: [ AppComponent ]
+})
+export class AppModule { }
+```
+
+---
+
+## 2. app-routing.module.ts
+```ts
+import { NgModule }     from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  { path: '',   redirectTo: 'tenants', pathMatch: 'full' },
+  { path: 'tenants',       loadChildren: () => import('./tenants/tenants.module').then(m => m.TenantsModule) },
+  { path: 'form-registry', loadChildren: () => import('./form-registry/form-registry.module').then(m => m.FormRegistryModule) },
+  { path: 'resource-library', loadChildren: () => import('./resource-library/resource-library.module').then(m => m.ResourceLibraryModule) },
+  { path: 'cohorts',       loadChildren: () => import('./cohorts/cohorts.module').then(m => m.CohortsModule) },
+  { path: 'resource-bundles', loadChildren: () => import('./resource-bundles/resource-bundles.module').then(m => m.ResourceBundlesModule) },
+  { path: 'deliver-bundles',  loadChildren: () => import('./deliver-bundles/deliver-bundles.module').then(m => m.DeliverBundlesModule) },
+  { path: '**', redirectTo: 'tenants' }
+];
+
+@NgModule({
+  imports: [ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ]
+})
+export class AppRoutingModule { }
+```
+
+---
+
+## 3. app.component.{ts,html,scss}
+
+### app.component.ts
+```ts
+import { Component } from '@angular/core';
+import { LayoutService } from 'pfm-layout/master';
+
+interface NavItem { label: string; route: string; }
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  navItems: NavItem[] = [
+    { label: 'Tenants',         route: '/tenants' },
+    { label: 'Form Registry',   route: '/form-registry' },
+    { label: 'Resource Library',route: '/resource-library' },
+    { label: 'Cohorts',         route: '/cohorts' },
+    { label: 'Resource Bundles',route: '/resource-bundles' },
+    { label: 'Deliver Bundles', route: '/deliver-bundles' }
+  ];
+
+  constructor(private layout: LayoutService) {
+    // load PFML layout config if necessary
+    this.layout.getConfiguration();
+  }
+}
+```
+
+### app.component.html
+```html
+<pfm-topbanner></pfm-topbanner>
+<pfm-breadcrumbs style="visibility:hidden"></pfm-breadcrumbs>
+
+<div class="app-shell">
+  <nav class="side-nav">
+    <a *ngFor="let nav of navItems"
+       routerLink="{{nav.route}}"
+       routerLinkActive="active">{{nav.label}}</a>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<pfm-footer></pfm-footer>
+```
+
+### app.component.scss
+```scss
+.app-shell {
+  display: flex;
+  height: calc(100vh - 100px);
+}
+.side-nav {
+  width: 200px;
+  background: #1589ee;
+  display: flex;
+  flex-direction: column;
+}
+.side-nav a {
+  color: white;
+  padding: .8rem 1rem;
+  text-decoration: none;
+}
+.side-nav a.active, .side-nav a:hover {
+  background: #16325c;
+}
+.main-content {
+  flex:1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+```
+
+---
+
+## 4. Shared WizardOverlayComponent
+
+```ts
+// shared/wizard-overlay/wizard-overlay.component.ts
+import { Component, TemplateRef, EventEmitter, Output } from '@angular/core';
+
+@Component({
+  selector: 'wizard-overlay',
+  template: `
+    <div class="wizard-overlay" *ngIf="visible">
+      <div class="wizard-content">
+        <h3>{{title}}</h3>
+        <ng-container *ngTemplateOutlet="steps[currentIndex]"></ng-container>
+        <div class="wizard-buttons">
+          <button (click)="cancel()">Cancel</button>
+          <button *ngIf="currentIndex>0" (click)="prev()">Prev</button>
+          <button *ngIf="currentIndex<steps.length-1" (click)="next()">Next</button>
+          <button *ngIf="currentIndex===steps.length-1" (click)="finish()">Finish</button>
+        </div>
+      </div>
+    </div>
+  `,
+  styleUrls: ['./wizard-overlay.component.scss']
+})
+export class WizardOverlayComponent {
+  visible = false;
+  title = '';
+  steps: TemplateRef<any>[] = [];
+  currentIndex = 0;
+
+  @Output() onFinish = new EventEmitter<any>();
+  @Output() onCancel = new EventEmitter<void>();
+
+  open(title: string, steps: TemplateRef<any>[]) {
+    this.title = title;
+    this.steps = steps;
+    this.currentIndex = 0;
+    this.visible = true;
+  }
+
+  next()  { this.currentIndex++; }
+  prev()  { this.currentIndex--; }
+  cancel(){ this.visible=false; this.onCancel.emit(); }
+  finish(){ this.visible=false; this.onFinish.emit({}); }
+}
+```
+
+```scss
+/* wizard-overlay.component.scss */
+.wizard-overlay {
+  position: fixed; top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0, .4);
+  display: flex; align-items: center; justify-content: center;
+}
+.wizard-content {
+  background: white; padding:1rem; border-radius: 4px;
+  width: 600px; max-height: 90%; overflow-y:auto;
+}
+.wizard-buttons { text-align: right; margin-top:1rem; }
+.wizard-buttons button { margin-left:.5rem; }
+```
+
+---
+
+## 5. Example Feature Module: Tenants
+
+### tenants.module.ts
+```ts
+import { NgModule }       from '@angular/core';
+import { CommonModule }   from '@angular/common';
+import { FormsModule }    from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+
+import { GridModule }     from 'pfm-ui/components';
+import { ControlsModule } from 'pfm-ui/controls';
+
+import { TenantsComponent } from './tenants.component';
+
+const routes: Routes = [
+  { path: '', component: TenantsComponent }
+];
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    GridModule,
+    ControlsModule,
+    RouterModule.forChild(routes)
+  ],
+  declarations: [TenantsComponent]
+})
+export class TenantsModule {}
+```
+
+### tenants.component.ts
+```ts
+import { Component, ViewChild } from '@angular/core';
+import { WizardOverlayComponent } from '../shared/wizard-overlay/wizard-overlay.component';
+
+interface Tenant { id:string; name:string; description:string; program:string; createdAt:Date; }
+
+@Component({
+  templateUrl: './tenants.component.html',
+  styleUrls: ['./tenants.component.scss']
+})
+export class TenantsComponent {
+  tenants: Tenant[] = [];
+  filtered: Tenant[] = [];
+  search = '';
+  @ViewChild(WizardOverlayComponent) wizard: WizardOverlayComponent;
+
+  ngOnInit(){
+    this.load();
+  }
+
+  load(){
+    // TODO: call your API
+    this.tenants = [];
+    this.filtered = [...this.tenants];
+  }
+
+  onSearch(){
+    let q = this.search.toLowerCase();
+    this.filtered = this.tenants.filter(t => t.name.toLowerCase().includes(q));
+  }
+
+  newTenant(wizardTpls: any[]){
+    this.wizard.open('New Tenant', wizardTpls);
+    this.wizard.onFinish.subscribe(_ => { this.load(); });
+  }
+
+  editTenant(t:Tenant, wizardTpls:any[]){
+    this.wizard.open('Edit Tenant', wizardTpls);
+    this.wizard.onFinish.subscribe(_ => { this.load(); });
+  }
+
+  deleteTenant(t:Tenant){
+    if(!confirm('Delete this tenant?')) return;
+    // TODO: call API delete
+    this.load();
+  }
+}
+```
+
+### tenants.component.html
+```html
+<h2>Manage Tenants</h2>
+<div class="toolbar">
+  <button (click)="newTenant(tenantWizardSteps)">New Tenant</button>
+  <button [disabled]="!filtered.length" (click)="/*bulk delete*/">Delete Selected</button>
+  <input type="text" placeholder="Search…" [(ngModel)]="search" (ngModelChange)="onSearch()">
+</div>
+
+<table class="grid">
+  <thead>
+    <tr>
+      <th><input type="checkbox"></th>
+      <th>Name</th><th>Description</th><th>Program</th><th>Created At</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let t of filtered">
+      <td><input type="checkbox"></td>
+      <td>{{t.name}}</td>
+      <td>{{t.description}}</td>
+      <td>{{t.program}}</td>
+      <td>{{t.createdAt | date:'short'}}</td>
+      <td>
+        <button (click)="editTenant(t, tenantWizardSteps)">Update</button>
+        <button (click)="deleteTenant(t)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Wizard steps as ng-template references -->
+<ng-template #step1>
+  <div class="step">
+    <label>Name *</label>
+    <input type="text" />
+  </div>
+</ng-template>
+<ng-template #step2>
+  <div class="step">
+    <label>Description</label>
+    <textarea></textarea>
+  </div>
+</ng-template>
+<ng-template #step3>
+  <div class="step">
+    <label>Program</label>
+    <select><option>Program A</option></select>
+  </div>
+</ng-template>
+
+<!-- pass these into the wizard -->
+<ng-container #tenantWizardSteps>
+  <ng-template [ngTemplateOutlet]="step1"></ng-template>
+  <ng-template [ngTemplateOutlet]="step2"></ng-template>
+  <ng-template [ngTemplateOutlet]="step3"></ng-template>
+</ng-container>
+
+<wizard-overlay></wizard-overlay>
+```
+
+---
+
+## 6. Repeat for FormRegistry, ResourceLibrary, Cohorts, ResourceBundles, DeliverBundles
+
+Give each its own module, component, table columns, and wizard templates.  Use the same pattern:
+
+1. **Module** – Imports, route to `''` → your component  
+2. **Component** – `load()`, `search()`, `new()`, `edit()`, `delete()`  
+3. **HTML** – Toolbar with New/Delete/Search, table, wizard templates, `<wizard-overlay>`  
+
+---
+
+### Next Steps
+
+1. Install & import the PFML UI/Layout packages you need.  
+2. Replace stub arrays with real services calling your backend (use `HttpClient`).  
+3. Flesh out each wizard’s step templates with your forms and validation (use Angular Reactive Forms).  
+4. Handle Create (POST) / Update (PUT) / Delete (DELETE) in each component.  
+5. Add styling + responsive media queries as you like.  
+
+This skeleton gives you a maintainable, modular Angular app with all six side-nav sections, live search, bulk-delete, per-row actions, and a reusable multi-step wizard overlay.  From here you can extend each feature module with full CRUD and business logic.

@@ -1,0 +1,389 @@
+# file: bundles-v26.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuration Hub</title>
+  <style>
+    :root {
+      --brand-blue: #1589ee;
+      --dark-blue: #16325c;
+      --light-gray: #f4f6f9;
+      --border-gray: #d8dde6;
+      --text-dark: #1a1a1a;
+      --text-light: #63737a;
+      --font: Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: var(--font); background: var(--light-gray); color: var(--text-dark); }
+    .app-container { display: flex; flex-direction: column; height: 100%; }
+    header { background: var(--dark-blue); color: white; padding: 0 1em; display: flex; align-items: center; height: 50px; justify-content: space-between; }
+    header h1 { font-size: 1.2em; }
+    .body { flex: 1; display: flex; overflow: hidden; }
+    nav { width: 220px; background: var(--brand-blue); display: flex; flex-direction: column; }
+    nav a { color: white; text-decoration: none; padding: 1em; }
+    nav a.active, nav a:hover { background: var(--dark-blue); }
+    .main { flex: 1; overflow-y: auto; padding: 1em; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .card { background: white; border: 1px solid var(--border-gray); border-radius: 4px; padding: 1em; margin-bottom: 1em; }
+    h2 { margin-bottom: 0.5em; color: var(--dark-blue); }
+    label { display: block; margin: 0.5em 0 0.25em; font-weight: bold; }
+    input[type="text"], textarea, select, input[type="number"], input[type="date"], input[type="url"], input[type="datetime-local"] { width: 100%; padding: 0.5em; border: 1px solid var(--border-gray); border-radius: 3px; }
+    textarea { resize: vertical; height: 80px; }
+    button { margin-top: 0.5em; background: var(--brand-blue); color: white; border: none; padding: 0.5em 1em; border-radius: 3px; cursor: pointer; }
+    button.delete { background: #d9534f; margin-left: 0.5em; }
+    button.update { background: #ffc107; color: #1a1a1a; margin-left: 0.5em;}
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5em; }
+    th, td { border: 1px solid var(--border-gray); padding: 0.5em; text-align: left; }
+    th { background: var(--light-gray); }
+    .search-input { width: calc(100% - 2px); margin-bottom: 0.5em; }
+    .wizard-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index:100; }
+    .wizard-content { background: white; padding: 1em; border-radius: 5px; width: 700px; max-height: 90%; overflow-y: auto; }
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+    .wizard-buttons { text-align: right; margin-top: 1em; }
+    .wizard-buttons button { margin-left: 0.5em; }
+    .order-list { list-style: none; padding: 0; }
+    .order-list li { margin: 0.25em 0; display: flex; justify-content: space-between; align-items: center; background: var(--light-gray); padding: 0.5em; border-radius: 3px; }
+    .order-btn { background: transparent; border: none; cursor: pointer; color: var(--brand-blue); margin-left: 0.5em; }
+    .toggle-switch { position: relative; width: 50px; display: inline-block; }
+    .toggle-switch input { display:none; }
+    .slider { position: absolute; cursor: pointer; top:0; left:0; right:0; bottom:0; background-color: #ccc; transition:.4s; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left:4px; bottom:4px; background-color:white; transition:.4s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--brand-blue); }
+    input:checked + .slider:before { transform: translateX(26px); }
+    .error { color: #d9534f; font-size: 0.9em; margin-top: 0.25em; }
+    .flex { display: flex; gap:1em; }
+    .flex-column { display: flex; flex-direction: column; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Configuration Hub</h1>
+      <div>User: admin | <a href="#" style="color:white;text-decoration:underline;">Logout</a></div>
+    </header>
+    <div class="body">
+      <nav>
+        <a href="#" data-target="submission-library" class="active">Submission Form Library</a>
+        <a href="#" data-target="review-library">Review Form Library</a>
+        <a href="#" data-target="resources">Resources</a>
+        <a href="#" data-target="cohorts">Cohorts</a>
+        <a href="#" data-target="bundles">Submission Bundles</a>
+        <a href="#" data-target="rbundles">Review Bundles</a>
+        <a href="#" data-target="deliverables">Deliverables</a>
+      </nav>
+      <div class="main">
+        <section id="submission-library" class="section active">
+          <h2>Manage Submission Form Library</h2>
+          <button id="open-lib-wizard">New Submission Form</button>
+          <button id="delete-selected-sub">Delete Selected</button>
+          <div class="card">
+            <label for="submission-grid-search">Search Forms</label>
+            <input type="text" id="submission-grid-search" class="search-input" placeholder="Search...">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="sub-select-all"></th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Endpoint URL</th>
+                  <th>Exit Event</th>
+                  <th>API Auth Type</th>
+                  <th>API Features</th>
+                  <th>Schema</th>
+                  <th>Validation Status</th>
+                  <th>Options</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="submission-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="review-library" class="section">
+          <h2>Manage Review Form Library</h2>
+          <button id="open-rlib-wizard">New Review Form</button>
+          <button id="delete-selected-rev">Delete Selected</button>
+          <div class="card">
+            <label for="review-grid-search">Search Forms</label>
+            <input type="text" id="review-grid-search" class="search-input" placeholder="Search...">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="rev-select-all"></th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Endpoint URL</th>
+                  <th>Exit Event</th>
+                  <th>API Auth Type</th>
+                  <th>API Features</th>
+                  <th>Schema</th>
+                  <th>Validation Status</th>
+                  <th>Options</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="review-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="resources" class="section">
+          <h2>Manage Resources</h2>
+          <button id="open-resource-wizard">New Resource</button>
+          <button id="delete-selected-resource">Delete Selected</button>
+          <div class="card">
+            <label for="resources-grid-search">Search Resources</label>
+            <input type="text" id="resources-grid-search" class="search-input" placeholder="Search resources...">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="resource-select-all"></th>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="resources-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="cohorts" class="section">
+          <h2>Manage Cohorts</h2>
+          <button id="open-cohort-wizard">New Cohort</button>
+          <button id="delete-selected-cohort">Delete Selected</button>
+          <div class="card">
+            <table>
+              <thead><tr><th><input type="checkbox" id="cohort-select-all"></th><th>Name</th><th>Description</th><th>Tags</th><th>Program</th><th>Resource Type</th><th># Resources</th><th>Actions</th></tr></thead>
+              <tbody id="cohort-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="bundles" class="section">
+          <h2>Manage Submission Bundles</h2>
+          <button id="open-bundle-wizard">New Bundle</button>
+          <button id="delete-selected-bundle">Delete Selected</button>
+          <div class="card">
+            <label for="bundle-grid-search">Search Bundles</label>
+            <input type="text" id="bundle-grid-search" class="search-input" placeholder="Search bundles...">
+            <table>
+              <thead><tr><th><input type="checkbox" id="bundle-select-all"></th><th>Name</th><th>Description</th><th>Program</th><th>Tags</th><th># Submission Forms</th><th>Review Enabled</th><th># Review Forms</th><th>Actions</th></tr></thead>
+              <tbody id="bundle-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="rbundles" class="section">
+          <h2>Manage Review Bundles</h2>
+          <button id="open-rbundle-wizard">New Review Bundle</button>
+          <button id="delete-selected-rbundle">Delete Selected</button>
+          <div class="card">
+            <label for="rbundle-grid-search">Search Bundles</label>
+            <input type="text" id="rbundle-grid-search" class="search-input" placeholder="Search bundles...">
+            <table>
+              <thead><tr><th><input type="checkbox" id="rbundle-select-all"></th><th>Name</th><th>Description</th><th>Program</th><th>Tags</th><th># Submission Forms</th><th>Review Enabled</th><th># Review Forms</th><th>Actions</th></tr></thead>
+              <tbody id="rbundle-grid"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="deliverables" class="section">
+          <h2>Manage Deliverables</h2>
+          <button id="open-deliverable-wizard">New Deliverable</button>
+          <button id="delete-selected-del">Delete Selected</button>
+          <div class="card">
+            <label for="deliverable-grid-search">Search Deliverables</label>
+            <input type="text" id="deliverable-grid-search" class="search-input" placeholder="Search...">
+            <table>
+              <thead><tr><th><input type="checkbox" id="del-select-all"></th><th>Name</th><th>Cohort</th><th>Bundle</th><th>Schedule</th><th>Next Run</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="deliverable-grid"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ... existing wizards unchanged ... -->
+
+  <!-- Resource Wizard -->
+  <div id="resource-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <h3 id="resource-wizard-title">New Resource</h3>
+      <div id="resource-step-1" class="wizard-step active">
+        <h4>Step 1: Basic Info</h4>
+        <label for="resource-name">Name *</label>
+        <input type="text" id="resource-name"><span class="error" id="resource-name-error"></span>
+        <label for="resource-desc">Description</label>
+        <textarea id="resource-desc"></textarea>
+        <label for="resource-type">Type *</label>
+        <select id="resource-type"><option value="">Select</option><option>system</option><option>user</option></select><span class="error" id="resource-type-error"></span>
+      </div>
+      <div id="resource-step-2" class="wizard-step">
+        <h4>Step 2: Review & Finish</h4>
+        <div id="resource-summary"></div>
+      </div>
+      <div class="wizard-buttons">
+        <button id="resource-cancel">Cancel</button>
+        <button id="resource-prev" style="display:none;">Prev</button>
+        <button id="resource-next">Next</button>
+        <button id="resource-finish" style="display:none;">Finish</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('nav a').forEach(a=>{
+      a.onclick=e=>{
+        e.preventDefault();
+        document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        document.getElementById(a.dataset.target).classList.add('active');
+      };
+    });
+
+    const defaultFeatures = [
+      {name:'Create Draft', verb:'POST', endpoint:'/api/forms'},
+      {name:'Update Draft', verb:'PUT', endpoint:'/api/forms/{formId}'},
+      {name:'Publish', verb:'POST', endpoint:'/api/forms/{formId}/publish'},
+      {name:'List Forms', verb:'GET', endpoint:'/api/forms?type={submission|review}&status={draft|published}&page={n}&size={m}'},
+      {name:'Get Form Details', verb:'GET', endpoint:'/api/forms/{formId}'},
+      {name:'Delete Form', verb:'DELETE', endpoint:'/api/forms/{formId}'},
+      {name:'List Versions', verb:'GET', endpoint:'/api/forms/{formId}/versions'},
+      {name:'Get Version Details', verb:'GET', endpoint:'/api/forms/{formId}/versions/{version}'},
+      {name:'Restore Version', verb:'POST', endpoint:'/api/forms/{formId}/versions/{version}/restore'},
+      {name:'Health', verb:'GET', endpoint:'/api/health'}
+    ];
+    const submissionLibrary = [
+      { id:'sf1', name:'BPHC Clinic Intake', desc:'Clinic intake form for HRSA BPHC programs', endpointUrl:'/api/forms/clinic-intake', exitEvent:'onExit', authType:'API Key', apiFeatures:'Create Draft,Update Draft,Publish,List Forms,Get Form Details,Delete Form,List Versions,Get Version Details,Restore Version,Health', schema:'schema1.json', lastValidationStatus:'Passed' },
+      { id:'sf2', name:'BPHC Patient Survey', desc:'Patient survey form', endpointUrl:'/api/forms/patient-survey', exitEvent:'surveyComplete', authType:'OAuth2', apiFeatures:'Create Draft,Update Draft,Publish,List Forms,Get Form Details,Delete Form,List Versions,Get Version Details,Restore Version,Health', schema:'schema2.json', lastValidationStatus:'Pending' }
+    ];
+    const reviewLibrary = [
+      { id:'rf1', name:'BPHC Clinic Intake Review', desc:'Review form for clinic intake', endpointUrl:'/api/forms/clinic-intake/review', exitEvent:'onReviewComplete', authType:'API Key', apiFeatures:'Create Draft,Update Draft,Publish,List Forms,Get Form Details,Delete Form,List Versions,Get Version Details,Restore Version,Health', schema:'schemaA.json', lastValidationStatus:'Passed' }
+    ];
+    const dataStore = {};
+    let cohorts = [];
+    let bundles = [
+      { id:"b1", name:"BPHC Submission Bundle", desc:"Bundle for BPHC community clinics", program:"BPHC", tags:"PrimaryCare,Community", submissionPhaseForms:["Clinic Intake","Patient Survey"], reviewEnabled:true, reviewPhaseForms:["Clinic Intake Review"] },
+      { id:"b2", name:"HAB Assessment Bundle", desc:"HIV/AIDS Bureau assessment bundle", program:"HAB", tags:"HIV,AIDS", submissionPhaseForms:["HAB Form A"], reviewEnabled:false, reviewPhaseForms:[] },
+      { id:"b3", name:"HRSA BPHC Test Bundle", desc:"Test bundle for HRSA BPHC example", program:"BPHC", tags:"HRSA,BPHC", submissionPhaseForms:["BPHC Clinic Intake","BPHC Patient Survey"], reviewEnabled:true, reviewPhaseForms:["BPHC Clinic Intake Review"] }
+    ];
+    let rbundles = JSON.parse(JSON.stringify(bundles));
+    let deliverables = [];
+
+    // Resources test data
+    let resources = [
+      { id:"res1", name:"HRSA BPHC Org A", desc:"Primary care organization", type:"system" },
+      { id:"res2", name:"BPHC Clinic X", desc:"Community clinic resource", type:"user" },
+      { id:"res3", name:"BPHC Patient Database", desc:"Secure patient DB", type:"system" }
+    ];
+
+    function renderGrid(grid, data, cols){
+      grid.innerHTML='';
+      data.forEach(item=>{
+        const tr=document.createElement('tr');
+        let html=`<td><input type="checkbox" data-name="${item.name}"></td>`;
+        cols.forEach(c=>{
+          const v=typeof c==='function'?c(item):item[c]||'';
+          html+=`<td>${v}</td>`;
+        });
+        html+=`<td><button class="update" data-name="${item.name}">Update</button><button class="delete" data-name="${item.name}">Delete</button></td>`;
+        tr.innerHTML=html; grid.appendChild(tr);
+      });
+    }
+
+    // Resources rendering & search
+    const resourceGrid=document.getElementById('resources-grid'), deleteSelectedResource=document.getElementById('delete-selected-resource');
+    function renderResources(){
+      renderGrid(resourceGrid,resources,[
+        'id',
+        'name',
+        item=>item.desc,
+        'type'
+      ]);
+      deleteSelectedResource.disabled=true;
+      document.getElementById('resource-select-all').checked=false;
+      resourceGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.onchange=()=>deleteSelectedResource.disabled=!resourceGrid.querySelectorAll('input[type="checkbox"]:checked').length);
+      resourceGrid.querySelectorAll('.delete').forEach(btn=>{btn.onclick=()=>{const n=btn.dataset.name;if(confirm(`Delete resource "${n}"?`)){const i=resources.findIndex(x=>x.name===n);resources.splice(i,1);renderResources();}}});
+      resourceGrid.querySelectorAll('.update').forEach(btn=>btn.onclick=()=>openResourceWizard('edit',btn.dataset.name));
+    }
+    renderResources();
+    document.getElementById('resource-select-all').onclick=e=>{resourceGrid.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=e.target.checked);deleteSelectedResource.disabled=!e.target.checked;};
+    deleteSelectedResource.onclick=()=>{
+      const sel=Array.from(resourceGrid.querySelectorAll('input[type="checkbox"]:checked')).map(cb=>cb.dataset.name);
+      if(sel.length&&confirm(`Delete ${sel.length} selected?`)){sel.forEach(n=>{const i=resources.findIndex(x=>x.name===n);resources.splice(i,1);});renderResources();}
+    };
+    document.getElementById('resources-grid-search').oninput=()=>{
+      const q=document.getElementById('resources-grid-search').value.toLowerCase();
+      Array.from(resourceGrid.children).forEach(tr=>{
+        tr.style.display=tr.innerText.toLowerCase().includes(q)?'':'none';
+      });
+    };
+
+    // Cohorts, Bundles, Deliverables rendering unchanged...
+
+    // Resource Wizard logic
+    let resourceState={}, resourceMode='create';
+    const rwOverlay=document.getElementById('resource-wizard-overlay');
+    function openResourceWizard(mode,name){
+      resourceMode=mode; resourceState={};
+      rwOverlay.style.display='flex';
+      document.getElementById('resource-wizard-title').innerText= mode==='edit'?'Edit Resource':'New Resource';
+      showResourceStep(1);
+      document.querySelectorAll('#resource-wizard-overlay input, #resource-wizard-overlay select, #resource-wizard-overlay textarea').forEach(el=>{ el.value=''; });
+      document.querySelectorAll('#resource-wizard-overlay .error').forEach(e=>e.innerText='');
+      if(mode==='edit'){
+        const item=resources.find(x=>x.name===name);
+        resourceState=JSON.parse(JSON.stringify(item));
+        document.getElementById('resource-name').value=item.name;
+        document.getElementById('resource-desc').value=item.desc;
+        document.getElementById('resource-type').value=item.type;
+      }
+    }
+    document.getElementById('open-resource-wizard').onclick=()=>openResourceWizard('create');
+    document.getElementById('resource-cancel').onclick=()=>rwOverlay.style.display='none';
+    function showResourceStep(n){
+      rwOverlay.querySelectorAll('.wizard-step').forEach((el,i)=>el.classList.toggle('active',i+1===n));
+      document.getElementById('resource-prev').style.display=n>1?'inline-block':'none';
+      document.getElementById('resource-next').style.display=n<2?'inline-block':'none';
+      document.getElementById('resource-finish').style.display=n===2?'inline-block':'none';
+      rwOverlay.dataset.step=n;
+      if(n===2) showResourceSummary();
+    }
+    document.getElementById('resource-next').onclick=()=>{
+      let ok=true;
+      if(!document.getElementById('resource-name').value.trim()){document.getElementById('resource-name-error').innerText='Required'; ok=false;} else document.getElementById('resource-name-error').innerText='';
+      if(!document.getElementById('resource-type').value){document.getElementById('resource-type-error').innerText='Required'; ok=false;} else document.getElementById('resource-type-error').innerText='';
+      if(ok){
+        resourceState.name=document.getElementById('resource-name').value.trim();
+        resourceState.desc=document.getElementById('resource-desc').value;
+        resourceState.type=document.getElementById('resource-type').value;
+        showResourceStep(2);
+      }
+    };
+    document.getElementById('resource-prev').onclick=()=>showResourceStep(1);
+    function showResourceSummary(){
+      const sum=document.getElementById('resource-summary');
+      sum.innerHTML=`
+        <p><strong>Name:</strong> ${resourceState.name}</p>
+        <p><strong>Description:</strong> ${resourceState.desc}</p>
+        <p><strong>Type:</strong> ${resourceState.type}</p>`;
+    }
+    document.getElementById('resource-finish').onclick=()=>{
+      if(resourceMode==='create'){
+        resourceState.id=Date.now().toString();
+        resources.push(resourceState);
+      } else {
+        const idx=resources.findIndex(x=>x.id===resourceState.id);
+        resources[idx]=resourceState;
+      }
+      rwOverlay.style.display='none';
+      renderResources();
+    };
+
+    // existing wizards unchanged...
+  </script>
+</body>
+</html>

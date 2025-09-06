@@ -1,0 +1,4044 @@
+Type	Filename	Code
+Config	cors.json	"{
+  ""cors"": {
+    ""origins"": "".localhost,.hrsa.gov,.reisystems.com,.reisys.com,.amer.reisystems.com,.amer.reisys.com""
+  }
+}"
+Config	endpoints.json	"{
+  ""AppSettings"": {
+    ""Endpoints"": {
+      ""AutosaveApiUrl"": {
+        ""ExternalSystemCode"": 240,
+        ""ExternalSystemDimensionValue"": 4
+      },
+      ""AutosaveWebUrl"": {
+        ""ExternalSystemCode"": 239,
+        ""ExternalSystemDimensionValue"": 4
+      },
+      ""ContentTransformationUrl"": {
+        ""ExternalSystemCode"": 472,
+        ""ExternalSystemDimensionValue"": 4
+      },
+      ""DataCollectionUrl"": {
+        ""ExternalSystemCode"": 304,
+        ""ExternalSystemDimensionValue"": 401
+      },
+      ""DocumentServiceUrl"": {
+        ""ExternalSystemCode"": 245,
+        ""ExternalSystemDimensionValue"": 4
+      },
+      ""EcWebUrl"": {
+        ""ExternalSystemCode"": 416,
+        ""ExternalSystemDimensionValue"": 4
+      },
+      ""IdentityServerUrl"": {
+        ""ExternalSystemCode"": 262,
+        ""ExternalSystemDimensionValue"": 4
+      },
+      ""PlatformCoreUiUrl"": {
+        ""CorePredefinedPageId"": ""4F941EE4-F389-451C-B4A2-135E99B13B29""
+      },
+      ""PlatformGlobalSearchUrl"": {
+        ""CorePredefinedPageId"": ""C1A388AF-F57C-425E-807F-DC31E9446652""
+      },
+      ""PlatformLayoutUrl"": {
+        ""CorePredefinedPageId"": ""C5196BF4-FAE0-42CD-A563-1D4E28D54783""
+      },
+      ""PlatformServicesUrl"": {
+        ""CorePredefinedPageId"": ""E50D5587-C598-4C53-8FBB-5731C7E50EB2""
+      },
+      ""RuleServiceUrl"": {
+        ""CorePredefinedPageId"": ""5DC57287-1ACE-43DB-993C-FD364CEA92C9""
+      },
+      ""STARWeb"": {
+        ""ExternalSystemCode"": 310,
+        ""ExternalSystemDimensionValue"": 23
+      },
+      ""STARWebApi"": {
+        ""ExternalSystemCode"": 311,
+        ""ExternalSystemDimensionValue"": 128
+      },
+      ""TasksServiceUrl"": {
+        ""CorePredefinedPageId"": ""51B120C4-6B73-48A1-8C16-FDCE90020580""
+      },
+      ""WorkflowServiceUrl"": {
+        ""ExternalSystemCode"": 410,
+        ""ExternalSystemDimensionValue"": 4
+      },
+      ""TatsInternalBaseUrl"": {
+        ""ExternalSystemCode"": 111,
+        ""ExternalSystemDimensionValue"": 23
+      },
+      ""TatsVendorBaseUrl"": {
+        ""ExternalSystemCode"": 111,
+        ""ExternalSystemDimensionValue"": 106
+      },
+      ""TatsConsultantBaseUrl"": {
+        ""ExternalSystemCode"": 111,
+        ""ExternalSystemDimensionValue"": 105
+      }
+    }
+  }
+}"
+Config	errors.json	"{
+  ""Errors"": {
+    ""Fatal"": [
+      ""System.OutOfMemoryException"",
+      ""System.StackOverflowException"",
+      ""System.UnauthorizedAccessException"",
+      ""System.BadImageFormatException"",
+      ""System.InsuficientExecutionStackException"",
+      ""System.InvalidProgramException"",
+      ""System.NotImplementedException"",
+      ""System.Data.SqlClient.SqlException"",
+      ""System.NotSupportedException"",
+      ""System.IO.IOException"",
+      ""System.Security.SecurityException""
+    ]
+  }
+}"
+Config	isdvr.json	"{
+  ""idsvr"": {
+    ""requireHttpsMetadata"": true,
+    ""ExternalSystemCode"": 310,
+    ""ExternalSystemDimensionCode"": 23,
+    ""clientId"": ""star"",
+    ""responseType"": ""code id_token"",
+    ""signInScheme"": ""Cookies"",
+    ""scopes"": [
+      ""openid"",
+      ""profile"",
+      ""ehb_id"",
+      ""star_api""
+    ],
+    ""saveTokens"": true,
+    ""getClaimsFromUserInfoEndpoint"": true,
+    ""sessionTimeout"": 30,
+    ""generateSession"": false,
+    ""GeneratePfmToken"": true
+  }
+}"
+Config	tenant.json	"{
+  ""authentication"": {
+    ""Tenants"": [
+      {
+        ""userTypeCode"": 1,
+        ""urlSegmentName"": ""external"",
+        ""AuthTypes"": [
+          ""Legacy""
+        ]
+      },
+      {
+        ""userTypeCode"": 2,
+        ""urlSegmentName"": ""internal"",
+        ""AuthTypes"": [
+          ""Legacy""
+        ]
+      },
+      {
+        ""userTypeCode"": 5,
+        ""urlSegmentName"": ""consultant"",
+        ""AuthTypes"": [
+          ""Legacy""
+        ]
+      },
+      {
+        ""userTypeCode"": 6,
+        ""urlSegmentName"": ""vendor"",
+        ""AuthTypes"": [
+          ""Legacy""
+        ]
+      }
+    ]
+  }
+}"
+Config		"{
+    ""AppSettings"": {
+        ""DebugMode"": true,
+        ""Environment"": ""Development"",
+        ""InitializeFromDB"": true,
+        ""Endpoints"": {
+            ""AutosaveApiUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/ASVWebApi/""
+            },
+            ""AutosaveWebUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/ASVWeb/""
+            },
+            ""ContentTransformationUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/ContentTransformation/""
+            },
+            ""DataCollectionUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/DataCollection/""
+            },
+            ""DocumentServiceUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/DocumentService/""
+            },
+            ""EcWebUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/EC.Web/""
+            },
+            ""IdentityServerUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/EaasIdentityServer/""
+            },
+            ""PlatformCoreUiUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/platform.core.ui/""
+            },
+            ""PlatformGlobalSearchUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/GlobalSearch/""
+            },
+            ""PlatformLayoutUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/layoutservice/""
+            },
+            ""PlatformServicesUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/platformservices/""
+            },
+            ""RuleServiceUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/RuleService/""
+            },
+          ""STARWeb"": {
+            ""BaseUrl"": ""https://mydevbox.amer.reisystems.com:61117/""
+          },
+          ""STARWebApi"": {
+            ""BaseUrl"": ""https://mydevbox.amer.reisystems.com:61119/""
+          },
+            ""TasksServiceUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/Tasks/""
+            },
+            ""WorkflowServiceUrl"": {
+                ""BaseUrl"": ""https://hrsauat7.amer.reisystems.com/Workflow/""
+            }
+        }
+    },
+    ""authentication"": {
+        ""Tenants"": [
+            {
+                ""userTypeCode"": 1,
+                ""urlSegmentName"": ""external""
+            },
+            {
+                ""userTypeCode"": 2,
+                ""urlSegmentName"": ""internal"",
+                ""loginPageId"": ""B7B07B64-6E38-487C-8C5D-37D1319C36FE"",
+                ""logoutPageId"": ""D54695F1-3265-41BB-8E2A-217B682C69B2""
+            },
+            {
+                ""userTypeCode"": 5,
+                ""urlSegmentName"": ""consultant""
+            },
+            {
+                ""userTypeCode"": 6,
+                ""urlSegmentName"": ""vendor""
+            }
+        ]        
+    },
+    ""Logging"": {
+        ""LogLevel"": {
+            ""Default"": ""Trace"",
+            ""System"": ""Error"",
+            ""Microsoft"": ""Error""
+        },
+        ""EnableTracing"": ""true"",
+        ""RestoreNLogFile"": false,
+        ""IncludeScopes"": false,
+        ""basePath"": ""Y:\\logs\\STAR\\STAR.Web""
+    },
+    ""idsvr"": {
+        ""url"": ""https://hrsauat7.amer.reisystems.com/eaasidentityserver""
+    }
+}"
+Config	appsettings.json	"{
+    ""AppSettings"": {
+        ""SystemName"": ""STARWeb"",
+        ""SystemAPIName"": ""STARWebApi"",
+        ""ModuleName"": ""Structured TA Report Module"",
+        ""Solution_Name"": ""STAR"",
+        ""OS_Version"": ""Windows Server 2012 R2"",
+        ""CLR_Version"": "".Net Core 3.1"",
+        ""ExternalSystemCode"": 310
+    },
+    ""Kestrel"": {
+        ""EndPoints"": {
+            ""Http"": {
+                ""Url"": ""https://0.0.0.0:61117""
+            }
+        }
+    },
+    ""cookieConfig"": {
+        ""name"": ""STAR.web""
+    },
+    ""Logging"": {
+        ""NLogConfigPath"": ""nlog.config"",
+        ""basePath"": ""Y:\\logs\\STAR\\STAR.Web""
+    }
+}"
+ts	star-app.ts	"// main entry point
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { APP_START_CONFIG_TOKEN, IApplicationStartupConfig} from './src/core/services/app-start-config.service';
+import { AppModule } from './src/app.module';
+
+export function runApp(startupConfig: IApplicationStartupConfig) {
+    (<any>window).beforeBootstrapTimestamp = performance.now();
+
+    platformBrowserDynamic(
+        [
+            { provide: APP_START_CONFIG_TOKEN, useValue: startupConfig }
+        ]
+    ).bootstrapModule(AppModule);
+}
+"
+ts	routes.ts	"import { Routes, RouterModule } from '@angular/router';
+import { ReportComponent } from './report/report.component';
+import { StatusOverviewComponent } from './status-overview/status-overview.component';
+import { StarFormComponent } from './form-loader/star-form.component';
+import { NotificationComponent } from './notification/notification.component';
+import { ActionHistoryComponent } from './action-history/action-history.component';
+import { ReadOnlyComponent } from './read-only/read-only/read-only.component';
+import { WordOnlyComponent } from './read-only/word-only/word-only.component';
+import { StarVerisonHistoryComponent } from './version-history/version-history.component';
+import { CorrespondenceGatewayComponent } from './correspondence-gateway/correspondence-gateway.component';
+import { FlagHistoryComponent } from './flag-history/flag-history.component';
+import { CorrespondenceReturnGatewayComponent } from './correspondence-return-gateway/correspondence-return-gateway.component';
+import { DefaultLandingComponent } from './default-landing/default-landing.component';
+import { AssignedPendingTasksComponent } from './pending-tasks/assigned-pending-tasks.component';
+import { UnAssignedPendingTasksComponent } from './pending-tasks/unassigned-pending-tasks.component';
+import { HealthMonitorComponent } from './health-monitor/health-monitor.component';
+import { LinkRouterComponent } from './core/components/link-router/link-router.component';
+import { TaskGuard } from './core/components/guards/task.guard';
+import { CorrespondenceGuard } from './core/components/guards/correspondence.guard';
+
+const appRoutes: Routes = [
+     { path: '', component: ReportComponent,
+        children: [
+            { path: 'statusoverview', component: StatusOverviewComponent, canActivate: [TaskGuard] },
+            { path: 'StatusOverview', component: StatusOverviewComponent, canActivate: [TaskGuard] },
+            { path: 'StarForm', component: StarFormComponent, canActivate: [TaskGuard] },
+            { path: 'starform', component: StarFormComponent, canActivate: [TaskGuard] },
+            { path: 'notification', component: NotificationComponent, canActivate: [TaskGuard] },
+            { path: 'Notification', component: NotificationComponent, canActivate: [TaskGuard] },
+            { path: 'ActionHistory', component: ActionHistoryComponent },
+            { path: 'actionhistory', component: ActionHistoryComponent },
+            { path: 'TAReportReadOnly', component: ReadOnlyComponent },
+			{ path: 'tareportreadonly', component: ReadOnlyComponent },
+            { path: 'TAReportWord', component: WordOnlyComponent },
+			{ path: 'tareportword', component: WordOnlyComponent },
+			{ path: 'StarVersionHistory', component: StarVerisonHistoryComponent },
+            { path: 'starversionhistory', component: StarVerisonHistoryComponent },
+            { path: 'correspondencegateway', component: CorrespondenceGatewayComponent, canActivate: [TaskGuard, CorrespondenceGuard] },
+            { path: 'CorrespondenceGateway', component: CorrespondenceGatewayComponent, canActivate: [TaskGuard, CorrespondenceGuard] },
+            { path: 'flaghistory', component: FlagHistoryComponent },
+            { path: 'correspondencereturngateway', component: CorrespondenceReturnGatewayComponent },
+            { path: 'CorrespondenceReturnGateway', component: CorrespondenceReturnGatewayComponent }
+        ]
+    } ,
+    { path: 'AssignedPendingTasks', component: AssignedPendingTasksComponent },
+    { path: 'assignedpendingtasks', component: AssignedPendingTasksComponent },
+    { path: 'UnAssignedPendingTasks', component: UnAssignedPendingTasksComponent },
+    { path: 'UnassignedPendingTasks', component: UnAssignedPendingTasksComponent },
+    { path: 'unassignedpendingtasks', component: UnAssignedPendingTasksComponent },
+    { path: 'HealthMonitor', component: HealthMonitorComponent },
+    { path: 'healthmonitor', component: HealthMonitorComponent },
+    { path: 'LinkRouter', component: LinkRouterComponent },
+    { path: '', component: DefaultLandingComponent },
+    { path: '**', component: DefaultLandingComponent }
+]
+
+export const Routing = RouterModule.forRoot(appRoutes, { enableTracing: false });"
+ts	route-reuse.ts	"import { ActivatedRouteSnapshot, RouteReuseStrategy, DetachedRouteHandle } from '@angular/router';
+
+export class CustomReuseStrategy implements RouteReuseStrategy {
+    shouldDetach(route: ActivatedRouteSnapshot): boolean { return false; }
+    store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void {
+        // Intentionally left blank as this method is not used in this strategy.
+    }
+    shouldAttach(route: ActivatedRouteSnapshot): boolean { return false; }
+    retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null { return null; }
+
+    shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
+        let config = future.routeConfig === curr.routeConfig;
+        
+        if (this.getRouteReuseComponentName(future) === 'StarFormComponent' && this.getRouteReuseComponentName(curr) === 'StarFormComponent')
+        {
+            return false;
+        }
+
+        return config;
+    }
+
+    public getRouteReuseComponentName(route: ActivatedRouteSnapshot): string {
+        return  (route.component as any)?.ROUTE_REUSE_COMPONENT_NAME ?? """";
+    }
+}"
+	layout.config.ts	"export var layoutConfig = {
+    ""solution"": {
+        ""windowTitle"": ""HRSA EHBs"",
+        ""externalSystemCode"": ""310"",
+        ""environment"": ""Development"",
+        ""userTypeCode"": ""2""
+    },
+    ""topBanner"": {
+        ""visible"": ""true"",
+        ""isSearchVisible"": ""false"",
+        ""isTabsVisible"": ""true"",
+        ""isTopMenuVisible"": ""true"",
+        ""enablePersistence"": ""true"",
+        ""rootMarkupId"": """",
+        ""markupId"": ""browseTasksSubTab""
+    },
+    ""sideMenu"": {
+        ""properties"": {
+            ""visible"": ""true"",
+            ""hierarchy"": ""Role, Process"",
+            ""markupId"": ""poReviewSTAR"",
+            ""enablePersistence"": ""true"",
+            ""custom"": ""false"",
+            ""mode"": ""Expand""
+        },
+        ""filters"": [
+            {
+                ""name"": ""Tab"",
+                ""values"": [
+                    ""browseTasksSubTab""
+                ]
+            }
+        ],
+        ""items"": [],
+        ""collapseGroups"": null,
+        ""visible"": ""true"",
+        ""markupId"": """",
+        ""custom"": ""true"",
+        ""mode"": ""collapse""
+    },
+    ""breadCrumbs"": {
+        ""properties"": {
+            ""visible"": ""true""
+        },
+        ""items"": []
+    },
+    ""toolbar"": {
+        ""visible"": ""true"",
+        ""leftItems"": [
+            {
+                ""id"": 1,
+                ""visible"": true
+            },
+            {
+                ""id"": 2,
+                ""visible"": true
+            },
+            {
+                ""id"": 3,
+                ""visible"": true
+            },
+            {
+                ""id"": 4,
+                ""visible"": true
+            },
+            {
+                ""id"": 5,
+                ""visible"": true
+            }
+        ],
+        ""rightItems"": [
+            {
+                ""id"": 6,
+                ""visible"": false
+            },
+            {
+                ""id"": 7,
+                ""visible"": true
+            },
+            {
+                ""id"": 8,
+                ""visible"": true
+            },
+            {
+                ""id"": 9,
+                ""visible"": true
+            },
+            {
+                ""id"": 10,
+                ""visible"": true
+            },
+            {
+                ""id"": 11,
+                ""visible"": true
+            },
+            {
+                ""id"": 12,
+                ""visible"": true
+            }
+        ]
+    },
+    ""pageTitle"": {
+        ""visible"": ""false""
+    },
+    ""footer"": {
+        ""visible"": ""true"",
+        ""solutionName"": ""EHB"",
+        ""platformVersion"": ""1.0.0"",
+        ""solutionVersion"": ""1.0.0"",
+        ""properties"": {
+            ""visible"": ""true"",
+            ""solutionName"": ""STAR"",
+            ""platformVersion"": ""1.0.0"",
+            ""solutionVersion"": ""1.0.0""
+        }
+    },
+    ""pageGroups"": {
+        ""pageGroup"": [
+            {
+                ""id"": ""TasksPageGroup"",
+                ""layout"": {
+                    ""sideMenu"": {
+                        ""visible"": ""true"",
+                        ""mode"": ""Expand"",
+                        ""title"": ""Tasks Page""
+                    }
+                }
+            },
+            {
+                ""id"": ""InstitutionFolderPageGroup"",
+                ""layout"": {
+                    ""layout"": {
+                        ""sideMenu"": {
+                            ""visible"": ""true"",
+                            ""mode"": ""Expand"",
+                            ""title"": ""Institution Folder Page""
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}"
+	app.module.ts	"import { enableProdMode, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule, RouteReuseStrategy } from '@angular/router';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgbModule, NgbModalModule, NgbActiveModal, NgbAccordionModule, NgbCollapseModule, NgbNavModule} from '@ng-bootstrap/ng-bootstrap';
+import { PlatformHttp, CoreModule, LookupService as PlatformLookupService } from 'pfm-ui/core';
+import { ControlsModule } from 'pfm-ui/controls';
+import { GridModule, SearchPanelModule, PageActionsModule, MessageModule, UserActionModule, CheckInCheckOutModule, FlagService, PFMResourcesModule } from 'pfm-ui/components'
+import { MasterLayoutModule, SideMenuModule, BreadcrumbsModule, FooterModule, ToolbarModule, TopBannerModule, LayoutService } from ""pfm-layout/master"";
+import { PFMDCFModule, LookupService, FormService, FormCollectionService } from 'pfm-dcf';
+import { PFMREModule, REService } from 'pfm-re';
+import { AutoSaveModule } from 'pfm-autosave/core';
+import { UserRoleTeamModule } from 'pfm-task-service/user-role-selector';
+
+// STAR Routes
+import { Routing } from './routes';
+import { CustomReuseStrategy } from './route-reuse';
+
+// STAR Services
+import { AppStartConfigService } from './core/services/app-start-config.service';
+import { STAR_CORE_PROVIDERS } from './core/star.core.provider';
+import { ConfigurationService } from './core/services/configuration.service';
+import { CorrespondenceService } from './core/services/correspondence.service';
+import { ComplianceHandbookService } from './core/services/compliance-handbook.service';
+import { ContextService } from './core/services/context.service';
+import { CoverPageService } from './core/services/cover-page.service';
+import { HealthMonitorService } from './core/services/health-monitor.service';
+import { LinkRouterService } from './core/services/link-router.service';
+import { NotificationService } from './core/services/notification.service';
+import { StarService } from './core/services/star.service';
+import { TaskService } from './core/services/task.service';
+import { HabLookupService } from './core/services/hab-lookup.service';
+
+// STAR Pipes
+import { LeftMenuFilterCriteriaPipe } from './core/pipes/left-menu-filter-criteria.pipe';
+import { ShowInOverviewPipe } from './core/pipes/show-in-overview.pipe';
+import { ShowResourceLinkPipe } from './core/pipes/show-resource-link.pipe';
+
+// STAR Guards
+import { CorrespondenceGuard } from './core/components/guards/correspondence.guard';
+import { TaskGuard } from './core/components/guards/task.guard';
+
+// STAR Components
+import { AppComponent } from './app.component';
+import { ActionHistoryComponent } from './action-history/action-history.component';
+import { AssignedPendingTasksComponent } from './pending-tasks/assigned-pending-tasks.component';
+import { CheckInModalComponent } from './form-loader/checkin-modal.component';
+import { CorrespondenceGatewayComponent } from './correspondence-gateway/correspondence-gateway.component';
+import { CorrespondenceReturnGatewayComponent } from './correspondence-return-gateway/correspondence-return-gateway.component';
+import { CoverPageComponent } from './read-only/cover-page/cover-page.component';
+import { DiscardAndCheckInConfirmModalComponent } from './form-loader/discard-and-checkin-confirm-modal.component';
+import { DisclaimerNoteComponent } from './read-only/disclaimer/disclaimer-note.component';
+import { DefaultLandingComponent } from './default-landing/default-landing.component';
+import { EmailWidgetComponent } from './core/components/widgets/email/email-widget.component';
+import { EmailWidgetOverlayComponent } from './core/components/widgets/email/email-widget-overlay.component';
+import { FlagActionsComponent } from './flag-history/flag-actions.component';
+import { FlagCardComponent } from './core/components/widgets/flags/flag-card.component';
+import { FlagCardLargeComponent } from './core/components/widgets/flags/flag-card-large.component';
+import { FlaggedFormComponent } from './flag-history/flagged-form.component';
+import { FlaggedSectionComponent } from './flag-history/flagged-section.component';
+import { FlagHistoryComponent } from './flag-history/flag-history.component';
+import { FlagsOverviewWidgetComponent } from './core/components/widgets/flags-overview/flags-overview-widget.component';
+import { FlagSummaryDashboardWidgetComponent } from './core/components/widgets/flags/flag-summary-dashboard-widget.component';
+import { FormsOverviewWidgetComponent } from './core/components/widgets/forms-overview/forms-overview-widget.component';
+import { HeaderComponent } from './core/components/header/header.component';
+import { HealthMonitorComponent } from './health-monitor/health-monitor.component';
+import { LinkRouterComponent } from './core/components/link-router/link-router.component';
+import { ManageCorrespondenceWidgetComponent } from './core/components/widgets/manage-correspondence-overview/manage-correspondence-widget.component';
+import { NotificationComponent } from './notification/notification.component';
+import { PrintOverviewWidgetComponent } from './core/components/widgets/print-overview/print-overview-widget.component';
+import { ReadOnlyComponent } from './read-only/read-only/read-only.component';
+import { WordOnlyComponent } from './read-only/word-only/word-only.component';
+import { ReportComponent } from './report/report.component';
+import { ResourcesComponent } from './core/components/resources/resources.component';
+import { RoleWidgetOverlayComponent } from './core/components/widgets/forms-overview/role-widget-overlay.component';
+import { SkipNavComponent } from './core/components/skip-nav/skip-nav.component';
+import { StarSpinnerComponent } from './core/components/spinner/spinner.component';
+import { StarFormComponent } from './form-loader/star-form.component';
+import { StarUserSelectorComponent } from './core/components/star-user-selector/star-user-selector.component';
+import { StarVerisonHistoryComponent } from './version-history/version-history.component';
+import { StatusOverviewCheckInModalComponent } from './status-overview/status-overview-checkin-modal.component';
+import { StatusOverviewComponent } from './status-overview/status-overview.component';
+import { StatusOverviewResourcesComponent } from './core/components/resources/status-overview-resources.component';
+import { TableOfContentsComponent } from './core/components/table-of-contents/table-of-contents.component';
+import { UnAssignedPendingTasksComponent } from './pending-tasks/unassigned-pending-tasks.component';
+import { TogglerComponent } from './core/components/toggler/toggler.component';
+import { KeyValuePipe } from './core/pipes/keyvalue.pipe';
+
+enableProdMode()
+@NgModule({
+    imports: [
+        BrowserModule
+        , CommonModule
+        , FormsModule
+        , NgbAccordionModule
+        , NgbCollapseModule
+        , NgbModule
+        , NgbModalModule
+        , NgbNavModule
+        , RouterModule
+        , MatProgressSpinnerModule
+        , AutoSaveModule
+        , BreadcrumbsModule
+        , CheckInCheckOutModule
+        , ControlsModule
+        , CoreModule
+        , FooterModule
+        , GridModule
+        , MasterLayoutModule
+        , MessageModule
+        , PageActionsModule
+        , PFMDCFModule
+        , PFMREModule
+        , SearchPanelModule
+        , SideMenuModule
+        , ToolbarModule
+        , TopBannerModule
+        , UserRoleTeamModule
+        , UserActionModule
+        , PFMResourcesModule
+        , Routing
+    ],
+    declarations: [
+        AppComponent,
+        ActionHistoryComponent,
+        AssignedPendingTasksComponent,
+        CheckInModalComponent,
+        CorrespondenceGatewayComponent,
+        CorrespondenceReturnGatewayComponent,
+        CoverPageComponent,
+        DiscardAndCheckInConfirmModalComponent,
+        DisclaimerNoteComponent,
+        DefaultLandingComponent,
+        EmailWidgetComponent,
+        EmailWidgetOverlayComponent,
+        FlagActionsComponent,
+        FlagCardComponent,
+        FlagCardLargeComponent,
+        FlaggedFormComponent,
+        FlaggedSectionComponent,
+        FlagHistoryComponent,
+        FlagsOverviewWidgetComponent,
+        FlagSummaryDashboardWidgetComponent,
+        FormsOverviewWidgetComponent,
+        HeaderComponent,
+        HealthMonitorComponent,
+        LinkRouterComponent,
+        ManageCorrespondenceWidgetComponent,
+        NotificationComponent,
+        PrintOverviewWidgetComponent,
+        ReadOnlyComponent,
+        WordOnlyComponent,
+        ReportComponent,
+        ResourcesComponent,
+        RoleWidgetOverlayComponent,
+        SkipNavComponent,
+        StarSpinnerComponent,
+        StarFormComponent,
+        StarUserSelectorComponent,
+        StarVerisonHistoryComponent,
+        StatusOverviewCheckInModalComponent,
+        StatusOverviewComponent,
+        StatusOverviewResourcesComponent,
+        TableOfContentsComponent,
+        TogglerComponent,
+        UnAssignedPendingTasksComponent,
+        KeyValuePipe,
+        ShowInOverviewPipe,
+        LeftMenuFilterCriteriaPipe,
+        ShowResourceLinkPipe
+    ],
+    bootstrap: [
+        AppComponent
+    ],
+    providers: [
+        NgbActiveModal,
+        PlatformHttp,
+        PlatformLookupService,
+        REService,
+        FormCollectionService,
+        FormService,
+        FlagService,
+        LayoutService,
+        LookupService,
+        STAR_CORE_PROVIDERS,
+        AppStartConfigService,
+        ConfigurationService,
+        CorrespondenceService,
+        ComplianceHandbookService,
+        ContextService,
+        CoverPageService,
+        DatePipe,
+        HealthMonitorService,
+        LinkRouterService,
+        NotificationService,
+        StarService,
+        TaskService,
+        HabLookupService,
+        TaskGuard,
+        CorrespondenceGuard,
+        { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
+        provideHttpClient(withInterceptorsFromDi()),
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+})
+
+export class AppModule
+{
+
+}"
+	app.component.ts	"import { Component, Inject, OnInit, ElementRef } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { PfmCoreConfig } from 'pfm-ui/core';
+import { LayoutService } from 'pfm-layout/master';
+import { layoutConfig } from './layout.config';
+import { QueryStringParams, UserTypes } from './core/constants';
+import { ConfigurationService } from './core/services/configuration.service';
+import { AppStartConfigService } from './core/services/app-start-config.service';
+
+@Component({
+    standalone: false,
+    preserveWhitespaces: true,
+    selector: 'star-app',
+    templateUrl: 'app.component.html',
+    styleUrl: 'app.component.scss'
+})
+
+export class AppComponent implements OnInit {
+
+    private taskTypeCode: number;
+    showLeftMenu: boolean = false;
+  
+   constructor( @Inject(Router) private readonly router: Router
+       , @Inject(ActivatedRoute) private readonly route: ActivatedRoute
+       , @Inject(ElementRef) private readonly elm: ElementRef
+       , @Inject(PfmCoreConfig) private readonly config: PfmCoreConfig
+       , @Inject(ConfigurationService) private readonly configService: ConfigurationService
+       , @Inject(LayoutService) private readonly layoutService: LayoutService
+       , @Inject(AppStartConfigService) private readonly appStartConfigService: AppStartConfigService
+   ) {
+        if (this.appStartConfigService.getConfig().UserTypeCode == UserTypes.Internal ||
+            this.appStartConfigService.getConfig().UserTypeCode == UserTypes.Consultant ||
+            this.appStartConfigService.getConfig().UserTypeCode == UserTypes.Vendor) {
+            
+            layoutConfig.solution.userTypeCode = this.appStartConfigService.getConfig().UserTypeCode + """";
+            window[""APP_CONFIGURATION""] = JSON.stringify(layoutConfig);         
+            this.config.userTypeCode = this.appStartConfigService.getConfig().UserTypeCode;
+            this.layoutService.getConfiguration();
+        }
+      
+
+        if (this.route.snapshot.queryParams[QueryStringParams.TaskTypeCode] !== null) {
+            this.taskTypeCode = Number(this.route.snapshot.queryParams[QueryStringParams.TaskTypeCode]);
+        } else {
+            this.taskTypeCode = 0;
+        }
+    }
+
+    ngOnInit() {
+        this.router.events.subscribe((evt) => {
+            if (!(evt instanceof NavigationEnd)) {
+                return;
+            }
+            window.scrollTo(0, 0);
+        });
+    }
+}"
+	app.component.scss	"li {
+    font-size: large;
+}
+
+div.panel-heading {
+    font-size: x-large;
+}
+
+#stickyAlerts {
+    position: absolute;
+}
+
+    #stickyAlerts, #stickyAlerts.stick {
+        margin-top: 0 !important;
+        z-index: 10000;
+        border-radius: 0 0 .5em .5em;
+        width: 90%;
+    }
+
+        #stickyAlerts.stick {
+            position: fixed;
+            top: 0;
+        }
+
+
+ /* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    border-style: solid;
+    border-width: 1px 1px 6px 1px;
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 35px 5px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    right: 0; /* Center the snackbar */
+    bottom: 15%; /* 30px from the bottom */
+    width: 400px;
+    max-height: 250px;
+    font-size: 1.4rem;
+}
+
+.toastSuccess {
+    border-color: #448f6d;
+    background-color: #DEF2E9;
+    color: #167449;
+}
+
+.toastError {
+    border-color: #ebcccc;
+    background-color: #f2dede;
+    color: #a94442;
+}"
+	app.component.html	"
+<star-skip-nav></star-skip-nav>
+<pfm-topbanner *ngIf=""configService.showTopMenu""></pfm-topbanner>
+<pfm-breadcrumbs style=""visibility:hidden""></pfm-breadcrumbs>
+<div class=""container-fluid"">
+    <div id=""content-center"" class=""clearfix"">
+        <div id=""mainarea"">
+            <pfm-sidemenu *ngIf=""configService.showLeftMenu""></pfm-sidemenu>
+            <div id=""colright"">
+                <div id=""base_right"">
+                    <div>
+                        <a id=""contentAnchor"" tabindex=""-1"" title=""Navigation skipped"" name=""content""></a>
+                        <router-outlet></router-outlet>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id=""snackbar"" role=""alert"" aria-live=""assertive"">
+    <span class=""fa fa-check"" aria-hidden=""true""></span>
+    <span id=""snackbarspan""></span>
+</div>
+<pfm-footer></pfm-footer>"
+	status-overview.component.html	"<ng-template ngbModalContainer></ng-template>
+<div class=""statusPage container-fluid"">
+    <h2 class=""main_title"" role=""heading"" aria-level=""2"">
+        <span>
+            <i class=""fa fa-hourglass-half"" aria-hidden=""true""></i> Status Overview
+        </span>
+    </h2>
+    <br />
+    <div style=""display:inline-block; width:100%"">
+        <div class=""col-lg-8 col-sm-12 pull-left d-inline-block"">
+            <div *ngIf=""starDetailsLoaded"" class="" headerResourceContainer col-sm-12 col-lg-12"" style=""margin-bottom: 40px;"">
+                <h3 class=""truncate""
+                    title=""{{ starDetailsModel.taRequest.taTrackingNumber }}: ({{ starDetailsModel.taRequest.entityNumber }}) {{ starDetailsModel.taRequest.entityName }}"">
+                    {{ starDetailsModel.taRequest.taTrackingNumber }}: ({{ starDetailsModel.taRequest.entityNumber }})
+                    {{ starDetailsModel.taRequest.entityName }}
+                </h3>
+                <hr />
+                <br />
+                <status-overview-resources [starStructuredTaReport]=""starDetailsModel""></status-overview-resources>
+            </div>
+            <div class=""sectionPerformanceReport  col-sm-12 col-lg-12"">
+                <div *ngIf=""showCheckedOutWarningMessage()"">
+                    <pfm-message [model]=""messageModel"" [uniqueId]=""noteId""></pfm-message>
+                    <br />
+                </div>
+                <div *ngIf=""showOtherFunctions && warningMessageModel.messages.length > 0"">
+                    <pfm-message [model]=""warningMessageModel"" [uniqueId]=""warningId""></pfm-message>
+                    <br />
+                </div>
+                <div *ngIf=""showConditionMappingMissingWarning && conditionMappingMissingMessageModel.messages.length > 0"">
+                    <pfm-message [model]=""conditionMappingMissingMessageModel"" [uniqueId]=""'conditionMappingMissingWarningId'""></pfm-message>
+                    <br />
+                </div>
+                <h3 class=""sectionHeader"">Structured TA Report</h3>
+                <div class=""statusBoxContainer container-fluid"">
+                    <div class=""row sectionStatusHeader"">
+                        <div [ngClass]=""showCheckInCheckOutButtons() ? 'col-4' : 'col-5'"">Forms</div>
+                        <div [ngClass]=""showCheckInCheckOutButtons() ? 'col-2' : 'col-2'"">Status</div>
+                        <div [ngClass]=""showCheckInCheckOutButtons() ? 'col-1' : 'col-2'"">Flags</div>
+                        <div class=""col-2"" *ngIf=""showCheckInCheckOutButtons()"">Checked-Out By</div>
+                        <div [ngClass]=""showCheckInCheckOutButtons() ? 'col-3' : 'col-3'"">Last Updated By</div>
+                    </div>
+                    <hr />
+                    <div *ngFor=""let sectionStatus of model?.sectionStatus | ShowInOverview"">
+                        <div class=""row padSec"">
+                            <div class=""col-12"">
+                                <span class=""colbd"">{{ sectionStatus.displayValue }}</span>:
+                            </div>
+                        </div>
+                        <div *ngFor=""let group of sectionStatus.groups"">
+                            <div class=""row padGroup"">
+                                <div class=""col-12"">
+                                    <span class=""colbd"">{{ group.displayValue }}</span>:
+                                </div>
+                            </div>
+                            <div *ngFor=""let section of group.sections | ShowInOverview; let idx = index"">
+                                <div [className]=""getFormRowClassName(idx)"">
+                                    <div [ngClass]=""showCheckInCheckOutButtons() ? 'col-4' : 'col-5'"">
+                                        <a [attr.href]=""contextService.getPageUrl(section.friendlyName, section.queryStringParams)""
+                                           (click)=""onFormClick($event, section)"" #FormLinks id=""{{ section.friendlyName }}"">
+                                            <span class=""fa fa-pencil-square-o"" aria-hidden=""true""></span>&nbsp;{{ getUpdatedDisplayValue(section.friendlyName, section.displayValue, section.longDisplayValue) }}
+                                        </a>
+                                    </div>
+                                    <div [ngClass]=""showCheckInCheckOutButtons() ? 'col-2' : 'col-2'"">
+                                        <span [ngClass]=""statusIcons[section.statusCode]"" aria-hidden=""true""></span>&nbsp;{{ statusDisplayLookup[section.statusCode] }}
+                                    </div>
+                                    <div [ngClass]=""showCheckInCheckOutButtons() ? 'col-1' : 'col-2'"">
+                                        <div style=""display:inline-block"">
+                                            <div class='flagComponent' [ngClass]=""{'soFlagContainerLargeScreen':getScreenSizeClass(true), 'soFlagContainerSmallScreen':getScreenSizeClass(false)}"">
+                                                <div class=""soFlagIcon"" *ngIf=""getFlagsCount(section.friendlyName, true, false) > 0 ? 1 : 0"">
+                                                    <div class=""flagActiveIcon "">
+                                                        <span class=""flagIcon"" tabindex=""0"" ngbTooltip=""{{FLAG_HOVER_MESSAGES.soNeedsAttention}}"" placement=""right"" triggers=""hover focus:blur"">
+                                                            <div style=""padding-left:25px"">
+                                                                {{ getFlagsCount(section.friendlyName, true, false) }}
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class=""soFlagIcon"" *ngIf=""getFlagsCount(section.friendlyName, true, true) > 0 ? 1 : 0"">
+                                                    <div class=""flagActiveCommentIcon "">
+                                                        <span class=""flagIcon"" tabindex=""0"" ngbTooltip=""{{FLAG_HOVER_MESSAGES.soNeedsAttentionComment}}"" placement=""right"" triggers=""hover focus:blur"">
+                                                            <div style=""padding-left:25px"">
+                                                                {{ getFlagsCount(section.friendlyName, true, true) }}
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class=""soFlagIcon"" *ngIf=""getFlagsCount(section.friendlyName, false, false) > 0 ? 1 : 0"">
+                                                    <div class=""flagResolvedIcon "">
+                                                        <span class=""flagIcon"" tabindex=""0"" ngbTooltip=""{{FLAG_HOVER_MESSAGES.soResolved}}"" placement=""right"" triggers=""hover focus:blur"">
+                                                            <div style=""padding-left:25px"">
+                                                                {{ getFlagsCount(section.friendlyName, false, false) }}
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class=""soFlagIcon"" *ngIf=""getFlagsCount(section.friendlyName, false, true) > 0 ? 1 : 0"">
+                                                    <div class=""flagResolvedCommentIcon "">
+                                                        <span class=""flagIcon"" tabindex=""0"" ngbTooltip=""{{FLAG_HOVER_MESSAGES.soResolvedComment}}"" placement=""right"" triggers=""hover focus:blur"">
+                                                            <div style=""padding-left:25px"">
+                                                                {{ getFlagsCount(section.friendlyName, false, true) }}
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=""col-2"" *ngIf=""showCheckInCheckOutButtons()"">
+                                        <div class=""pl-2"">{{ section.lockedBy }}</div>
+                                        <div>
+                                            <pfm-checkincheckout #CheckIn [model]=""checkInModels[section.friendlyName]""
+                                                                 (checkInClicked)=""checkInClicked($event, section.friendlyName)""
+                                                                 (checkInComplete)=""checkInComplete($event, section.friendlyName)""
+                                                                 *ngIf=""isLeadConsultant && checkInModels[section.friendlyName].showCheckInButton"">
+                                            </pfm-checkincheckout>
+                                        </div>
+                                    </div>
+                                    <div [ngClass]=""showCheckInCheckOutButtons() ? 'col-3' : 'col-3'"">
+                                        <span *ngIf=""section.lastUpdatedBy"">
+                                            {{ section.lastUpdatedBy }} on {{ section.formattedLastUpdateDate }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=""col-lg-4 col-sm-12 pull-right d-inline-block"" id=""rightSide"">
+            <div class=""sectionContainer col-sm-12 col-lg-12"" id=""FormsOverview"">
+                <div class=""borderSC"">
+                    <h3 class=""widgetSectionHeader"">
+                        Forms Overview
+                        &nbsp;<i class=""fa fa-lg fa-info-circle fa-blue"" tabindex=""0"" [ngbTooltip]=""formsOverviewWidgetTooltip"" placement=""bottom"" triggers=""hover focus:blur""></i>
+                        <span class=""sr-only"">{{ formsOverviewWidgetTooltip }}</span>
+                    </h3>
+                    <forms-overview [sections]=""formsOverviewSections"" *ngIf=""showFormsOverview""></forms-overview>
+                </div>
+            </div>
+            <div class=""sectionContainer col-sm-12 col-lg-12"" id=""FlagsOverview"">
+                <div class=""borderSC"">
+                    <h3 class=""widgetSectionHeader"">
+                        Flags Overview
+                        &nbsp;<i class=""fa fa-lg fa-info-circle fa-blue"" tabindex=""0"" [ngbTooltip]=""flagsOverviewWidgetTooltip"" placement=""bottom"" triggers=""hover focus:blur""></i>
+                        <span class=""sr-only"">{{ flagsOverviewWidgetTooltip }}</span>
+                    </h3>
+                    <flags-overview [formFlagModels]=""formFlagModels"" [currentRoleId]=""currentRoleId""></flags-overview>
+                </div>
+            </div>
+            <div class=""sectionContainer col-sm-12 col-lg-12"" id=""ManageCorrespondence"" *ngIf=""showOtherFunctions"">
+                <div class=""borderSC"">
+                    <h3 class=""widgetSectionHeader"">Activity</h3>
+                    <manage-correspondence-overview></manage-correspondence-overview>
+                </div>
+            </div>
+            <div class=""sectionContainer col-sm-12 col-lg-12"" id=""Print"">
+                <div class=""borderSC"">
+                    <h3 class=""widgetSectionHeader"">Print</h3>
+                    <print-overview></print-overview>
+                </div>
+            </div>
+            <div class=""sectionContainer col-sm-12 col-lg-12"" id=""Email"" *ngIf=""starDetailsModel && isHabPqc"">
+                <div class=""borderSC"">
+                    <h3 class=""widgetSectionHeader"">Email</h3>
+                    <email-widget [hrsaAcceptanceEmailSentFlag]=""starDetailsModel.hrsaAcceptanceEmailSentFlag"" (flagValueUpdate)=""onEmailFlagUpdated($event, 1)""></email-widget>
+                </div>
+            </div>
+        </div>
+        <div class=""clear"">
+            &nbsp;
+        </div>
+    </div>
+    <div>
+        <div class=""clear"">
+            &nbsp;
+        </div>
+        <pfm-page-actions [model]=""pageActionModel"" (onClick)=""pageActionModel.pageActionOnClick($event)"" id=""pageActions"">
+        </pfm-page-actions>
+    </div>
+</div>"
+	status-overview.component.scss	"$status-page-primary-color:#0e3c58;
+$status-page-primary-color-text:#ffffff;
+$status-page-secondary-color:#E7F7F6;
+$status-page-secondary-color-text:#2e2e30;
+$status-page-secondary-color-bottom-border:#9a0101;
+
+hr{
+    margin: 10px 0px;
+}
+h3{
+    font-size:1.33rem;
+	font-weight:bold;
+}
+.colbd{
+    font-weight:bold;
+}
+.indent30 {
+    margin-left: 30px;
+}
+.indent25{
+    margin-left:25px;
+}
+.indent20 {
+    margin-left: 20px;
+}
+.indent15 {
+    margin-left: 15px;
+}
+.fa-yellow{
+    color:#FFD700;
+}
+.fa-blue{
+    color:#014c8c;
+}
+.smallFont{
+    font-size:1.1rem;
+}
+/* Status Page */
+.statusPage{
+    display:inline-block;
+    padding:0px 10px;
+    width:100%;
+    #rightSide{
+        position: sticky;
+        top: 20px;
+    }
+    .headerResourceContainer{
+        padding-left: unset;
+        padding-right: unset;
+    }
+    .headerContainer{
+        height:220px;
+        margin-bottom: 10px;
+        .requestExtension{
+            padding:10px 0px;
+        }
+        .containerSpacing{
+            margin-bottom:15px;
+        }
+    }
+    .sectionContainer{
+        margin-bottom: 10px;
+        .widgetSectionHeader{
+            background-color:$status-page-secondary-color;
+            height:38px;
+            color:$status-page-secondary-color-text;
+            padding:10px;
+            border-bottom: 1px solid $status-page-secondary-color-bottom-border;
+        }
+        .borderSC{
+            border:1px solid #dedede;
+            min-height: 125px;
+        }
+    }
+    .sectionPerformanceReport{
+        padding-left: unset;
+        padding-right: unset;
+        margin-bottom: 10px;
+        float:left;
+        .sectionHeader{
+            background-color:$status-page-primary-color;
+            height:38px;
+            color:$status-page-primary-color-text;
+            padding:10px;
+			margin-bottom:0;
+        }
+        .borderSPR{
+            border:1px solid #C0C0C0;
+            height:500px;
+        }
+        .table{
+            margin-bottom:0px;
+            th{
+                border:0px;
+            }
+            th.noBorder{
+                border:0px !important;
+            }
+        }
+        .ng-table{
+            width:100%;
+            margin-top:5px;
+            i.fa {
+                font-size: 0.7rem;
+            }
+            tr{
+                border: 1px solid #e0e0e0;
+            }
+        }
+        .cellSpacing{
+            padding:5px 0px;
+        }
+        .statusBoxContainer{
+            overflow-x: hidden;
+            padding: 0px 10px;
+            border:1px solid #C0C0C0;
+            min-height: 60px;
+         }
+    }
+    
+    #dueDates, #daysLeft{
+        padding: 5px 0px 0px 25px;
+    }
+    #dueDates, #daysLeft, #dueDateIcon, #daysLeftIcon{
+        .bigLabel{
+            font-size: 3rem;
+            padding-bottom: 10px;
+        }
+    }
+    .dueDateContainer, .datesLeftContainer{
+        padding-top:15px;
+        padding-bottom:15px;
+    }
+    .floatRight{
+        float:right;
+    }
+    .textRight{
+        text-align:right;
+    }
+    .textCenter{
+        text-align:center;
+    }
+}
+
+/*
+IE11 compatibility - font download disabled in HRSA - https://technet.microsoft.com/itpro/windows/keep-secure/block-untrusted-fonts-in-enterprise#Turn_on_and_use_the_Blocking_untrusted_fonts_feature
+*/
+
+@media all and (-ms-high-contrast:none) {
+    
+    // .fa-times {
+    //     background-image: url(../images/fa_times.png);
+    //     background-repeat:no-repeat;
+    //     background-position:-1px 2px;
+    // }
+    // .fa-check {
+    //     background-image: url(../images/fa_check.png);
+    //     background-repeat:no-repeat;
+    // }
+    // .fa-exclamation {
+    //     background-image: url(../images/fa_exclamation_blue.png);
+    //     background-repeat:no-repeat;
+    //     background-position:-2px 1px;
+    // }
+    .fa-print {
+        background-image: url(../images/fa_print.png);
+        background-repeat:no-repeat;
+    }
+    .fa-bug{
+        background-image: url(../images/fa_bug.png);
+        background-repeat:no-repeat;
+    }
+    .statusBoxContainer {
+        .fa-info-circle {
+            background-image: url(../images/fa_info_circle.png);
+            background-repeat:no-repeat;
+        }
+        .fa-check-square-o{
+            background-image: url(../images/fa_check_square_o.png);
+            background-repeat:no-repeat;
+        }
+    }
+    #dueDateIcon{
+        .fa-calendar{
+            background-image: url(../images/fa_calendar_lg.png);
+            background-repeat:no-repeat;
+        }
+    }
+    #daysLeftIcon{
+        .fa-clock-o{
+            background-image: url(../images/fa_clock_lg.png);
+            background-repeat:no-repeat;
+            background-position:0px 2px;
+        }
+    }
+}
+
+.colSize1 {
+    width: 8.33%
+}
+
+.colSize2 {
+    width: 16.66%;
+}
+
+.colSize3{
+    width: 25%;
+}
+
+.colSize4 {
+    width: 33.33%;
+}
+
+.colSize5 {
+    width: 41.66%;
+}
+
+.sectionStatusHeader {
+    padding-left: 15px;
+    line-height: 18px;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    color: #414141;
+    font-weight: 700;
+}
+
+.padSec {
+    padding-top: 0.75rem;
+    padding-bottom: 0.5rem;
+    line-height: 18px;
+}
+
+.padGroup {
+    padding-left: 15px;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    line-height: 18px;
+}
+
+.padForm {
+    margin-left: 15px;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    line-height: 18px;
+}
+
+.formEven {
+    background-color: #f5f5f5
+}
+
+.flagActiveIcon {
+    height: 20px !important;
+    width: 20px !important;
+}
+
+.flagResolvedIcon {
+    height: 20px !important;
+    width: 20px !important;
+}
+.flagActiveIcon span:hover {
+    border: none !important;
+    background-size: 90% !important;
+    background-position: unset !important;
+}
+
+.flagActiveIcon span:focus {
+    border: none !important;
+    background-size: 90% !important;
+    background-position: unset !important;
+}
+
+.flagResolvedIcon span:hover {
+    border: none !important;
+    background-size: 90% !important;
+    background-position: unset !important;
+}
+
+.flagResolvedIcon span:focus {
+    border: none !important;
+    background-size: 90% !important;
+    background-position: unset !important;
+}
+
+.soFlagContainerLargeScreen {
+    width: 91px;
+}
+.soFlagContainerSmallScreen {
+    width: 51px;
+}
+
+.soFlagIcon {
+    float: left;
+    margin-right: 20px;
+}
+
+.soFlagIcon .flagActiveCommentIcon {
+    width: 20px!important;
+}
+
+.soFlagIcon .flagResolvedCommentIcon {
+    width: 20px!important;
+}"
+	checkin-modal.component.html	"<div class=""modal-header star-modal-header"">
+	<h4>Check-In Options</h4>
+	<button type=""button"" class=""close"" aria-label=""Close"" (click)=""activeModal.dismiss('Cross click')"" (keydown)=""closeKeyEvent($event)"" #closeX>
+		<span aria-hidden=""true"">&times;</span>
+	</button>
+</div>
+<div class=""modal-body"">
+	<p>
+		This is a confirmation window. If you want to save your changes and check-in this form, please use the 'Save Changes and Check-In' button below. 
+		If you do not want to save your changes and need to check-in this form, please use the 'Delete Changes and Check-In' button below. 
+		If you do not check-in the form using one of these options, other users will not be able to edit the form.
+	</p>
+</div>
+<div class=""modal-footer"">
+	<button type=""button"" class=""btn btn-secondary btn-lg"" (click)=""activeModal.close('Discard and Check-In')"">Delete Changes and Check-In</button>
+	<button type=""button"" class=""btn btn-primary btn-lg"" (click)=""activeModal.close('Save and Check-In')"" (keydown)=""saveAndCheckInKeyEvent($event)"" #saveAndCheckIn>Save Changes and Check-In</button>
+</div>"
+	checkin-modal.component.ts	"import { Component, Input, Inject, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { KeyCode } from 'pfm-ui/core';
+
+@Component({
+	standalone: false,
+	preserveWhitespaces: true,
+    selector: 'checkin-modal',
+    templateUrl: 'checkin-modal.component.html'
+})
+
+export class CheckInModalComponent implements AfterViewInit {
+	@Input() name: string;
+	@ViewChild('container') container: ElementRef;
+	@ViewChild('saveAndCheckIn') saveAndCheckIn: ElementRef;
+	@ViewChild('closeX') closingX: ElementRef;
+
+	constructor( @Inject(NgbActiveModal) public activeModal: NgbActiveModal) { }
+
+	/*
+	 * ngafterviewinit method to focus into tab trap
+	 */
+	public ngAfterViewInit() {
+		this.closingX.nativeElement.focus();
+	}
+
+	/*
+	 * captures the keydown event on the closing x, will force focus on save and check in button only when shift-tab is pressed
+	 */
+	public closeKeyEvent(event: any): void {
+		if (event.keyCode === KeyCode.Tab && event.shiftKey) {
+			event.preventDefault();
+			this.saveAndCheckIn.nativeElement.focus();
+		}
+	}
+
+	/*
+	 * captures the keydown event on the save and check in, will force focus on closing x button only when tab is pressed
+	 */
+	public saveAndCheckInKeyEvent(event: any): void {
+		if (event.keyCode === KeyCode.Tab && !event.shiftKey) {
+			event.preventDefault();
+			this.closingX.nativeElement.focus();
+		}
+	}
+}"
+	discard-and-checkin-confirm-modal.component.html	"<div class=""modal-header star-modal-header"">
+    <h4>Delete Changes and Check-In Confirmation</h4>
+    <button type=""button"" class=""close"" aria-label=""Close"" (click)=""activeModal.dismiss('Cross click')"" (keydown)=""closeKeyEvent($event)"" #closeX>
+        <span aria-hidden=""true"">&times;</span>
+    </button>
+</div>
+<div class=""modal-body"">
+    <p>
+        Are you sure you want to DELETE your changes and check-in? Flags and flag actions that you added will not be deleted.
+    </p>
+</div>
+<div class=""modal-footer"">
+    <div class=""w-100"">
+        <button type=""button"" class=""btn btn-secondary btn-lg"" (click)=""activeModal.close('Cancel')"">Cancel</button>
+        <button type=""button"" class=""btn btn-primary btn-lg float-right"" (click)=""activeModal.close('Confirm')"" (keydown)=""confirmKeyEvent($event)"" #confirm>Confirm</button>
+    </div>
+</div>"
+	discard-and-checkin-confirm-modal.component.ts	"import { Component, Input, Inject, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { KeyCode } from 'pfm-ui/core';
+
+@Component({
+    standalone: false,
+    preserveWhitespaces: true,
+    selector: 'discard-and-checkin-confirm-modal',
+    templateUrl: 'discard-and-checkin-confirm-modal.component.html'
+})
+
+export class DiscardAndCheckInConfirmModalComponent implements AfterViewInit {
+    @Input() name: string;
+    @ViewChild('container') container: ElementRef;
+    @ViewChild('closeX') closingX: ElementRef;
+    @ViewChild('confirm') saveAndCheckIn: ElementRef;
+
+    constructor( @Inject(NgbActiveModal) public activeModal: NgbActiveModal) 
+    { }
+
+	/*
+	 * ngafterviewinit method to focus into tab trap
+	 */
+    public ngAfterViewInit() {
+        this.closingX.nativeElement.focus();
+    }
+
+    /*
+     * captures the keydown event on the save and check in, will force focus on closing x button only when tab is pressed
+     */
+    public confirmKeyEvent(event: any): void {
+        if (event.keyCode === KeyCode.Tab && !event.shiftKey) {
+
+            event.preventDefault();
+            this.closingX.nativeElement.focus();
+        }
+    }
+
+	/*
+	 * captures the keydown event on the closing x, will force focus on save and check in button only when shift-tab is pressed
+	 */
+    public closeKeyEvent(event: any): void {
+        if (event.keyCode === KeyCode.Tab && event.shiftKey) {
+
+            event.preventDefault();
+            this.saveAndCheckIn.nativeElement.focus();
+        }
+    }
+}"
+	form-loader.pageaction.model.ts	"import { filter, Observable, Subject } from 'rxjs';
+import { PageActionMode } from 'pfm-ui/core';
+import { PageActionItem, PageActionModel } from 'pfm-ui/components';
+import { StarPageActions } from '../core/page-actions';
+
+///<summary>
+///Form Loader Page Action Model
+///Will maintain observables for each page action
+///</summary>
+export class FormLoaderPageActionModel extends PageActionModel {
+    private eventSubject: Subject<string>;
+    public save: Observable<string>;
+    public saveAndContinue: Observable<string>;
+    public cancel: Observable<string>;
+
+    ///<summary>
+    ///Constructor to change mode of page actions, set page actions and set values of eventSubject and other observables
+    ///</summary>
+    constructor() {
+        super();
+        this.mode = PageActionMode.Buttons;
+        this.items = this.getPageActions();
+        this.eventSubject = new Subject<string>();
+        this.save = this.eventSubject.pipe(filter((value: string) => value === StarPageActions.Save.id));
+        this.saveAndContinue = this.eventSubject.pipe(filter((value: string) => value === StarPageActions.SaveAndContinue.id));
+        this.cancel = this.eventSubject.pipe(filter((value: string) => value === StarPageActions.Cancel.id));
+    }
+
+    ///<summary>
+    ///Method to get pageActions for page
+    ///</summary>
+    public getPageActions(): PageActionItem[] {
+        return [
+            StarPageActions.Save,
+            StarPageActions.SaveAndContinue,
+            StarPageActions.Cancel,
+        ]
+    }
+
+    ///<summary>
+    ///Method to be called when page actions are clicked on the formloader wrapper, 
+    ///function passes which action type was taken by passing the id of the page action
+    ///</summary>
+    public pageActionOnClick(event: any): void {
+        this.eventSubject.next(event.id);
+    }
+}"
+	star-form.component.html	"<ng-template ngbModalContainer></ng-template>
+<div *ngIf=""showFormSummary()"" class=""container-fluid mx-0 my-0"" style=""padding-left: 5px; padding-right: 5px;"">
+    <pfm-message [model]=""formSummaryMessageModel"" [uniqueId]=""'formSummaryNote'""></pfm-message>
+    <br />
+    <flag-summary-dashboard-widget [flagData]=""formFlagModels"" [currentRoleId]=""currentRoleId""></flag-summary-dashboard-widget>
+    <br />
+</div>
+<div class=""card"" *ngIf=""isHabSummary"">
+	<pfm-message [model]=""habSummaryMessage"" [uniqueId]=""'habSummaryNote'""></pfm-message>
+</div>
+<div class=""card"" *ngIf=""showCheckOutComponent"">
+    <div class=""card-header"">
+        <h2 class=""sectionTitle"">
+            Check-In Check-Out Options
+        </h2>
+    </div>
+    <pfm-message [model]=""messageModel"" [uniqueId]=""noteId"" *ngIf=""showCheckInCheckOutNote""></pfm-message>
+    <br />
+</div>
+<pfm-checkincheckout [model]=""checkInCheckOutComponentModel""
+	(checkOutClicked)=""checkOutClicked($event)""
+	(checkInClicked)=""checkInClicked($event)""
+	(checkOutComplete)=""checkOutComplete($event)""
+	(checkInComplete)=""checkInComplete($event)""
+	*ngIf=""showCheckOutComponent"">
+</pfm-checkincheckout>
+<div>
+	<pfm-autosave-toast></pfm-autosave-toast>
+</div>
+<pfm-dcf-form-instance [(args)]=""args""
+	[(form)]=""form""
+	[(user)]=""user""
+	(load)=""onLoad($event)"">
+</pfm-dcf-form-instance>
+<div *ngIf=""form.formModel.components"" class=""starFormCustom"" [ngClass]=""{'habFormCustom' : isHab}"">
+	<pfm-re [(fact)]=""form""
+		[formData]=""form.formData""
+		[validationRules]=""form.validationRules""
+		[businessRules]=""form.businessRules""
+		[config]=""reConfig"">
+	</pfm-re>
+	<div class=""reqMsg"">
+		Fields with <span class=""fa fa-star fa-red""></span><span class=""sr-only"">star</span> are required.
+	</div>
+	<pfm-dcf-edit-groups *ngIf=""!!solutionFormModelSetupComplete"" name=""form.formModel""
+		[(formModel)]=""form.formModel""
+		(blur)=""onBlur($event)""
+		(action)=""action($event)""
+		[(ngModel)]=""form.formData""
+		[modes]=""modes""
+		[(validationResult)]=""form.validationResult"">
+	</pfm-dcf-edit-groups>
+</div>
+<pfm-page-actions [model]=""pageActionModel"" (onClick)=""pageActionModel.pageActionOnClick($event)"" id=""pageActions""></pfm-page-actions>"
+	star-form.component.ts	"// Angular
+import { Component, OnInit, Inject, ViewChild, OnDestroy, AfterViewChecked } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, forkJoin, mergeMap, Observable, Observer, Subject, take, takeUntil, throwError } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+
+// Technical Services
+import { FormInstanceModel, FormUserModel, EditModesModel, LookupService, FormService, FormInstanceArgsModel, FormComponent } from 'pfm-dcf';
+import { REComponent, REConfigModel } from 'pfm-re';
+import { LookupService as PlatformLookupService, LookupModel, MessageType } from 'pfm-ui/core';
+import { AutoSaveService, autosaveConfigModel} from 'pfm-autosave/core';
+import { MessageModel, CheckInCheckOutModel, CheckedOutItemEventModel, CheckInCheckOutComponentModel, CheckInCheckOutComponent, FlagModel, FlagService, FlagIconMode, CheckInCheckOutService } from 'pfm-ui/components';
+
+// STAR Specific
+import { StarPageActionType, QueryStringParams, FormStatus, UserTypes, StarConstants, GDCArguments, FlagStatus, RoleIds, FlagHoverMessages, InternalOrgId, habFormFriendlyNameBase, StarTaskTypeCodes } from '../core/constants';
+import { StarPageActions } from './../core/page-actions'
+import { FormLoaderPageActionModel } from './form-loader.pageaction.model';
+import { ConfigurationService } from '../core/services/configuration.service';
+import { ContextService } from './../core/services/context.service';
+import { TaskService } from './../core/services/task.service';
+import { StarService } from './../core/services/star.service';
+import { HabLookupService } from '../core/services/hab-lookup.service';
+import { ComplianceHandbookService } from '../core/services/compliance-handbook.service';
+import { CorrespondenceService } from '../core/services/correspondence.service';
+import { AppStartConfigService } from '../core/services/app-start-config.service';
+import { FormUtilities } from '../core/utilities/form-utilities';
+import { StarClientUtilities } from './../core/utilities/star-client-utilities';
+import { FormStatusUpdateDataArgs, FormStatusData } from '../core/models/form-status-update-data-args.model';
+import { CheckInModalComponent } from './checkin-modal.component';
+import { DiscardAndCheckInConfirmModalComponent } from './discard-and-checkin-confirm-modal.component';
+import { FormComplianceHandbookMapping } from '../core/models/form-compliance-handbook-mapping.model';
+import { ECResourceContextModel } from '../core/models/ec-resource-context.model';
+import { ComplianceElementCondition } from '../core/models/compliance-element-condition.model';
+
+@Component({
+    standalone: false,
+    preserveWhitespaces: true,
+    selector: ""star-form"",
+    templateUrl: ""star-form.component.html""
+})
+
+/**
+ * Star Form Component class
+ */
+export class StarFormComponent implements OnInit, OnDestroy, AfterViewChecked {
+
+    public static readonly ROUTE_REUSE_COMPONENT_NAME: string = 'StarFormComponent'; // Do not remove.
+
+	@ViewChild(FormComponent) formComponent;
+	@ViewChild(REComponent) reComponent;
+    @ViewChild(CheckInCheckOutComponent) checkInCheckOutComponent;
+    form: FormInstanceModel = new FormInstanceModel();
+    user: FormUserModel = new FormUserModel(); 
+    pageActionModel: FormLoaderPageActionModel;
+    modes: EditModesModel = new EditModesModel();
+    private ngUnsubscribe: Subject<any>;
+    private strId: string;
+    public friendlyName: string;
+    private taskTypeCode: number;
+    public starDetails: any;
+    private buttonsLocked: boolean = false;
+    private showExpertRoMode: boolean = false;
+
+    private showCheckInCheckOutNote: boolean = false;
+    private messageModel = new MessageModel();
+    public formSummaryMessageModel = new MessageModel();
+    private noteId: string = ""starAlreadyCheckedOutMessage"";
+    private checkInCheckOutComponentModel = new CheckInCheckOutComponentModel();
+	private showCheckOutComponent: boolean;
+	private args: FormInstanceArgsModel;
+	reConfig: REConfigModel = new REConfigModel();
+    form_Autosave_Config: autosaveConfigModel = null;
+    private BPHC_STAR_OSV_ResourceTypeCode = 2;
+    private currentRoleId:number;
+    private formStatus:FormStatus;
+    private flagNeedsAttention:boolean = false;
+    public formFlagModels: Array<FlagModel>;
+    public formStatusUpdateData: FormStatusUpdateDataArgs =new FormStatusUpdateDataArgs();
+    solutionFormModelSetupComplete: boolean;
+
+    private isHab: boolean;
+    private isHabSummary: boolean;
+    private habSummaryMessage = new MessageModel();
+    private isCQMTask: boolean = false;
+    constructor(
+        @Inject(Router) private router: Router,
+        @Inject(ActivatedRoute) private route: ActivatedRoute,
+        @Inject(ConfigurationService) private configService: ConfigurationService,
+        @Inject(ContextService) private contextService: ContextService,
+        @Inject(StarService) private starService: StarService,
+        @Inject(TaskService) private taskService: TaskService,
+        @Inject(PlatformLookupService) private platformLookupService: PlatformLookupService,
+        @Inject(LookupService) private lookupService: LookupService,
+        @Inject(DatePipe) private datepipe: DatePipe,
+        @Inject(CheckInCheckOutService) private checkInCheckOutService: CheckInCheckOutService,
+        @Inject(FormService) private formService: FormService,
+		@Inject(NgbModal) private modalService: NgbModal,
+        @Inject(AutoSaveService) private autoSaveSvc: AutoSaveService,
+        @Inject(ComplianceHandbookService) private complianceHandbookService: ComplianceHandbookService,
+        @Inject(CorrespondenceService) private corrspondenceService: CorrespondenceService,
+        @Inject(FlagService) private flagService: FlagService,
+        @Inject(AppStartConfigService) private appStartConfigService: AppStartConfigService,
+        @Inject(HabLookupService) private habLookupService: HabLookupService
+    ) {
+        this.configService.loading = true;
+		this.contextService.pageTitle = '';
+		this.datepipe = new DatePipe(""en-us"");
+        this.ngUnsubscribe = new Subject();
+        this.strId = this.route.snapshot.queryParams[QueryStringParams.StructuredTAReportId];
+        this.friendlyName = this.route.snapshot.queryParams[QueryStringParams.FriendlyName];
+        this.taskTypeCode = Number.parseInt(this.route.snapshot.queryParams[QueryStringParams.TaskTypeCode]);
+        let configData = this.appStartConfigService.getConfig();
+        this.user.userTypeCode = configData.UserTypeCode;
+		this.args = this.getDCFArgs();
+		this.reConfig.summary = false;
+        this.currentRoleId = StarClientUtilities.getRoleByTaskTypeCode(this.taskTypeCode);
+         
+		this.contextService.loadContextModel(this.strId, this.friendlyName);
+        this.pageActionModel = new FormLoaderPageActionModel();
+        this.pageActionModel.save.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => this.onAction(StarPageActionType.Save));
+        this.pageActionModel.saveAndContinue.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => this.onAction(StarPageActionType.SaveAndContinue));
+		this.pageActionModel.cancel.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => this.onAction(StarPageActionType.Cancel));
+
+        this.checkInCheckOutService.serviceUrl = this.appStartConfigService.getExternalSystemBaseUrl(""PlatformCoreUiUrl"");
+
+        this.checkInCheckOutComponentModel = new CheckInCheckOutComponentModel();
+        this.checkInCheckOutComponentModel.checkInCheckOutModel = new CheckInCheckOutModel();
+        this.checkInCheckOutComponentModel.id = ""starForm"";
+        this.checkInCheckOutComponentModel.checkOutButtonToolTip = ""Click here to check-out the form."";
+        this.checkInCheckOutComponentModel.checkInButtonToolTip = ""Click here to check-in the form."";
+        this.checkInCheckOutComponentModel.checkOutButtonText = ""Check-Out Form"";
+        this.checkInCheckOutComponentModel.checkInButtonText = ""Check-In Form"";
+        this.checkInCheckOutComponentModel.serviceUrl = this.appStartConfigService.getExternalSystemBaseUrl(""PlatformCoreUiUrl"");
+        this.isCQMTask = this.taskTypeCode === StarTaskTypeCodes.CQMAssignStructuredTAReport || this.taskTypeCode === StarTaskTypeCodes.CQMPrepareStructuredTAReport || this.taskTypeCode === StarTaskTypeCodes.CQMPrepareStructuredTAReportChangeRequest;
+
+        this.formFlagModels = new Array<FlagModel>();
+
+		this.taskService.startTask(this.strId, this.taskTypeCode).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+            error: (_error) => { console.log(""Failed to start pending task.""); }
+        });
+
+		this.form_Autosave_Config = new autosaveConfigModel(this.args.friendlyName, this.args.resourceValue, StarConstants.StarResourceTypeCode, this.args.definitionVersionId, ""gdc"");
+    }
+
+	/**
+	 * ngOnInit method
+	 */
+	public ngOnInit(): void { 
+        this.configService.showResources = true;
+        this.configService.showHeader = true;
+
+        this.formSummaryMessageModel = new MessageModel();
+        this.formSummaryMessageModel.type = MessageType.Note;
+        this.formSummaryMessageModel.messages = [
+            'Flag Types:',
+            'The two types of flags are ""Needs Attention"" (red) and ""Resolved"" (green).',
+            'If you create a new flag OR if you were the last person to add a comment to a flag: The flag icon shows a comment bubble and the flag label includes the ""you commented last"" phrase.',
+            '', '',
+            'Flag Actions:',
+            'The presence of an ""Add Flag"" link indicates that a question or table does not have any current flags. To create a new flag, click the ""Add Flag"" link to the left of the associated question or table. The new flag will appear for you as a ""Needs Attention (You Commented Last)"" flag.',
+            'To view or update (comment on or resolve) an existing flag, click on the flag icon to the left of the associated question or table. Resolving a flag changes it from red to green. Closing out a flag removes the flag entirely from view. All flag information is saved and accessible in the ""Flag Action History"" resource link.',
+            '',
+            '', '',
+            'Flag Counts:',
+            'The below flag counts show the statuses of the flags for this page, not for the entire report. Flag counts are refreshed when the page is saved.'
+        ];
+
+        this.habSummaryMessage = new MessageModel();
+        this.habSummaryMessage.type = MessageType.Note;
+        this.habSummaryMessage.messages = [
+            ""The information on this page is not complete until the report is finalized.""
+        ];
+    }
+
+    public ngAfterViewChecked(): void {
+        //fix for 508 issue reading disabled buttons twice
+        let nodeList = document.querySelectorAll(""button"");   
+        nodeList.forEach(node=> { 
+            if (node.getAttribute(""disabled"")) { 
+                node.children[0].setAttribute(""aria-hidden"",""true"")
+            }
+        });
+
+        //QoL: add space after repeaters in hab forms and bfore the next panel
+        let form = document.getElementsByClassName(""habFormCustom"");
+        if (form.length) {
+            let repeaters = form[0].getElementsByTagName(""pfm-dcf-edit-repeater"");
+            Array.from(repeaters).forEach(repeater => {
+                repeater.parentElement.style.marginBottom = ""10px"";
+            });
+        }        
+    }
+
+	/**
+	 * ngOnDestory method
+	 */
+	public ngOnDestroy(): void {
+		this.disableAutosave();
+        this.ngUnsubscribe.next(null);
+        this.ngUnsubscribe.complete();
+    }
+
+	/**
+	 * the onload method, fired after form is retrieved handles check in/check out if expert, calls form load method
+	 * @param event the form data 
+	 */
+	public onLoad(event: any): void {
+		this.showSavePageActions(false);
+        let checkedInCheckOutModel = new CheckInCheckOutModel(this.strId, <number>StarConstants.StarResourceTypeCode, this.friendlyName, null, null);
+        if (this.appStartConfigService.getConfig().UserTypeCode === 5 || this.isCQMTask) {
+            this.showExpertRoMode = true;
+            this.modes.ro = true;
+            this.checkInCheckOutService.getCheckedOutItems(checkedInCheckOutModel)
+                .subscribe(checkedOutItems => {
+                    if (!!checkedOutItems && checkedOutItems.length > 0) { 
+						if (checkedOutItems[0].userId.toLowerCase() === this.appStartConfigService.getConfig().UserId.toLowerCase()) {
+							this.showSavePageActions(true);
+                            this.modes.ro = false;
+                            this.checkInCheckOutComponentModel.enableCheckOutButton = false;
+                            this.checkInCheckOutComponentModel.enableCheckInButton = true;
+                            this.setCheckedOutToYouNote();
+                            this.showExpertRoMode = false;
+                        } else {
+                            this.modes.ro = true;
+                            this.showCheckInCheckOutNote = true;
+                            this.setCheckedOutToAnotherNote(`${checkedOutItems[0].firstName} ${checkedOutItems[0].lastName}`);
+                            this.checkInCheckOutComponentModel.enableCheckOutButton = false;
+                            this.checkInCheckOutComponentModel.enableCheckInButton = false;
+                            this.showExpertRoMode = true;
+                        }
+                    } else {
+                        this.modes.ro = true;
+                        this.setCheckedOutToNoOneNote();
+                        this.checkInCheckOutComponentModel.enableCheckOutButton = true;
+                        this.checkInCheckOutComponentModel.enableCheckInButton = false;
+                        this.showExpertRoMode = true;
+                    }
+
+                    checkedInCheckOutModel.userId = this.appStartConfigService.getConfig().UserId.toLowerCase();
+                    this.checkInCheckOutComponentModel.checkInCheckOutModel = checkedInCheckOutModel;
+                    this.onFormLoad(event, true, true);
+                });
+		} else {
+			this.showSavePageActions(true);
+            this.onFormLoad(event, false, true);
+        }
+    }
+
+	/**
+	 * mapping function for lookups from platform
+	 * @param data data to be mapped
+	 */
+    private mapLookupToArray(data: LookupModel): Array<any> {
+        let arr = [];
+        data.values.forEach(function (x) {
+            arr.push({
+                ""id"": x.displayValue,
+                ""value"": x.displayValue,
+                ""text"": x.displayValue                
+            });
+        });
+
+        return arr;
+    }
+
+
+    /**
+     * method that handles any page action event
+     * @param event the page action type
+     */
+    private onAction(event: StarPageActionType): void {
+        if (event !== StarPageActionType.Cancel) {
+            if (!this.buttonsLocked) {
+                this.buttonsLocked = true;
+                this.taskService.checkActiveTask(this.taskTypeCode, this.strId).pipe(take(1)).subscribe({
+                    next: (res) => {
+                        if (res) {
+                            //If task is active form update will happen
+                            this.doSave(event, false);
+                        }
+                        else {
+                            //If task is not active for user, navigate back to assignedpendingtasks page
+                            this.router.navigate(['/assignedpendingtasks'], { queryParams: { TaskTypeCode: this.taskTypeCode } })
+                        }
+                    },
+                    error: (_error) => {
+                        StarClientUtilities.showToast(""toastError"", ""There was an error loading the page. Please try again or contact the help desk."");
+                            this.buttonsLocked = false;
+                    }
+                });
+            }
+            else {
+                StarClientUtilities.showToast(""toastError"", ""Please wait while the system processes your request."");
+                this.buttonsLocked = false;
+            }
+        }
+        else {
+            this.router.navigate(['/statusoverview'], { queryParams: { strId: this.strId, TaskTypeCode: this.taskTypeCode } });
+        }
+
+    }
+
+	/**
+	 * Method to update form via gdc api, if successful update will update StatusJson of form and navigate if necessary
+	 * @param event page action type
+	 * @param checkIn if method called in a check in context
+	 */
+    private doSave(event: StarPageActionType, checkIn: boolean): void {
+        //for HAB forms, sort consultant review data by catergory item display value before save
+        if (this.starDetails.taRequest.internalOrgId == InternalOrgId.HAB) {
+            if (this.form.lookupObjects && this.form.lookupObjects.LookupHabCategoryItem && this.form.formData.ConsultantReview_Panel) {
+                let temp;
+                temp = this.sortHabDataByCategoryItem(this.form.formData.ConsultantReview_Panel.Findings.items, ""ConsultantReview_"");
+                this.form.formData.ConsultantReview_Panel.Findings.items = temp;
+                temp = this.sortHabDataByCategoryItem(this.form.formData.ImprovementOptions_Panel.Improvements.items, ""ImprovementOptions_"");
+                this.form.formData.ImprovementOptions_Panel.Improvements.items = temp;
+            }
+        }
+
+        this.updateFormInstance().pipe(take(1)).subscribe({
+            next: (_res) => {
+                this.discardAutoSave();
+				this.updateJsonStatus(event, checkIn);
+            },
+            error: (_error) => {
+                StarClientUtilities.showToast(""toastError"", ""There was an error loading the page. Please try again or contact the help desk."");
+            }
+        });
+    }
+
+    private sortHabDataByCategoryItem(array: Array<any>, sectionPrefix: string) {
+        let sortedArray = [];
+
+        this.form.lookupObjects.LookupHabCategoryItem.sort(function(a, b) {
+            return a.text > b.text;
+        });
+
+        for (let lookupCategoryItem of this.form.lookupObjects.LookupHabCategoryItem) {
+            for (let selectedItem of array) {
+                if (selectedItem[sectionPrefix + ""CategoryItem""] == lookupCategoryItem.id) {
+                    sortedArray.push(selectedItem);
+                }
+
+                if (sortedArray.length == array.length) {
+                    break;
+                }
+            }
+
+            if (sortedArray.length == array.length) {
+                break;
+            }
+        }
+
+        //in case mapping gets corrupted add any missed, unsorted items to the end
+        let missingItems = array.filter(function(x) {
+            return sortedArray.indexOf(x) < 0;
+        });
+        sortedArray = sortedArray.concat(missingItems);
+
+        return sortedArray;
+    }
+
+	/**
+	 * Method to update status json and trigger navigation, sidemenu updates
+	 * @param event the star page action type
+	 * @param checkIn if method called in a check in context
+	 */
+    private updateJsonStatus(event: StarPageActionType, checkIn: boolean): void {
+        this.anyFlagNeedsAttention().pipe(
+            take(1),
+            mergeMap((result) => {
+                this.flagNeedsAttention = result;
+                this.formStatus = (!this.flagNeedsAttention && this.form.validationResult.valid) ? FormStatus.Complete : FormStatus.NotStarted;
+                this.formStatusUpdateData.strId=this.strId;
+                this.formStatusUpdateData.taskTypeCode=this.taskTypeCode;
+                this.formStatusUpdateData.formStatusCollection.push(new FormStatusData(this.friendlyName,this.form.formModel.title,this.formStatus)); 
+                return this.contextService.saveFormStatus(this.formStatusUpdateData)
+            }),
+            catchError((error) =>  throwError(() => error))
+        ).pipe(take(1)).subscribe({
+            next: (statusJson) => {
+                let toastMessage = this.formStatus === FormStatus.Complete ? ""Information saved successfully."" : ""Information saved successfully with errors."";
+                toastMessage = this.flagNeedsAttention ? ""Information saved with errors: One or more Needs Attention (red) flags was not updated. Form cannot be completed."" : toastMessage;
+                
+                StarClientUtilities.showToast(this.formStatus === FormStatus.Complete ? ""toastSuccess"" : ""toastError"", toastMessage);
+                this.buttonsLocked = false;
+                this.contextService.contextModel = statusJson;
+                
+                if (event === StarPageActionType.SaveAndContinue) {
+                    // If the user type is consultant, then we want to manually check-in the form.
+                    if (this.user.userTypeCode === UserTypes.Consultant || this.isCQMTask) {
+                        this.checkInCheckOutService.checkIn(this.checkInCheckOutComponentModel.checkInCheckOutModel).pipe(take(1)).subscribe({
+                                next: (res) => {
+                                    this.navigateAfterAction();
+                                },
+                                error: (_error) => {
+                                    StarClientUtilities.showToast(""toastError"", ""There was an error with check-in. Please try again or contact the help desk."");
+                                }
+                            });
+                    } else {
+                        this.navigateAfterAction();
+                    }
+                }
+                else {
+                    if (checkIn) {
+                        this.checkInCheckOutComponent.checkIn();
+                    }
+                    this.contextService.loadContextModel(this.strId, this.friendlyName);
+                }
+            },
+            error: (_error) => {
+                StarClientUtilities.showToast(""toastError"", ""There was an error loading the page. Please try again or contact the help desk."");
+            }
+        });
+    }
+                                                                     
+	/**
+	 * Method that navigates to next form or status overview based on the statusjson
+	 */
+    private navigateAfterAction(): void {
+        let nextFriendlyName = this.contextService.getNextFriendlyName(this.friendlyName)
+        if (nextFriendlyName !== ""statuspage"") {
+            this.router.navigate(['/StarForm'], { queryParams: { strId: this.strId, friendlyName: nextFriendlyName, TaskTypeCode: this.taskTypeCode } })
+        }
+        else {
+            this.router.navigate(['/statusoverview'], { queryParams: { strId: this.strId, TaskTypeCode: this.taskTypeCode } })
+        }
+    }
+
+	/**
+	 * the form load method to handle setting the title, and getting data.
+	 * @param event form data
+	 * @param checkInCheckOutActive boolean to determine if using check in/ check out 
+	 * @param fromPageLoad boolean to determine if function called during page load
+	 */
+    public onFormLoad(event: any, checkInCheckOutActive: boolean, fromPageLoad: boolean): void {
+        this.contextService.pageTitle = this.form.formModel.title;
+        
+        let observablesList = new Array<Observable<boolean>>();
+
+        // Need to get star related details for the forms
+        this.getStarDetailsObservable().pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+            next: () => {
+                this.setupFormAttachmentValues();
+
+                // Need to get some looks ups for the forms
+                if (this.starDetails.taRequest.internalOrgId == InternalOrgId.HAB) {
+                    this.isHab = true;
+                    FormUtilities.loadGeneralInfoData(this.form, this.starDetails);
+                    if (this.friendlyName.startsWith(habFormFriendlyNameBase.hab_findings_summary)) {
+                        this.isHabSummary = true;
+                    }
+                    observablesList.push(this.habLookupService.getHabLookupObservable(this.starDetails, false, this.friendlyName, this.form, this.ngUnsubscribe));
+                }
+                else {
+                    observablesList.push(this.getLookupObservable());        
+
+                    // This observable is used to inject EC Request Data and Program Compliance Mapping info into the BPHC Site Visit Program Compliance Summary Form
+                    if (this.friendlyName.toLowerCase().startsWith('star_bphc_programrequirements_summary')) {
+                        observablesList.push(this.getCorrespondenceComplianceMappingObservable());
+                    }
+                }
+
+                observablesList.push(this.getFlagDetailsObservable());
+
+                // Process the list of observables set above, once done form is ready to have autosave enabled
+                // Getting all necessary details is done.
+                forkJoin(observablesList).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+                    next: () => {
+                        this.reComponent.execute(event, ""action"");
+                        // calling execute again to validate any questions pre-selected with business rules on form load
+                        this.reComponent.execute(event, ""action"");
+                        // If the form is in not in RO mode, enable autosave
+                        if (!this.modes.ro) {
+                            this.enableAutosave().pipe(take(1)).subscribe({
+                                next: (loadedFromAutoSave) => {
+                                    if (loadedFromAutoSave) {
+                                        this.reComponent.execute(this.form, ""action"");
+                                    }
+                                    this.reConfig.summary = true;
+                                    //show checkout component now page is fully loaded
+                                    if (checkInCheckOutActive) {
+                                        this.showCheckOutComponent = true;
+                                        this.showCheckInCheckOutNote = true;
+                                        if (!fromPageLoad) {
+                                            this.checkInCheckOutComponent.setFocusOnCheckIn();
+                                        }
+                                    }
+                                    // populate the Flagging Details into the Form model
+                                    this.setupFormFlaggingDetails();
+                                    this.configService.loading = false; 
+                                }
+                            });
+                        }
+                        //show checkout component
+                        else {
+                            if (checkInCheckOutActive) {
+                                this.showCheckOutComponent = true;
+                                this.showCheckInCheckOutNote = true;
+                            }
+                            this.configService.loading = false;
+                        }
+                    },
+                    error: (error) => { 
+                        console.log(error); 
+                    }
+                });
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });    
+    }
+
+    /**
+     * Handle the Check Out Click event from the CheckInCheckOutComponent
+	 * @param event the check out item event model
+     */
+	private checkOutClicked(event: CheckedOutItemEventModel) {
+		this.checkInCheckOutComponentModel.enableCheckOutButton = false;
+        this.checkInCheckOutComponent.checkOut();
+    }
+
+    /**
+     * Handle the Check Out Complete event from the CheckInCheckOutComponent
+	 * @param event the check out item event model
+     */
+    private checkOutComplete(event: CheckedOutItemEventModel) {
+        if (event && event.success === true) {
+
+            this.solutionFormModelSetupComplete = false; // need to set this to false to force GDC to wait to load documents untill STAR is able to set up the details in onFormLoad
+
+            // disable the Check-Out Button
+            this.checkInCheckOutComponentModel.enableCheckOutButton = false;
+            this.checkInCheckOutComponentModel.enableCheckInButton = true;
+
+            // Form Related
+            this.formService.getFormInstance(this.args).pipe(take(1)).subscribe({
+                next: (res) => {
+                    this.form = res;
+                    this.formService.processUser(this.form, this.user);
+
+                    // Add Page Actions
+                    this.showSavePageActions(true);
+
+                    this.modes.ro = false;
+
+                    this.showExpertRoMode = false;
+                    this.addFormROProperties(this.showExpertRoMode)
+
+                    // Enable Auto-Save and other Form Setups
+                    this.onFormLoad(this.form, true, false);
+
+                    // Update page note
+                    this.setCheckedOutToYouNote();
+
+                    setTimeout(() => {
+                        this.checkInCheckOutComponent.setFocusOnCheckIn();
+                    });
+                },
+                error: (_error) => {
+                    StarClientUtilities.showToast(""toastError"", ""There was an error during check-out. Please reload the page or contact the help desk."");
+                } 
+            });
+		} else {
+			this.checkInCheckOutComponentModel.enableCheckOutButton = true;
+			StarClientUtilities.showToast(""toastError"", ""Check-out failed. Please reload the page to see if someone else has already checked-out the item."");
+        }
+    }
+
+    /**
+     * Handle the Check In Click event from the CheckInCheckOutComponent
+	 * @param event the check out item event model
+     */
+	private checkInClicked(): void {
+		this.checkInCheckOutComponentModel.enableCheckInButton = false;
+
+        this.openCheckInOptionsModal();
+    }
+
+    /**
+     * Handle the Check In Complete event from the CheckInCheckOutComponent
+	 * @param event the checked out item event model
+     */
+    private checkInComplete(event: CheckedOutItemEventModel): void {
+        if (event && event.success === true) {
+            // disable the Check-in Button
+            this.checkInCheckOutComponentModel.enableCheckOutButton = true;
+            this.checkInCheckOutComponentModel.enableCheckInButton = false;
+
+            // Remove page actions
+			this.showSavePageActions(false);
+
+            // disable auto save
+            this.disableAutosave();
+
+            // Form Related
+            this.modes.ro = true;
+            
+            this.showExpertRoMode = true;
+            this.addFormROProperties(this.showExpertRoMode);
+            this.reComponent.execute(this.form, ""action"");
+
+            // update page note
+			this.setCheckedOutToNoOneNote();
+
+			//on modal close set the focus back to checkout button, using timeout to force focus.
+			setTimeout(() => {
+				this.checkInCheckOutComponent.setFocusOnCheckOut();
+			});
+        } else {
+            StarClientUtilities.showToast(""toastError"", ""Check-in failed. Please try again or contact the help desk."");
+        }
+    }
+
+    /**
+     * handles setting up the page note model
+	 * @param message message in the page note
+     */
+    private setCheckInCheckOutPageNote(message: string): void {
+        this.messageModel = new MessageModel();
+        this.messageModel.type = MessageType.Note;
+        this.messageModel.messages = [message];
+    }
+
+	/**
+	 * handles setting the checkout message when another user has the record checked out
+	 * @param name name of user that has the checked out record
+	 */
+	private setCheckedOutToAnotherNote(name: string) {
+		let message = `This form is currently checked-out to ${name} and, therefore, cannot be edited. Please coordinate with ${name} or with your team lead [leadTeamExpert] to have this form checked back in to make it available again for editing.`;
+        this.setCheckInCheckOutPageNote(message);
+    }
+
+	/**
+	 * handles setting the checkout message to the current user
+	 */
+    private setCheckedOutToYouNote() {
+		let message = ""This form is currently checked-out to you. Others will not be able to make any edits to this form until you have completed your changes and checked the form back in."";
+        this.setCheckInCheckOutPageNote(message);
+    }
+
+	/**
+	 * handles setting the checkout message when no one has the record checked out
+	 */
+    private setCheckedOutToNoOneNote() {
+        let message = ""This form is not currently checked-out. In order to make edits, please use the 'Check-Out Form' button below."";
+        this.setCheckInCheckOutPageNote(message);
+    }
+
+	/**
+	 * handles adding or removing the readonly properties to formmodel
+	 * @param add boolean describing if adding or removing
+	 */
+    private addFormROProperties(add: boolean) {
+        if (add) {
+            this.form['pdf'] = false;
+            this.form['readOnly'] = true;
+        } else {
+            delete this.form['pdf'];
+  "
+	star.core.provider.ts	"import { Provider } from '@angular/core';
+import { BaseUrl, PfmCoreConfig, SolutionName, ENABLE_GLOBAL_ERRORHANDLING, SolutionVersion, WEB_APP_ROOT_URL, DEVICE } from ""pfm-ui/core"";  
+import { AppStartConfigService } from '../core/services/app-start-config.service';
+
+export const webApiUrlFactory = (configService: AppStartConfigService) => {
+    return configService.getSystemAPIBaseUrl();
+};
+
+export const webAppUrlFactory = (configService: AppStartConfigService) => {
+    return configService.getSystemBaseUrl();
+};
+
+export const STAR_CORE_PROVIDERS: Provider[] = [
+    PfmCoreConfig,
+    { provide: SolutionName, useValue: 'STAR' },
+    { provide: SolutionVersion, useValue: '10.2.0' },
+    { provide: BaseUrl, useFactory: webApiUrlFactory, deps: [AppStartConfigService] },
+    { provide: DEVICE, useValue: 3 },
+    { provide: WEB_APP_ROOT_URL, useFactory: webAppUrlFactory, deps: [AppStartConfigService] },
+    { provide: ENABLE_GLOBAL_ERRORHANDLING, useValue: false },
+    AppStartConfigService
+];"
+	page-actions.ts	"import { Action } from 'pfm-ui/core';
+import { PageActionItem, Align } from 'pfm-ui/components';
+
+export class StarPageActions {
+    public static get Save(): PageActionItem {
+        let save: PageActionItem = new PageActionItem();
+        save.text = 'Save';
+        save.id = 'pgActSave';
+        save.action = Action.CallBack;
+        save.align = Align.Right;
+        return save;
+    }
+    public static get SaveAndContinue(): PageActionItem {
+        let saveAndContinue: PageActionItem = new PageActionItem();
+        saveAndContinue.text = 'Save and Continue';
+        saveAndContinue.id = 'pgActSaveAndContinue';
+        saveAndContinue.action = Action.CallBack;
+        saveAndContinue.align = Align.Right;
+        return saveAndContinue;
+    }
+    public static get Cancel(): PageActionItem {
+        let cancel: PageActionItem = new PageActionItem();
+        cancel.text = 'Cancel';
+        cancel.id = 'pgActCancel';
+        cancel.action = Action.CallBack;
+        cancel.align = Align.Left;
+        return cancel; 
+    }
+    public static get ReturnToList(): PageActionItem {
+        let returnToList: PageActionItem = new PageActionItem();
+        returnToList.text = 'Return to List';
+        returnToList.id = 'pgActReturnToList';
+        returnToList.action = Action.CallBack;
+        returnToList.align = Align.Left; 
+        return returnToList;
+    }
+    public static get SendForApproval(): PageActionItem {
+        let sendForApproval: PageActionItem = new PageActionItem();
+        sendForApproval.text = 'Send for Approval';
+        sendForApproval.id = 'pgActSendForApproval';
+        sendForApproval.action = Action.CallBack;
+        sendForApproval.align = Align.Right;
+        return sendForApproval;
+    }
+    public static get Approve(): PageActionItem {
+        let approve: PageActionItem = new PageActionItem();
+        approve.text = 'Approve';
+        approve.id = 'pgActApprove';
+        approve.action = Action.CallBack;
+        approve.align = Align.Right;
+        return approve;
+    }
+    public static get RequestChange(): PageActionItem {
+        let changeRequested: PageActionItem = new PageActionItem();
+        changeRequested.text = 'Request Change';
+        changeRequested.id = 'pgActChangeRequested';
+        changeRequested.action = Action.CallBack;
+        changeRequested.align = Align.Right;
+        return changeRequested;
+    }
+    public static get SendToCQMReview(): PageActionItem {
+        let sendToCQMReview: PageActionItem = new PageActionItem();
+        sendToCQMReview.text = 'Send for Site Visit Staff Review';
+        sendToCQMReview.id = 'pgActSendToCQMReview';
+        sendToCQMReview.action = Action.CallBack;
+        sendToCQMReview.align = Align.Right;
+        return sendToCQMReview;
+    }
+    public static get Close(): PageActionItem {
+        let close: PageActionItem = new PageActionItem();
+        close.text = 'Close Window';
+        close.id = 'pgActClose';
+        close.action = Action.CallBack;
+        close.align = Align.Left;
+        close.cssClass = 'btn-primary';
+        return close;
+    }
+    public static get Confirm(): PageActionItem {
+        let confirm: PageActionItem = new PageActionItem();
+        confirm.text = 'Confirm';
+        confirm.id = 'pgActConfirm';
+        confirm.action = Action.CallBack;
+        confirm.align = Align.Right;
+        return confirm;
+    }
+}"
+	constants.ts	"/// <summary>
+/// Enum for different page action types within the Star Solution
+/// </summary>
+export enum StarPageActionType {
+    Save = 1,
+    SaveAndContinue = 2,
+    MarkAsComplete = 3,
+    Submit = 4,
+    SendForApproval = 5,
+    Approve = 6,
+    ChangeRequest = 7,
+    Cancel = 8,
+    ReturnToList = 9,
+    Confirm = 10,
+    CQMReview = 11
+}
+
+/// <summary>
+/// Enum for different form statuses within the Star Solution
+/// </summary>
+export enum FormStatus {
+    NotStarted = 1,
+    InProgress = 2,
+    Complete = 3
+}
+
+/// <summary>
+/// Enum for different WorkFlow Review Decision Status Codes
+/// </summary>
+export enum WorkFlowReviewDecisionStatusCodes {
+    Approved = 1,
+    DisApproved = 2,
+    RecommendForApproval = 3,
+    ChangeRequest = 4,
+    Default = 0
+}
+
+// Enum defining the Task Type Code lookups for STAR solution
+export enum StarTaskTypeCodes {
+    ///<summary>
+    /// Task Type Code for Consultant Prepares Structured TA Report
+    ////<summary>
+    PrepareStructuredTAReport = 1130,
+
+    ///<summary>
+    /// Task Type Code for Consultant Prepares Structured TA Report Change Requested
+    ////<summary>
+    PrepareStructuredTAReportChangeRequested = 1131,
+
+    ///<summary>
+    /// Task Type Code for Reviewer Assign Structured TA Report
+    ////<summary>
+    ReviewerAssignStructuredTAReport = 1132,
+
+    ///<summary>
+    /// Task Type Code for Reviewer Review Structured TA Report
+    ////<summary>
+    ReviewerReviewStructuredTAReport = 1133,
+
+    ///<summary>
+    /// Task Type Code for Reviewer Review Structured TA Report Change Requested
+    ////<summary>
+    ReviewerReviewStructuredTAReportChangeRequested = 1134,
+
+    ///<summary>
+    /// Task Type Code for Editor Assign Structured TA Report
+    ////<summary>
+    EditorAssignStructuredTAReport = 1135,
+
+    ///<summary>
+    /// Task Type Code for Editor Review Structured TA Report
+    ////<summary>
+    EditorReviewStructuredTAReport = 1136,
+
+    ///<summary>
+    /// Task Type Code for Editor Review Structured TA Report Change Requested
+    ////<summary>
+    EditorReviewStructuredTAReportChangeRequested = 1137,
+
+    ///<summary>
+    /// Task Type Code for TAR Assign Structured TA Report
+    ////<summary>
+    TARAssignStructuredTAReport = 1138,
+
+    ///<summary>
+    /// Task Type Code for TAR Review Structured TA Report
+    ////<summary>
+    TARReviewStructuredTAReport = 1139,
+
+    ///<summary>
+    /// Task Type Code for TAR Review Structured TA Report Change Requested
+    ////<summary>
+    TARReviewStructuredTAReportChangeRequested = 1140,
+
+    ///<summary>
+    /// Task Type Code for PO Review Structured TA Report
+    ////<summary>
+    POReviewStructuredTAReport = 1141,
+
+    ///<summary>
+    /// Task Type Code for PO Review Structured TA Report Change Requested
+    ////<summary>
+    POReviewStructuredTAReportChangeRequested = 1142,
+
+    ///<summary>
+    /// Task Type Code for PQC Review Structured TA Report
+    ////<summary>
+    PQCReviewStructuredTAReport = 1143,
+
+    ///<summary>
+    /// Task Type Code for PQC Review Structured TA Report Change Requested
+    ////<summary>
+    PQCReviewStructuredTAReportChangeRequested = 1354,
+
+    ///<summary>
+    /// Task Type Code for PAO Review Structured TA Report
+    ////<summary>
+    PAOReviewStructuredTAReport = 1356,
+    ///<summary>
+    /// Task Type Code for CQM Assign Structured TA Report
+    ////<summary>
+    CQMAssignStructuredTAReport = 1440,
+
+    ///<summary>
+    /// Task Type Code for CQM Prepare Structured TA Report
+    CQMPrepareStructuredTAReport = 1442,
+
+    //<summary>
+    /// Task Type Code for CQM Prepare Structured TA Report Change Request
+    ////<summary>
+    CQMPrepareStructuredTAReportChangeRequest = 1444,
+    //<summary>
+    /// Task Type Code for CQM Review Structured TA Report
+    ////<summary>
+    CQMReviewStructuredTAReport = 1446,
+
+    //<summary>
+    /// Task Type Code for CQM Prepare Structured TA Report Change Request
+    ////<summary>
+    CQMPrepareStructuredTAUnAssignedReportChangeRequest = 1462
+}
+
+// Class defining the query string parameter names
+export class QueryStringParams {
+
+    ///<summary>
+    /// Gets the query string parameter name for Task Type Code
+    ////<summary>
+    public static TaskTypeCode: string = 'TaskTypeCode';
+
+    ///<summary>
+    /// Gets the query string parameter name for Structured TA Report Id
+    ////<summary>
+    public static StructuredTAReportId: string = 'strId';
+
+    ///<summary>
+    /// Gets the query string parameter name for Task Order Id
+    ////<summary>
+    public static TaskOrderId: string = 'toid';
+
+    ///<summary>
+    /// Gets the query string parameter name for TA Packet Id
+    ////<summary>
+    public static TAPacketId: string = 'tapid';
+
+    ///<summary>
+    /// Gets the query string parameter name for friendlyName, for GDC
+    ////<summary>
+    public static FriendlyName: string = 'friendlyName';
+
+    ///<summary>
+    ///Gets the query string parameter name for readFromFile, for GDC
+    ///</summary>
+    public static ReadFromFile: string = 'readFromFile';
+
+    ///<summary>
+    ///Gets the query string parameter name for readFromFileDir, for GDC
+    ///</summary>
+    public static ReadFromFileDir: string = 'readFromFileDir';
+
+    ///<summary>
+    ///Gets the query string parameter name for Workflow Decision Code
+    ///</summary>
+    public static WorkflowDecisionCode: string = 'WorkflowDecisionCode';
+
+    ///Gets the query string parameter name for the User Action Process Type Code
+    public static UserActionProcessTypeCode: string = ""aptc"";
+
+    ///Gets the query string parameter name for the Instance Version of the form
+    public static VersionId: string = ""versionId"";
+
+    ///<summary>
+    ///Gets the query string parameter name for PDF
+    ///</summary>
+    public static PDF: string = ""pdf"";
+
+    ///<summary>
+    ///Gets the query string parameter name for the link code
+    ///</summary>
+    public static LinkCode: string = ""linkCode"";
+
+    ///<summary>
+    ///Gets the query string parameter name for the form id
+    ///</summary>
+    public static FormId: string = ""formId"";
+
+    ///<summary>
+    ///Gets the query string parameter name for the disclaimer note
+    ///</summary>
+    public static DisclaimerNote: string = ""disclaimer""
+
+    ///<summary>
+    ///Gets the query string parameter name for To Role
+    ///</summary>
+    public static ToRole: string = 'ToRole';
+
+    ///<summary>
+    ///Gets the query string parameter name for WORD
+    ///</summary>
+    public static readonly Word: string = ""word"";
+}
+
+// Gets the Navigation Urls
+export class NavigationUrls {
+
+    ///<summary>
+    /// Gets the TA Request Read Only Page navigation Url
+    ///<summary>
+    public static TARequestReadOnlyPage: string = '/Interface/Common/TaskOrderReadOnly.aspx?mode=1';
+
+    ///<summary>
+    /// Gets the TA Packet Read Only Page navigation Url
+    ///<summary>
+    public static TAPacketReadOnlyPage: string = '/Interface/Common/TAPacketReadOnly.aspx';
+}
+
+
+//A lookup to relate task status to status display values
+export const statusLookup = {
+    ""1"": ""Not Complete"",
+    ""2"": ""In Progress"",
+    ""3"": ""Complete""
+};
+
+//A lookup to relate the task status to the side menu icon that should be displayed
+export const sideMenuStatusIcons = {
+    ""1"": ""img-NotStarted"",
+    ""2"": ""img-InProgress"",
+    ""3"": ""img-Complete""
+}
+
+//A lookup to relate the task status to the font awesome icon that should be used on the status overview
+export const statusPageSectionIcons = {
+    ""1"": ""fa fa-times fa-red"",
+    ""2"": ""fa fa-exclamation fa-blue"",
+    ""3"": ""fa fa-check fa-green""
+};
+
+//A lookup to be used when determining which page to load given a friendly name
+export const pageRoutes = {
+    ""default"": ""StarForm"",
+    ""statuspage"": ""StatusOverview"",
+    ""starlist"": ""AssignedPendingTasks"",
+    ""correspondencegateway"": ""CorrespondenceGateway""
+}
+//A lookup for friendly name to determine form name different than displayed on left menu
+export const habFormFriendlyNames = {
+    ""hab_technical_assistance_recommendations_v1"": ""hab_technical_assistance_recommendations_v1"",
+    ""hab_grant_recipient_innovative_practices_v1"": ""hab_grant_recipient_innovative_practices_v1"",
+    ""hab_site_visit_overview_v1"": ""hab_site_visit_overview_v1""
+}
+export const habFormFriendlyNameBase = {
+    ""hab_adap"": ""hab_adap"",
+    ""hab_administration"": ""hab_administration"",
+    ""hab_clinical_quality_management"": ""hab_clinical_quality_management"",
+    ""hab_clinical"": ""hab_clinical"",
+    ""hab_findings_summary"": ""hab_findings_summary"",
+    ""hab_fiscal"": ""hab_fiscal"",
+    ""hab_grant_recipient_innovative_practices"": ""hab_grant_recipient_innovative_practices"",
+    ""hab_next_steps"": ""hab_next_steps"",
+    ""hab_planning_council"": ""hab_planning_council"",
+    ""hab_site_visit_overview"": ""hab_site_visit_overview"",
+    ""hab_site_visit_participants"": ""hab_site_visit_participants"",
+    ""hab_technical_assistance_recommendations"": ""hab_technical_assistance_recommendations"",
+    ""hab_demonstration_and_implementation"": ""hab_demonstration_and_implementation"",
+    ""hab_data_and_evaluation"":""hab_data_and_evaluation""
+}
+export class HabQueryStatements {
+    public static LookupHabFormLookupMapping = ""LookupHabFormLookupMapping"";
+    public static LookupAreasOfReview = ""LookupAreasOfReview"";
+    public static LookupNarrativeSummaries = ""LookupNarrativeSummaries"";
+    public static LookupHabCategory = ""LookupHabCategory"";
+    public static LookupHabCategoryItem = ""LookupHabCategoryItem"";
+    public static LookupHabCategoryItemDescription = ""LookupHabCategoryItemDescription"";
+    public static LookupHabFindingType = ""LookupHabFindingType"";
+    public static LookupHabFormCategory = ""LookupHabFormCategory"";
+    public static readonly LookupSiteVisitModality = ""LookupSiteVisitModality"";
+}
+//A class for GDC Argument Constants
+export class GDCArguments {
+    ///Tenant Id needed for GDC Database
+    public static TenantId: number = 4;
+    ///Version Id needed for GDC Database
+    public static VersionId: number = 1;
+}
+
+// Enum for Workflow Decision Codes
+export enum WorkflowDecisionCodes {
+    Approved = 1,
+    Disapproved = 2,
+    RecommendForApproval = 3,
+    ChangeRequested = 4
+}
+
+// Enum for Return Status Codes
+export enum ReturnStatusCode {
+    Success = 1, // Status code for success
+    Error = 3, // Status Code for Error
+    TaskNotInQueue = 4, // Status code for Task is not in the user's queue
+    FormsNotComplete = 5, // Status code for all forms are not complete
+    FlagValidation = 6 // Status code for all flag validations
+}
+
+// Enum for the External System Codes used by STAR
+export enum ExternalSystemCode {
+    StarWeb = 310,
+    StarWebAPI = 311
+}
+
+//Enum for Flag Status
+export enum FlagStatus {
+    Active = 1,
+    Resolved = 2,
+    ClosedOut = 3
+}
+
+// Class for handling star constants
+export class StarConstants {
+    // Resource Type Code for STAR
+    public static StarResourceTypeCode: number = 2158;
+
+    // User Action Process Type Code for the Worfklow
+    public static StarUserActionProcessTypeWorkflow: number = 80;
+
+    // User Action Process Type Code for the Form changes
+    public static StarUserActionProcessTypeForms: number = 81;
+
+    // Grant Resource Type Code
+    public static GrantResourceTypeCode: number = 12;
+
+    // The EC resource type code for STAR BPHC OSV
+    public static STAR_BPHC_OSV_EC_ResourceTypeCode: number = 2;
+
+    // The EC Correspondence Type Code for Request
+    public static EC_RequestCorrespondenceTypeCode: number = 1;
+
+    // The tenant code for Flagging Configuration
+    public static StarFlagTenantCode: number = 1;
+
+    // Task Order resource type code
+    public static StarHABCQMFormSectionId: string = ""Clinical Quality Management"";
+}
+
+// Enum for handling Role Ids 
+export enum RoleIds {
+    PO = 9,
+    PAO = 41,
+    PQC = 44,
+    Consultant = 191,
+    VendorTAR = 194,
+    VendorReviewer = 376,
+    VendorEditor = 377,
+    CQM = 458
+}
+
+// Enum for handling User Types
+export enum UserTypes {
+    External = 1,
+    Internal = 2,
+    Consultant = 5,
+    Vendor = 6
+}
+
+export enum InternalOrgId {
+    BPHC = 705,
+    HAB = 711
+}
+
+export enum FlagActionType {
+    ""Add Needs Attention Flag (red)"" = 1,
+    ""Add Comment"" = 2,
+    ""Resolve Flag (convert to green)"" = 3,
+    ""Re-Open Needs Attention Flag (red)"" = 4,
+    ""Close Out Flag (remove green)"" = 5
+}
+
+export class Messages {
+    public static FlagWidgetNoteMessage: string = ""Below is the count of total flags across all forms. To see flag details, go to the respective form or click on the Flag Action History link in Resources."";
+    public static StatusOverviewFormsMessage: string = ""Below is the overall completion status of all forms."";
+}
+
+export class FlagHoverMessages {
+    //Form flags
+    public static AddFlag: string = ""The presence of an 'Add Flag' link indicates that the question or table does not have any current flags. Click here to add a flag."";
+    public static NeedsAttention: string = ""Needs Attention Flag. The user, except for Vendor Reviewer and Vendor Editor, must take an action (e.g., add comment) on the 'Needs Attention' flag(s) to send the report to the next reviewer or to request change from the previous reviewer. Click here to see flag details."";
+    public static NeedsAttentionComment: string = ""Needs Attention (You Commented Last) flag. This icon indicates that the current user was the last person to add a comment to the 'Needs Attention' flag. Click here to see flag details."";
+    public static Resolved: string = ""Resolved Flag. This icon indicates that the 'Needs Attention' flag was resolved. Click here to see flag details."";
+    public static ResolvedComment: string = ""Resolved (You Commented Last) flag. This icon indicates that the current user was the last person to add a comment to the 'Resolved' flag. Click here to see flag details."";
+    //Flag summary widgets
+    public static FlagSummaryNeedsAttention: string = ""This icon indicates that the question or table has a 'Needs Attention' flag. The user, except for Vendor Reviewer and Vendor Editor, must take an action (e.g., add comment) on the 'Needs Attention' flag(s) to send the report to the next reviewer or to request change from the previous reviewer."";
+    public static FlagSummaryNeedsAttentionWithComments: string = ""This icon indicates that the current user was the last person to add a comment to the 'Needs Attention' flag."";
+    public static FlagSummaryResolved: string = ""This icon indicates that the 'Needs Attention' flag was resolved."";
+    public static FlagSummaryResolvedWithComments: string = ""This icon indicates that the current user was the last person to add a comment to the 'Resolved' flag."";
+    //Status overview grid
+    public static soNeedsAttention: string = ""Needs Attention Flag. The user, except for Vendor Reviewer and Vendor Editor, must take an action (e.g., add comment) on the 'Needs Attention' flag(s) to send the report to the next reviewer or to request change from the previous reviewer."";
+    public static soNeedsAttentionComment: string = ""Needs Attention (You Commented Last) flag. This icon indicates that the current user was the last person to add a comment to the 'Needs Attention' flag."";
+    public static soResolved: string = ""Resolved Flag. This icon indicates that the 'Needs Attention' flag was resolved."";
+    public static soResolvedComment: string = ""Resolved (You Commented Last) flag. This icon indicates that the current user was the last person to add a comment to the 'Resolved' flag."";
+}
+
+export class ErrorMessages {
+    public static ApproveFlagValidation: string = ""You can perform this action only after all the forms are complete and all Needs Attention (red) flags are resolved."";
+    public static RequestChangeFlagValidation: string = ""You can perform this action only after commenting on or resolving all Needs Attention (red) flags. One or more Needs Attention (red) flags was not updated."";
+    public static SendForApprovalFlagValidation: string = ""You can perform this action only when all the forms are checked-in and are complete."";
+    public static ApproveConfirmFlagValidation: string = ""You can perform this action only after all the forms are complete and all Needs Attention (red) flags are resolved. Click on Cancel button to return to Status Overview page and complete the forms or resolve flags."";
+    public static RequestChangeConfirmFlagValidation: string = ""You can perform this action only after commenting on or resolving all Needs Attention (red) flags. One or more Needs Attention (red) flags was not updated. Click on Cancel button to return to Status Overview page and update the flags."";
+    public static SendForApprovalConfirmFlagValidation: string = ""You can perform this action only when all the forms are checked-in and are complete. Click on Cancel button to return to Status Overview page and complete the forms."";
+    public static SendForCQMFlagValidation: string = ""You can perform this action only when all the forms are checked-in and are complete."";
+}
+
+export enum FlagTypes {
+    NeedsAttention = 1,
+    NeedsAttentionWithComment = 2,
+    Resolved = 3,
+    ResolvedWithComments = 4
+}
+
+export enum TaEntityType {
+    Grantee = 1,
+    LalDesignee = 2,
+    LalApplicant = 6
+}
+
+export enum TeamIds {
+    SiteVisitReports = '06b78d6d-0979-4a28-a9d7-9e56faa4df7a'
+}"
+	form-utilities.ts	"import { habFormFriendlyNameBase } from '../constants';
+import { StarClientUtilities } from './star-client-utilities';
+
+export class FormUtilities {
+    // Load Genera Infor section for site visit overview form    
+    public static loadGeneralInfoData(form, starDetails) {
+        if (form && form.friendlyName &&
+            form.friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_site_visit_overview) &&
+            form.formModel &&
+            form.formModel.components &&
+            form.formModel.components.SiteVisitOverview_General_Panel &&
+            form.formModel.components.SiteVisitOverview_General_Panel.components &&
+            form.formModel.components.SiteVisitOverview_General_Panel.components.GeneralInfoMatrix.rows) {
+            form.formModel.components.SiteVisitOverview_General_Panel.components.GeneralInfoMatrix.rows.forEach(r => {
+                if (r && r.columns && r.columns.length > 1) {
+                    r.columns[1].labelText = this.getGeneralInfoLabelText(starDetails, r.columns[1].id);
+                }
+            });
+        }
+    }
+
+    // Get general info label text
+    private static getGeneralInfoLabelText (starDetails, formModelColumnId) {
+        let labelText = """";
+
+        if (starDetails && starDetails.taRequest) {
+            switch(formModelColumnId) {
+                case ""RecipientAddressRight"":
+                    labelText = starDetails.taRequest.noaAddress;
+                    break;
+                case ""BudgetPeriodsRight"":
+                    labelText = StarClientUtilities.getFormattedDate(starDetails.taRequest.entityBudgetPeriodStartDate) + ' - ' + StarClientUtilities.getFormattedDate(starDetails.taRequest.entityBudgetPeriodEndDate);
+                    break;
+                case ""ProgramNameRight"":
+                    labelText = starDetails.taRequest.programName;
+                    break;
+            }
+        }
+
+        return labelText;
+    }
+}"
+	app-start-config.service.ts	"import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { UserTypes } from '../constants';
+
+export interface IApplicationStartupConfig {
+    UserId: string;
+    UserTypeCode: number;
+    AccessToken: string;
+    AccessTokenExpiration: string;
+    APIConfig: { [identifier: string]: string };
+    RequiredAPIHeaders: { [identifier: string]: string };
+}
+
+export interface IAccessTokenInfo {
+    AccessToken: string;
+    AccessTokenExpiration: Date;
+}
+
+export const APP_START_CONFIG_TOKEN = new InjectionToken<IApplicationStartupConfig>('APP_STARTUP_CONFIG');
+
+@Injectable({
+    providedIn: ""root""
+})
+export class AppStartConfigService {
+    tokenInfo: IAccessTokenInfo;
+
+    constructor(
+        @Inject(APP_START_CONFIG_TOKEN) private startupConfig: IApplicationStartupConfig) {
+        this.setAccessToken(this.startupConfig.AccessToken, this.startupConfig.AccessTokenExpiration);
+    }
+
+    public getConfig(): IApplicationStartupConfig {
+        return this.startupConfig;
+    }
+
+    public getExternalSystemBaseUrl(key: string): string {
+        return this.startupConfig.APIConfig[key];
+    }
+
+    public getSystemBaseUrl(): string {
+        return this.startupConfig.APIConfig[""SolutionBaseUrl""];
+    }
+
+    public getSystemAPIBaseUrl(): string {
+        return this.startupConfig.APIConfig[""SolutionAPIBaseUrl""];
+    }
+
+    public getTatsBaseUrl(): string {
+        let userTypeCode = !!this.startupConfig.UserTypeCode ? this.startupConfig.UserTypeCode : 0;
+        let tatsBaseUrl: string;
+
+        switch (userTypeCode) {
+            case UserTypes.Consultant:
+                tatsBaseUrl = this.startupConfig.APIConfig[""TatsConsultantBaseUrl""];
+                break;
+            case UserTypes.Vendor:
+                tatsBaseUrl = this.startupConfig.APIConfig[""TatsVendorBaseUrl""];
+                break;
+            case UserTypes.Internal:
+            default:
+                tatsBaseUrl = this.startupConfig.APIConfig[""TatsInternalBaseUrl""];
+                break;
+        }
+
+        return tatsBaseUrl;
+    }
+
+    public getAccessToken(): IAccessTokenInfo {
+        return this.tokenInfo;
+    }
+
+    public setAccessToken(token: string, strTokenExpiration: string) {
+        this.tokenInfo = {
+            AccessToken: token,
+            AccessTokenExpiration: this.parseTokenExpirationTime(strTokenExpiration)
+        };
+    }
+
+    public clearAccessToken(): void {
+        this.tokenInfo = {
+            AccessToken: null,
+            AccessTokenExpiration: null
+        };
+    }
+
+    public parseTokenExpirationTime(strTokenExpTime: string): Date | null {
+        let timeStamp = Date.parse(strTokenExpTime);
+
+        if (isNaN(timeStamp)) {
+            return null;
+        }
+
+        return new Date(timeStamp);
+    }
+
+    public getRequiredRequestHeaders(): any {
+        return this.startupConfig.RequiredAPIHeaders;
+    }
+}"
+	compliance-handbook.service.ts	"import { Injectable, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { PlatformHttp } from 'pfm-ui/core';
+import { FormComplianceHandbookMapping } from './../../core/models/form-compliance-handbook-mapping.model';
+import { AppStartConfigService } from './app-start-config.service';
+import { ComplianceElementCondition } from '../models/compliance-element-condition.model';
+
+
+@Injectable({
+    providedIn: ""root""
+})
+
+/**
+ * Compliance Handbook Service
+ * */
+export class ComplianceHandbookService {
+    /**
+     * Consturctor
+     * @param pfmHttp - The Platform Http object
+     */
+    public constructor(
+        @Inject(PlatformHttp) private readonly pfmHttp: PlatformHttp,
+        @Inject(AppStartConfigService) private readonly appStartConfigService: AppStartConfigService) {
+
+    }
+
+    /**
+     * Get the Form Compliance Handbook Mappings for the requested form friendly names
+     * @param formFriendlyNames - The friendly names for the mappings to retrieve
+     */
+    public getFormComplianceHandbookMapping(strId: string): Observable<Array<FormComplianceHandbookMapping>> {
+        return this.pfmHttp.get(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/ComplianceHandbook/GetFormComplianceHandbookMapping`, { params: { ""strId"": strId } }, true, false, true);
+    }
+
+    /**
+     * Get the Compliance Element Conditions for the programId
+     * @param programId - The program id
+     * @param year - The year
+     */
+    public getComplianceElementConditions(programId: string, year: number): Observable<Array<ComplianceElementCondition>> {
+        return this.pfmHttp.get(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/ComplianceHandbook/GetComplianceElementConditions`, { params: { ""programId"": programId, ""year"": year } }, true, false, true);
+    }
+}"
+	configuration.service.ts	"import { Injectable } from '@angular/core';
+
+@Injectable({
+    providedIn: ""root""
+})
+/// <summary>
+/// Configuration Service
+/// </summary>
+export class ConfigurationService {
+    public showLeftMenu: boolean;
+    public showTopMenu: boolean;
+    public showResources: boolean;
+    public showHeader: boolean;
+    public loading: boolean;
+
+    constructor() {
+        this.showLeftMenu = true;
+        this.showTopMenu = true;
+        this.showResources = true;
+        this.showHeader = true;
+        this.loading = false;
+    }
+}"
+	context.service.ts	"import { Injectable, Inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { connectable, Observable, take } from 'rxjs';
+import { EventPublisher, EventModel, EventType, PlatformHttp } from 'pfm-ui/core';
+import { SideMenuModel, SideMenuItemModel } from 'pfm-layout/master';
+import { sideMenuStatusIcons, pageRoutes, QueryStringParams } from './../../core/constants';
+import { Status, Group, Section, SectionStatus } from './../../core/models/status.model';
+import { FormStatusUpdateDataArgs } from './../../core/models/form-status-update-data-args.model';
+import { LeftMenuFilterCriteriaPipe } from './../../core/pipes/left-menu-filter-criteria.pipe';
+import { StarService } from './../../core/services/star.service';
+import { AppStartConfigService } from './app-start-config.service';
+
+@Injectable({
+    providedIn: ""root""
+})
+export class ContextService {
+
+    public pageTitle: string = '';
+
+    public contextModel: Status;
+
+    public readOnlyFriendlyNames: Array<string> = new Array<string>();
+    public pdfFriendlyNames: Array<string> = new Array<string>();
+    public readOnlySections: Array<any> = new Array<any>();
+
+    public starDetails: any;
+
+    /// <summary>
+    /// Constructor - dependency injection
+    /// </summary>
+    constructor( @Inject(PlatformHttp) private pfmHttp: PlatformHttp
+        , @Inject(EventPublisher) private eventPublisher: EventPublisher
+        , @Inject(ActivatedRoute) private route: ActivatedRoute
+        , @Inject(AppStartConfigService) private appStartConfigService: AppStartConfigService
+        , @Inject(StarService) private starService: StarService
+    ) {
+
+    }
+
+    /**
+     * Method to load context model (Left Menu)
+     * @param strId - the structured ta report id
+     * @param markupId - the current markup Id for which item to highlight in left menu
+     */
+    public loadContextModel(strId: string, markupId: string, mapSideMenu:boolean = true): Observable<any> {
+        let subscription = this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Context/GetContextModel`, { ""StrId"": strId }, true, null);
+        let con = connectable(subscription);
+
+        // If the star details are not null, we don't want to get again
+        if (this.starDetails == null) {
+            this.starService.getStarDetails(strId).pipe(take(1)).subscribe(results => {
+                this.starDetails = results;
+                this.getContextModel(markupId, con, mapSideMenu);
+            });
+
+            return con;
+        } else {
+            this.getContextModel(markupId, con, mapSideMenu);
+            return con;
+        }
+    }
+
+    /**
+     * Private method to get the Context Model from server
+     * @param markupId - the markup id for which item to highlight
+     * @param connectable - the connectable observable in which to subscribe to
+     */
+    private getContextModel(markupId: string, connectable: any, mapSideMenu:boolean = true): void {
+        connectable.pipe(take(1)).subscribe({
+            next: (res) => {
+                this.contextModel = res;
+                if(mapSideMenu)
+                {
+                    this.mapSideMenu(markupId, this.starDetails);
+                    this.eventPublisher.filter(EventType.SideMenuReady).pipe(take(1)).subscribe({
+                        next: (_res2) => {
+                            if (this.contextModel != null) {
+                                this.mapSideMenu(markupId, this.starDetails);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        connectable.connect();
+    }
+
+
+    ///<summary>
+    ///Method used to update StatusJson of record after page action
+    ///</summary>
+    public saveFormStatus(formStatusUpdateDataArgs : FormStatusUpdateDataArgs ): Observable<any> {
+        return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Context/UpdateContextModel`, formStatusUpdateDataArgs, true, null);
+    }
+
+    ///<summary>
+    ///Method to return the context model
+    ///</summary>
+    public get mapStatusPage(): any {
+        return this.contextModel;
+    }
+
+    /**
+      * Method used to map the side menu of a starform/status overview based on friendlyName
+      * @param markupId
+      * @param strDetails
+      */ 
+     public mapSideMenu(markupId, strDetails: any): void {
+        let sideMenuModel = new SideMenuModel();
+        sideMenuModel.menuTitle = ""All Tasks"";
+        sideMenuModel.visible = true;
+        sideMenuModel.markupId = markupId;
+        sideMenuModel.collapse = false;
+        sideMenuModel.items = new Array<SideMenuItemModel>();
+        for (let i = 0; i < this.contextModel.sectionStatus.length; i++) {
+            let currentSectionStatus = this.contextModel.sectionStatus[i];
+            let sectionStatus = this.mapSectionStatus(currentSectionStatus, strDetails);
+            if (sectionStatus.childItems.length > 0) {
+                sideMenuModel.items.push(sectionStatus);
+            }
+        }
+
+        this.eventPublisher.publish(new EventModel(EventType.SideMenuChanged, sideMenuModel));
+    }
+
+    /**
+     * Maps a Section Status to Side Menu Item Model
+     * @param currentSectionStatus
+     * @param strDetails
+     */
+    private mapSectionStatus(currentSectionStatus: SectionStatus, strDetails: any): SideMenuItemModel {
+        let section = new SideMenuItemModel();
+
+        section.visible = true;
+        section.enabled = false;
+        section.text = currentSectionStatus.displayValue;
+        section.childItems = new Array<SideMenuItemModel>();
+
+        for (let k = 0; k < currentSectionStatus.groups.length; k++) {
+            let currentGroup = currentSectionStatus.groups[k];
+            let group = this.mapGroup(currentGroup, strDetails);
+
+            if (group.childItems.length > 0) {
+                section.childItems.push(group);
+            }
+        }
+
+        return section;
+    }
+
+    /**
+     * Maps a Group to Side Menu Item Model
+     * @param currentGroup
+     * @param strDetails
+     */
+    private mapGroup(currentGroup: Group, strDetails: any): SideMenuItemModel {
+        let group = new SideMenuItemModel();
+
+        group.visible = true;
+        group.enabled = false;
+        group.text = currentGroup.displayValue;
+        group.childItems = new Array<SideMenuItemModel>();
+
+        for (let m = 0; m < currentGroup.sections.length; m++) {
+            let currentItem = currentGroup.sections[m];
+            let item = this.mapSection(currentItem, strDetails);
+
+            if (item.visible) {
+                group.childItems.push(item);
+            }
+        }
+
+        return group;
+    }
+
+    /**
+     * Maps a Section to Side Menu Item Model and filters visible
+     * @param currentItem
+     * @param strDetails
+     */
+    private mapSection(currentItem: Section, strDetails: any): SideMenuItemModel {
+        let item = new SideMenuItemModel();
+
+        item.visible = (currentItem.showInLeftMenu === true);
+        item.enabled = true;
+        item.text = currentItem.displayValue;
+        item.markupId = currentItem.friendlyName;
+        item.cssClass = sideMenuStatusIcons[currentItem.statusCode] || '';
+        item.destination = this.getPageUrl(currentItem.friendlyName, currentItem.queryStringParams);
+        item.actionType = 2;
+
+        let filterObj = {};
+        if (strDetails) {
+            filterObj = {
+                'taskTypeCode': this.route.snapshot.queryParams[QueryStringParams.TaskTypeCode],
+                'entityTypeCode': strDetails.taRequest.taEntityTypeCode.toString()
+            }
+        }
+
+        // if filter critiera is specified add or don't add
+        if (currentItem.leftMenuFilterCritiera && currentItem.leftMenuFilterCritiera.length > 0) {
+            item.visible = new LeftMenuFilterCriteriaPipe().transform(currentItem.leftMenuFilterCritiera, filterObj);
+        }
+
+        return item;
+    }
+
+    ///<summary>
+    ///Method to build urls
+    ///<summary>
+    public getPageUrl(friendlyName: string, queryParams: Array<string>): string {
+        let qp: string = '';
+        if (queryParams != null && queryParams.length > 0) {
+            for (let param of queryParams) {
+                if (param === 'friendlyName') {
+                    qp = this.setQueryCharacter(qp) + param + '=' + friendlyName;
+                }
+                else if (this.route.snapshot.queryParams[param] != null) {
+                    qp = this.setQueryCharacter(qp) + param + '=' + this.route.snapshot.queryParams[param];
+                }
+            }
+        }
+        let route: string = pageRoutes[friendlyName] || pageRoutes['default'];
+        return route + qp;
+    }
+
+    ///<summary>
+    ///Helper method used to select the proper query stirng character
+    ///<summary>
+    private setQueryCharacter(qp: string): string {
+        if (qp === '') {
+            qp += '?';
+        }
+        else {
+            qp += '&';
+        }
+        return qp;
+    }
+
+    ///<summary>
+    ///Method used to get the next friendlyName based on the current friendlyName
+    ///</summary> 
+    public getNextFriendlyName(friendlyName: string): string {
+        return this.getCurrentFormDetails(friendlyName).nextFriendlyName;
+    }
+
+    ///<summary>
+    ///Method used to get the next section in the statusjson based on friendlyName
+    ///</summary> 
+    private getCurrentFormDetails(friendlyName: string): any {
+        let groups = this.contextModel.sectionStatus.map((sectionStatus) => {
+            return sectionStatus.groups;
+        })
+        groups = [].concat.apply([], groups);
+        let sectionsArray = groups.map((group) => {
+            return group.sections;
+        })
+        let sections = [].concat.apply([], sectionsArray);
+        for (let section of sections) {
+            if (section.friendlyName === friendlyName) {
+                return section;
+            }
+        }
+    }
+
+    ///<summary>
+    ///Method used to clear the context model
+    ///</summary>
+    public clearContextModel() {
+        this.contextModel = null;
+    }
+
+    /**
+     * Sets the star details
+     * @param details
+     */
+    public setStarDetails(details: any) {
+        this.starDetails = details;
+    }
+
+}"
+	correspondence.service.ts	"import { Injectable, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PlatformHttp } from 'pfm-ui/core';
+
+import { CorrespondenceContextDataArgs } from './../../core/models/correspondence-context-data-args.model'
+import { ECResourceContextModel } from './../../core/models/ec-resource-context.model';
+import { AppStartConfigService } from './app-start-config.service';
+
+@Injectable({
+    providedIn: ""root""
+})
+/**
+ * Correspondence Service class 
+ */
+export class CorrespondenceService {
+    /**
+     * Constructor
+     * @param pfmHttp - Platform Http Service
+     * @param configService - Configuration Service
+     */
+    constructor(
+        @Inject(PlatformHttp) private readonly pfmHttp: PlatformHttp,
+        @Inject(AppStartConfigService) private readonly appStartConfigService: AppStartConfigService) {
+    }
+
+    /**
+     * Method used to check if Correspondence Requests have already been made to External users
+     * @param resourceValue - The resource value of the correspondence
+     * @param resourceTypeCode - The resource type code of the correspondence
+     */
+    public checkIfECExists(resourceValue: string, resourceTypeCode: number): Observable<boolean> {
+        let resourceConfigData = {
+            ""resourceValue"": resourceValue,
+            ""resourceTypeCode"": resourceTypeCode
+        };
+
+        return this.pfmHttp.post(`${this.appStartConfigService.getExternalSystemBaseUrl(""EcWebUrl"")}api/correspondence/isEcCreated`, resourceConfigData, true, null);
+    }
+
+    /**
+     * Creates or Updates resource context and correspondence module
+     * @param args - the Correspondence Context Data Args
+     */
+    public updateCorrespondenceContextData(args: CorrespondenceContextDataArgs): Observable<any> {
+
+        return this.pfmHttp.post(`${this.appStartConfigService.getExternalSystemBaseUrl(""EcWebUrl"")}api/resourceContext/updateContext`, args, true, null);
+    }
+
+    /**
+     * Gets the Url for the EC Manage Correspondence List Page
+     * @param resourceValue - The resource value for the context/correspondence record
+     * @param resourceTypeCode - The resource typecode for the context/correspondence record
+     * @param correspondenceTypeCode - The type code of correspondence (Request/Response)
+     */
+    public getManageCorrespondenceListPageUrl(resourceValue: string, resourceTypeCode: number, correspondenceTypeCode: number): string {
+        return `${this.appStartConfigService.getExternalSystemBaseUrl(""EcWebUrl"")}internal/home/list?rv=${resourceValue}&ct=${correspondenceTypeCode}&rt=${resourceTypeCode}`;
+    }
+
+    /**
+     * Gets the Resource Context Data for a given resource
+     * @param resourceValue
+     * @param resourceTypeCode
+     */
+    public getResourceContextData(resourceValue: string, resourceTypeCode: number): Observable<ECResourceContextModel> {
+        let resourceConfigData = {
+            ""resourceValue"": resourceValue,
+            ""resourceTypeCode"": resourceTypeCode
+        };
+
+        return this.pfmHttp.post(`${this.appStartConfigService.getExternalSystemBaseUrl(""EcWebUrl"")}api/correspondence/getResourceContextData`, resourceConfigData, true, null);
+    }
+
+    /**
+     * Gets the Correspondence Instances created for a given resource and resource type
+     * @param resourceValue
+     * @param resourceTypeCode
+     */
+    public getCorrespondenceInstances(resourceValue: string, resourceTypeCode: number): Observable<any> {
+        let args = {
+            ""parameters"": [{
+                ""key"": ""resourceValue"",
+                ""value"": resourceValue
+            },
+            {
+                ""key"": ""resourceTypeCode"",
+                ""value"": resourceTypeCode
+            }]
+        };
+
+        return this.pfmHttp.post(`${this.appStartConfigService.getExternalSystemBaseUrl(""EcWebUrl"")}api/correspondence/getAllInstances`, args, true, null);
+    }
+}"
+	cover-page.service.ts	"import { Injectable, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PlatformHttp } from 'pfm-ui/core';
+import { AppStartConfigService } from './app-start-config.service';
+
+@Injectable({
+    providedIn: ""root""
+})
+export class CoverPageService {
+
+    /// <summary>
+    /// Constructor - dependency injection
+    /// </summary>
+    constructor( @Inject(PlatformHttp) private readonly pfmHttp: PlatformHttp
+        , @Inject(AppStartConfigService) private readonly appStartConfigService: AppStartConfigService) {
+
+    }
+
+    public getCoverPageText(strId: string): Observable<string>
+    {
+        return this.pfmHttp.get(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Star/GetCoverPageText`, { params: { ""strId"": strId } }, false, false, true);
+    }
+}"
+	cts.service.ts	"import { Injectable, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PlatformHttp } from 'pfm-ui/core';
+import { AppStartConfigService } from './app-start-config.service';
+
+@Injectable({
+    providedIn: ""root""
+})
+export class CtsService {
+    constructor(@Inject(PlatformHttp) private readonly pfmHttp: PlatformHttp
+        , @Inject(AppStartConfigService) private readonly appStartConfigService: AppStartConfigService) {
+
+    }
+
+    public getWordDocument(strId: string, versionId: string): Observable<any> {
+        return this.pfmHttp.get(`${this.appStartConfigService.getExternalSystemBaseUrl(""ContentTransformationUrl"")}api/Cts/GetUrltoWord`,
+            { params: { ""strId"": strId, ""versionId"": versionId } }, false, false, true);
+    }
+}"
+	hab-lookup.service.ts	"import { Inject, Injectable } from '@angular/core';
+import { forkJoin, Observable, Observer, of, takeUntil } from 'rxjs';
+import { LookupService as PlatformLookupService, LookupModel } from 'pfm-ui/core';
+import { LookupService } from 'pfm-dcf';
+import { habFormFriendlyNameBase, HabQueryStatements } from '../constants';
+
+@Injectable({
+    providedIn: ""root""
+})
+export class HabLookupService {
+    constructor(@Inject(PlatformLookupService) private platformLookupService: PlatformLookupService,
+        @Inject(LookupService) private lookupService: LookupService) {}
+
+    public getHabLookupObservable(starDetails: any, isRo: boolean, friendlyName: string, form: any, ngUnsubscribe: any): Observable<boolean>  {
+        let input = {
+            programId: parseInt(starDetails.taRequest.program),
+            startDate: starDetails.taRequest.actualTAFromDate.split(""T"")[0],
+            friendlyName: isRo ? """" : friendlyName.split(""_v"")[0]
+        };
+        let lookups = [];
+        this.setObservableList(lookups, input, isRo, friendlyName);
+ 
+        let observable;
+        if (lookups.length > 1) {
+            let fork = forkJoin(lookups); //todo: Figure this out
+
+            observable = new Observable<boolean>((observer: Observer<boolean>) => {
+                fork.pipe(takeUntil(ngUnsubscribe)).subscribe({
+                    next: (results) => {
+                        let lookupObjects = {};
+
+                        for (let lookup of results) {
+                            lookupObjects[lookup.name] = this.mapHabLookupToArray(lookup);
+                            //add in a Select One value to preselected, but ignore lists not used for dropdowns
+                            if (lookup.name != HabQueryStatements.LookupHabCategory &&
+                                lookup.name != HabQueryStatements.LookupHabFormLookupMapping &&
+                                (lookup.values.length == 0 || lookup.values[0].displayValue)) {
+                                lookupObjects[lookup.name].unshift({ id: '0', value: '0', text: 'Select One' });
+                            }
+                        }
+
+                        this.lookupService.publishLookupData(lookupObjects);
+                        form[""lookupObjects""] = lookupObjects;
+
+                        observer.next(true);
+                        observer.complete();
+                    },
+                    error: (error) => {
+                        observer.error(error);
+                    observer.complete();
+                    }
+                });
+            });
+        } 
+        else {
+            observable = of({});
+        }
+        
+        return observable;
+    }
+
+    public mapHabLookupToArray(data: LookupModel): Array<any> {
+        let arr = [];
+        if (data.values.length > 0) {
+            if (data.values[0].displayValue) {
+                for (let lookupData of data.values) {
+                    let item = {
+                        ""id"": lookupData.lookupCode + """",
+                        ""value"": lookupData.lookupCode + """",
+                        ""text"": lookupData.displayValue
+                    };
+
+                    HabLookupService.setCustomProperty(lookupData, ""groupName"", ""group"", item);
+                    HabLookupService.setCustomProperty(lookupData, ""groupCode"", ""groupCode"", item);
+                    HabLookupService.setCustomProperty(lookupData, ""friendlyName"", ""friendlyName"", item);
+                    HabLookupService.setCustomProperty(lookupData, ""categoryCode"", ""categoryCode"", item);
+
+                    arr.push(item);
+                }
+            }
+            else {
+                //this builds the mapping lookup array
+                data.values.forEach(function (lookupData) {
+                    arr.push(lookupData.otherFields);
+                });
+            }
+        }
+        return arr;
+    }
+
+    /**
+     * becuase null checks are too complex
+     * */
+    public static setCustomProperty(lookupData: any, lookupFieldName: string, customFieldName: string, lookupItem: any): void {
+        if (!!lookupData.otherFields && !!lookupData.otherFields[lookupFieldName]) {
+            lookupItem[customFieldName] = lookupData.otherFields[lookupFieldName];
+        }
+    }
+
+
+    public setObservableList(lookups: Array<Observable<any>>, input: any, isRo: boolean, friendlyName: string): void {
+        if (isRo) {
+            delete input.friendlyName;
+            lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupAreasOfReview, input));
+            lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupNarrativeSummaries, input));
+            lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabFormLookupMapping, input));
+            lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabCategory, input));
+            lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabCategoryItem, input));
+            lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabCategoryItemDescription, input));
+            lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabFindingType, input));
+            lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabFormCategory, input));
+            lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupSiteVisitModality, input));
+        }
+        else {
+            if (friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_site_visit_overview)) {
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupAreasOfReview, input));
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupNarrativeSummaries, input));
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupSiteVisitModality, input));
+            }
+            else if (friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_administration) ||
+                friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_planning_council) ||
+                friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_fiscal) ||
+                friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_clinical) ||
+                friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_clinical_quality_management) ||
+                friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_adap) ||
+                friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_demonstration_and_implementation) ||
+                friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_data_and_evaluation)) {
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabFormLookupMapping, input));
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabCategoryItem, input));
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabCategoryItemDescription, input));
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabFindingType));
+            }
+            else if (friendlyName.toLowerCase().startsWith(habFormFriendlyNameBase.hab_findings_summary)) {
+                delete input.friendlyName;
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabCategory, input));
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabCategoryItem, input));
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabCategoryItemDescription, input));
+                lookups.push(this.platformLookupService.lookup(HabQueryStatements.LookupHabFormCategory, input));
+            }
+        }
+    }
+}"
+	health-monitor.service.ts	"import { Injectable, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PlatformHttp } from 'pfm-ui/core';
+import { KeyValuePair } from '../data/ikeyvaluepair';
+import { AppStartConfigService } from './app-start-config.service';
+
+@Injectable({
+    providedIn: ""root""
+})
+export class HealthMonitorService {
+
+    private readonly healthMonitorRoute: string = ""api/HealthMonitor"";
+    /// <summary>
+    /// Constructor - dependency injection
+    /// </summary>
+    constructor(@Inject(PlatformHttp) private readonly pfmHttp: PlatformHttp,
+        @Inject(AppStartConfigService) private readonly appStartConfig: AppStartConfigService) {
+
+    }
+
+    /// <summary>
+    /// Performs a basic health check of the STAR WebAPI to check if operational
+    /// </summary>
+    /// <returns>Returns an Observable<string> indicating the status of the STAR WebAPI</returns>
+    public getBasicHealthCheck(): Observable<string> {
+        return this.pfmHttp.get(`${this.appStartConfig.getSystemAPIBaseUrl()}${this.healthMonitorRoute}/BasicHealthCheck`, null, false, null);
+    }
+
+    /// <summary>
+    /// Performs a basic services check of the dependent services
+    /// </summary>
+    /// <returns>Returns an Observable<string> indicating the status of the services</returns>
+    public getBasicServicesCheck(): Observable<string> {
+        return this.pfmHttp.get(`${this.appStartConfig.getSystemAPIBaseUrl()}${this.healthMonitorRoute}/BasicServicesCheck`, null, false, null);
+    }
+
+    /// <summary>
+    /// Gets the application config settings to verify installation parameters for critical items like URLs
+    /// </summary>
+    /// <returns>Returns an Observable<Array<KeyValuePair<string, string>>> indicating the status of the services</returns>
+    public getApplicationConfigSettings(): Observable<Array<KeyValuePair<string, string>>> {
+        return this.pfmHttp.get(`${this.appStartConfig.getSystemAPIBaseUrl()}${this.healthMonitorRoute}/GetApplicationConfigSettings`, null, true, null);
+    }
+
+}"
+	V	"import { Injectable, Inject } from '@angular/core';
+import { Observable, take } from 'rxjs';
+import { PlatformHttp } from 'pfm-ui/core';
+import { StarClientUtilities } from '../utilities/star-client-utilities';
+import { AppStartConfigService } from './app-start-config.service';
+
+@Injectable({
+    providedIn: ""root""
+})
+export class LinkRouterService {
+    constructor(@Inject(PlatformHttp) private readonly pfmHttp: PlatformHttp
+                , @Inject(AppStartConfigService) private readonly appStartConfigService: AppStartConfigService)
+    {
+
+    }
+
+    public GetRouterLink(linkCode: number, strId: string): Observable<string>
+    {
+        return this.pfmHttp.get(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Star/GetLink`, { params: { ""strId"": strId, ""linkCode"": linkCode } }, false, false, true);
+    }
+
+    public resourceLinkClick(event: any, link: any, strId: string): void {
+        event.preventDefault();
+        this.GetRouterLink(link.linkCode, strId).pipe(take(1)).subscribe({
+            next: (t) => { 
+                if (t !== null) {
+                    // TA Report RO page is too heavy for IE Popup, force to open in New Tab instead
+                    let linkCodesToFilterForIE = [1, 6, 10, 24, 26, 28];
+                    if (linkCodesToFilterForIE.indexOf(link.linkCode) !== -1 && StarClientUtilities.detectIE()) {
+                        window.open(t, ""_blank"");
+                    } else {
+                        window.open(t, link.displayValue, ""height=900,width=1200,scrollbars=1,resizable=yes"");
+                    }
+                }
+            },
+            error: (err) => {
+                StarClientUtilities.showToast(""toastError"", ""There was an error accessing "" + link.displayText + ""."");
+            }
+        });
+    }
+}"
+	notification.service.ts	"import { Injectable, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PlatformHttp } from 'pfm-ui/core';
+import { ReturnStatusModel } from './../../core/models/return-status.model';
+import { NotificationModel } from './../models/notification.model';
+import { RoleSelectModel } from '../models/role-select.model';
+import { AppStartConfigService } from './app-start-config.service';
+
+
+@Injectable({
+    providedIn: ""root""
+})
+export class NotificationService {
+    constructor(@Inject(PlatformHttp) private readonly pfmHttp: PlatformHttp
+                , @Inject(AppStartConfigService) private readonly appStartConfigService: AppStartConfigService)
+    {
+
+    }
+
+    public getNotificationModel(strId: string, taskTypeCode: number, reviewDecisionStatusCode: number, toRole: number): Observable<NotificationModel>{
+        let args = { 
+            strId: strId, 
+            taskTypeCode: taskTypeCode, 
+            reviewDecisionStatusCode: reviewDecisionStatusCode, 
+            toRole: toRole 
+        };
+        return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Notification/LoadTransition`, args, true, null);
+    }
+
+    public sendConfirmation(model: NotificationModel): Observable<ReturnStatusModel>
+    {
+        return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Notification/Confirm`, model, true, null);
+    }
+
+    public getHrsaAcceptanceNotification(strId: string): Observable<NotificationModel> {
+        return this.pfmHttp.get(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Notification/GetHrsaAcceptanceNotification`, { params: { ""strId"": strId } }, true, false, true);
+    }
+
+    public sendHrsaAcceptanceNotification(model: NotificationModel): Observable<any> {
+        return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Notification/SendHrsaAcceptanceNotification`, model, true, null);
+    }
+
+    public getTransitions(strId: string, taskTypeCode: number, reviewDecisionStatusCode: number): Observable<RoleSelectModel[]> {
+        return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Notification/GetTransitions`,
+            { ""strId"": strId, ""taskTypeCode"": taskTypeCode, ""reviewDecisionStatusCode"": reviewDecisionStatusCode },
+            true, null);
+    }
+}"
+	star.service.ts	"import { Injectable, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PlatformHttp } from 'pfm-ui/core';
+import { AdminAutoSaveModel } from './../../core/models/admin-autosave.model';
+import { AppStartConfigService } from './app-start-config.service';
+
+@Injectable({
+    providedIn: ""root""
+})
+/**
+ * Star Service class 
+ */
+export class StarService {
+    constructor(@Inject(PlatformHttp) private readonly pfmHttp: PlatformHttp,
+        @Inject(AppStartConfigService) private readonly appStartConfigService: AppStartConfigService
+    ) { }
+
+	/**
+	 * Method to check if user is the lead consultant
+	 * @param strId the structured ta report id
+	 */
+    public CheckIfLeadConsultant(strId: any): Observable<boolean> {
+        return this.pfmHttp.get(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Star/CheckIfLeadConsultant`, { params: { ""strId"": strId } }, true, false, true);
+    }
+
+	/**
+	 * Method used to check if the all the form's statuses are complete or not
+	 * @param strId the structured ta report id
+	 */
+    public CheckIfFormStatusComplete(strId: any): Observable<boolean> {
+        return this.pfmHttp.get(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Star/CheckIfFormStatusComplete`, { params: { ""strId"": strId } }, true, false, true);
+    }
+
+	/**
+	 * Method used to retrieve star report details, brings in associated record data
+	 * @param strId the structred ta report id
+	 */
+    public getStarDetails(strId: any): Observable<any> {
+        return this.pfmHttp.get(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Star/GetStarDetails`, { params: { ""strId"": strId } }, true, false, true);
+	}
+
+	/**
+	 * Method used to discard autosave for user
+	 * @param model the autosave data model 
+	 */
+	public discardPageForUser(model : AdminAutoSaveModel): Observable<any> {
+		return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/AutoSave/DiscardPageForUser`, model, true, null);
+    }
+
+    /**
+     * Get the Context Data needed for Correspondence Request
+     * @param strId - The structured ta report id
+     */
+    public getCorrespondenceContextData(strId: string): Observable<any> {
+        return this.pfmHttp.get(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Correspondence/GetCorrespondenceContextData`, { params: { ""strId"": strId } }, true)
+    }
+}"
+	task.service.ts	"import { Injectable, Inject } from '@angular/core';
+import { catchError, Observable, take, throwError } from 'rxjs';
+import { PlatformHttp, UrlService, PersistenceService } from 'pfm-ui/core';
+import { ReturnStatusModel } from './../../core/models/return-status.model';
+import { AppStartConfigService } from './app-start-config.service';
+import { TaskData } from '../data/task.data';
+
+@Injectable({
+    providedIn: ""root""
+})
+/// <summary>
+/// Configuration Service
+/// </summary>
+export class TaskService {
+    constructor(@Inject(PlatformHttp) private readonly pfmHttp: PlatformHttp,
+        @Inject(UrlService) private readonly urlService: UrlService,
+        @Inject(PersistenceService) private readonly storage: PersistenceService,
+        @Inject(AppStartConfigService) private readonly appStartConfigService: AppStartConfigService
+    ) { }
+    public checkActiveTask(taskTypeCode: number, strid: string): Observable<boolean> {
+        return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Tasks/CheckActiveTask`, { clientTaskId: strid, taskTypeCode: taskTypeCode }, true).pipe(
+            catchError((error: any) => this.handleError(error))
+        );
+    }
+    public closeUnassignedTask(taskTypeCode: number, strId: string): Observable<ReturnStatusModel> {
+        let data = new TaskData();
+        data.strId = strId;
+        data.taskTypeCode = taskTypeCode;
+        return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Tasks/AssignTaskToMe`, data, true).pipe(
+            catchError((error: any) => this.handleError(error))
+        );
+    }
+    public findOpenTask(strid: string): Observable<number> {
+        return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Tasks/FindOpenTask`, { clientTaskId: strid, taskTypeCode: null }, true).pipe(
+            catchError((error: any) => this.handleError(error))
+        );
+    }
+
+    /// Starts a pending task based on client Task Id, Task Type Code and current user
+	public startTask(clientTaskId: string, taskTypeCode: number): Observable<boolean> {
+		return this.pfmHttp.post(`${this.appStartConfigService.getSystemAPIBaseUrl()}api/Tasks/StartTask`, { clientTaskId: clientTaskId, taskTypeCode: taskTypeCode }, true).pipe(
+            catchError((error: any) => this.handleError(error))
+        );
+	}
+
+	private handleError(error) {
+		if (error.status === 401) {
+			let loginPageId = this.storage.get('loginPageId');
+			this.urlService.getUrl(loginPageId).pipe(take(1)).subscribe({
+                next: (url) => {
+                    let rUrl = encodeURIComponent(window.location.href);
+                    url = `${url}?rURL=${rUrl}`;
+                    window.location.assign(url);
+                    return new Observable<never>();
+                }
+            });
+		} 
+        return throwError(() => { return error; });
+	}
+}"
+	keyvalue.pipe.ts	"import { PipeTransform, Pipe } from ""@angular/core"";
+
+@Pipe({ 
+	standalone: false, 
+	name: 'keyvalue', 
+	pure: false }
+)
+export class KeyValuePipe implements PipeTransform {
+	transform(value: any, args: any[] = null): any {
+		return Object.keys(value);
+	}
+}"
+	left-menu-filter-criteria.pipe.ts	"import { Pipe, PipeTransform } from '@angular/core';
+import { FilterCriteria } from './../../core/models/filter-criteria.model';
+
+@Pipe({
+    standalone: false,
+    name: 'LeftMenuFilterCriteria',
+    pure: false
+})
+
+/**
+ * Left Menu Filter Criteria Pipe takes a list of filter criteria and an associated object of values to compare against the filters
+ */
+export class LeftMenuFilterCriteriaPipe implements PipeTransform {
+
+    /**
+     * apply the pipe and transform the object.
+     * @param filterCriteriaList - the list of filters to apply to this object
+     * @param filterObject - the object that contains the values being evaluated
+     */
+    transform(filterCriteriaList: Array<FilterCriteria>, filterObject: any): boolean {
+        let passesAllCriteria = true;
+
+        // If the filter object is not provided return false
+        if (!filterObject) {
+            return false;
+        }
+
+        if (filterCriteriaList) {
+            for (let i = 0; i < filterCriteriaList.length; i++) {
+                if (!this.processFilter(filterCriteriaList[i], filterObject)) {
+                    passesAllCriteria = false;
+                    break;
+                }
+            }
+        }
+
+        return passesAllCriteria;
+    }
+
+
+    /**
+     * Process the current filter criteria. Returns false if filter does not pass or dataField is not found in the filterObject
+     * @param filterCriteria - a single filter critiera object
+     * @param filterObject - the object that contains the values being evaluated
+     */
+    private processFilter(filterCriteria: FilterCriteria, filterObject: any): boolean {
+        let passesSingleCriteria = false;
+
+        if (filterObject[filterCriteria.dataField]) {
+
+            switch (filterCriteria.operator.toLowerCase()) {
+                case ""="":
+                    passesSingleCriteria = this.equalFilter(filterObject[filterCriteria.dataField], filterCriteria.compareValue);
+                    break;
+                case ""in"":
+                    passesSingleCriteria = this.inListFilter(filterObject[filterCriteria.dataField], filterCriteria.compareValue);
+                    break;
+                case ""!="":
+                    passesSingleCriteria = this.notEqualFilter(filterObject[filterCriteria.dataField], filterCriteria.compareValue);
+                    break;
+                default:
+                    // do nothing;
+                    break;
+            }
+        }
+
+        return passesSingleCriteria;
+    }
+
+
+    /**
+     * Returns if the dataValue is equal to the compareValue
+     * @param dataValue - the value which is being evaluated
+     * @param compareValue - the value in which the dataValue is being evaluated against
+     */
+    private equalFilter(dataValue: string, compareValue: string): boolean {
+        return dataValue.toLowerCase() === compareValue.toLowerCase();
+    }
+
+
+    /**
+     * Returns if the dataValue is not equal to the compareValue
+     * @param dataValue - the value which is being evaluated
+     * @param compareValue - the value in which the dataValue is being evaluated against
+     */
+    private notEqualFilter(dataValue: string, compareValue: string): boolean {
+        return dataValue.toLowerCase() !== compareValue.toLowerCase();
+    }
+
+
+    /**
+     * Returns if the dataValue is provided in the compareValue list
+     * @param dataValue - the value which is being evaluated
+     * @param compareValue - the value in which the dataValue is being evaluated against. Needs to be comma separated string
+     */
+    private inListFilter(dataValue: string, compareValue: string): boolean {
+        let list = compareValue.split(',');
+
+        if (!list || list.length == 0) {
+            return false;
+        }
+
+        return list.indexOf(dataValue) > -1;
+    }
+}"
+	show-in-overview.pipe.ts	"import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+    standalone: false,
+    name: 'ShowInOverview',
+    pure: false
+})
+export class ShowInOverviewPipe implements PipeTransform {
+    transform(items: any[]): any {
+        if (!items) {
+            return items;
+        }
+        // filter items array, items which match and return true will be kept, false will be filtered out
+        return items.filter(item => item.showOnStatusPage);
+    }
+}"
+	show-resource-link.pipe.ts	"import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+    standalone: false,
+    name: 'ShowResourceLink',
+    pure: false
+})
+export class ShowResourceLinkPipe implements PipeTransform {
+    transform(items: any[], filterObject: any): any {
+        if (!items) {
+            return items;
+        }
+
+        // filter items array, items which match and return true will be kept, false will be filtered out
+        return items.filter(item => {
+            let returnItem: boolean = true;
+            if (item.hideConditions) {
+                let conditions = item.hideConditions;
+                for (let i = 0; i < conditions.length; i++) {
+                    if (conditions[i].includes(""==="")) {
+                        let condArgs = conditions[i].split(""==="").map(cond => cond.trim());
+                        if (filterObject[condArgs[0]] === Number(condArgs[1])) {
+                            returnItem = false;
+                            break;
+                        }
+                    }
+                    if (conditions[i].includes(""!=="")) {
+                        let condArgs = conditions[i].split(""!=="").map(cond => cond.trim());
+                        if (filterObject[condArgs[0]] !== Number(condArgs[1])) {
+                            returnItem = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            return returnItem;
+        });
+    }
+}"
+	compliance-element-condition.model.ts	"/**
+ * admin auto save model for api calls
+ */
+export class AdminAutoSaveModel {
+	pageId: string;
+	resourceValue: string;
+	resourceInstance: number;
+	resourceTypeCode: number;
+	viewParams: string;
+	userId: string;
+}"
+	correspondence-context-data-args.model.ts	"export class CorrespondenceContextDataArgs {
+    resourceTypeCode: number;
+    resourceValue: string;
+    contextData: string;
+    userId: string;
+    sourceUrl: string;
+}"
+	ec-resource-context.model.ts	"export class ECResourceContextModel {
+    public isEcRequestCreated: boolean;
+    public isContextCreated: boolean;
+    public contextData: string;
+}"
+		"export class FilterCriteria {
+    public operator: string;
+    public dataField: string;
+    public compareValue: string;
+}"
+	flag-card-config.model.ts	"export class FlagCardConfig {
+    public count: number;
+    public description: string;
+    public flagTooltip: string;
+    public flagType: number;
+    public fromStatusOverview: boolean;
+
+    public constructor() {
+        this.count = 0;
+        this.description = """";
+        this.flagTooltip = """";
+        this.flagType = 0;
+        this.fromStatusOverview = false;
+    }
+}
+
+export class FlagCardLargeConfig {
+    public top: FlagCardConfig;
+    public bottom: FlagCardConfig;
+
+    public constructor() {
+        this.top = new FlagCardConfig();
+        this.bottom = new FlagCardConfig();
+    }
+}"
+	form-compliance-handbook-mapping.model.ts	"export class FormComplianceHandbookMapping {
+    public programRequirementComplianceElementId: string;
+    public programRequirementId: string;
+    public programRequirementName: string;
+    public programRequirementDisplayOrder: number;
+    public complianceElementId: string;
+    public complianceElementName: string;
+    public complianceElementDisplayOrder: number;
+    public formDefinitionId: string;
+    public formFriendlyName: string;
+    public fieldId: string;
+    public fieldPath: string;
+}"

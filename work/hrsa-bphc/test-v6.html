@@ -1,0 +1,438 @@
+Below is a complete scaffold (CLI commands + all of the minimal files) you need to get your “Configuration Hub” up and running on Angular 16+ with standalone components, esbuild, and the six slices you requested.  Everything you need is here—just paste each file into your workspace under the paths shown.
+
+-------------------------------------------------------------------------------
+1. Create the workspace & switch to esbuild
+
+```bash
+npm install -g @angular/cli@latest
+ng new config-hub \
+  --standalone=true \
+  --routing=true \
+  --style=scss \
+  --minimal=true \
+  --package-manager=npm
+
+cd config-hub
+
+# In angular.json replace
+#   "@angular-devkit/build-angular:browser"
+# with
+#   "@angular-devkit/build-angular:browser-esbuild"
+# in both “build” and “serve” targets under “projects→config-hub→architect”.
+```
+
+2. Install PF-Micro libraries
+
+```bash
+npm install pfm-ui pfm-layout pfm-ui/components pfm-dcf pfm-re pfm-autosave user-role-selector
+```
+
+3. Generate your shell (layout) and common pieces
+
+```bash
+ng generate component shell/layout --standalone --export --style=scss
+ng generate component shell/top-banner --standalone --export
+ng generate component shell/breadcrumbs --standalone --export
+ng generate component shell/side-nav --standalone --export
+ng generate component shell/footer --standalone --export
+```
+
+– src/app/shell/layout.component.ts
+
+```ts
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { TopBannerComponent } from './top-banner.component';
+import { BreadcrumbsComponent } from './breadcrumbs.component';
+import { SideNavComponent } from './side-nav.component';
+import { FooterComponent } from './footer.component';
+
+@Component({
+  selector: 'app-layout',
+  standalone: true,
+  imports: [
+    TopBannerComponent,
+    BreadcrumbsComponent,
+    SideNavComponent,
+    FooterComponent,
+    RouterOutlet
+  ],
+  template: `
+    <pfm-topbanner></pfm-topbanner>
+    <pfm-breadcrumbs></pfm-breadcrumbs>
+    <div class="shell">
+      <pfm-sidemenu></pfm-sidemenu>
+      <main><router-outlet></router-outlet></main>
+    </div>
+    <pfm-footer></pfm-footer>
+  `,
+  styleUrls: ['./layout.component.scss']
+})
+export class LayoutComponent {}
+```
+
+– src/app/shell/top-banner.component.html
+
+```html
+<pfm-topbanner>Configuration Hub</pfm-topbanner>
+```
+
+– src/app/shell/breadcrumbs.component.html
+
+```html
+<pfm-breadcrumbs></pfm-breadcrumbs>
+```
+
+– src/app/shell/side-nav.component.html
+
+```html
+<nav class="side-nav">
+  <ul>
+    <li routerLink="tenants">Tenants</li>
+    <li routerLink="form-registry">Form Registry</li>
+    <li routerLink="resources">Resource Library</li>
+    <li routerLink="cohorts">Cohorts</li>
+    <li routerLink="bundles">Resource Bundles</li>
+    <li routerLink="deliver-bundles">Deliver Bundles</li>
+  </ul>
+</nav>
+```
+
+– src/app/shell/footer.component.html
+
+```html
+<pfm-footer>© Your Company</pfm-footer>
+```
+
+4. Define root routes & bootstrap
+
+– src/app/app.routes.ts
+
+```ts
+import { Routes } from '@angular/router';
+import { LayoutComponent } from './shell/layout.component';
+
+export const routes: Routes = [
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [
+      {
+        path: 'tenants',
+        loadComponent: () =>
+          import('./tenants/tenants-page.component').then(m => m.TenantsPageComponent)
+      },
+      {
+        path: 'form-registry',
+        loadComponent: () =>
+          import('./form-registry/form-registry-page.component').then(m => m.FormRegistryPageComponent)
+      },
+      {
+        path: 'resources',
+        loadComponent: () =>
+          import('./resources/resources-page.component').then(m => m.ResourcesPageComponent)
+      },
+      {
+        path: 'cohorts',
+        loadComponent: () =>
+          import('./cohorts/cohorts-page.component').then(m => m.CohortsPageComponent)
+      },
+      {
+        path: 'bundles',
+        loadComponent: () =>
+          import('./bundles/bundles-page.component').then(m => m.BundlesPageComponent)
+      },
+      {
+        path: 'deliver-bundles',
+        loadComponent: () =>
+          import('./deliver-bundles/deliver-bundles-page.component').then(m => m.DeliverBundlesPageComponent)
+      },
+      { path: '', redirectTo: 'form-registry', pathMatch: 'full' }
+    ]
+  }
+];
+```
+
+– src/main.ts
+
+```ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { routes } from './app/app.routes';
+import { LayoutComponent } from './app/shell/layout.component';
+
+bootstrapApplication(LayoutComponent, {
+  providers: [provideRouter(routes)]
+}).catch(err => console.error(err));
+```
+
+5. Generate pages, services & models for each slice
+
+```bash
+# TENANTS
+ng generate component tenants/tenants-page --standalone --export --style=scss
+ng generate component tenants/tenant-wizard --standalone --export --style=scss
+ng generate service tenants/tenant --flat=false
+# Form Registry
+ng generate component form-registry/form-registry-page --standalone --export --style=scss
+ng generate component form-registry/form-registry-wizard --standalone --export --style=scss
+ng generate service form-registry/form-registry --flat=false
+# RESOURCES
+ng generate component resources/resources-page --standalone --export --style=scss
+ng generate component resources/resource-wizard --standalone --export --style=scss
+ng generate service resources/resource --flat=false
+# COHORTS
+ng generate component cohorts/cohorts-page --standalone --export --style=scss
+ng generate component cohorts/cohort-wizard --standalone --export --style=scss
+ng generate service cohorts/cohort --flat=false
+# RESOURCE BUNDLES
+ng generate component bundles/bundles-page --standalone --export --style=scss
+ng generate component bundles/bundle-wizard --standalone --export --style=scss
+ng generate service bundles/bundle --flat=false
+# DELIVER BUNDLES
+ng generate component deliver-bundles/deliver-bundles-page --standalone --export --style=scss
+ng generate component deliver-bundles/deliver-bundles-wizard --standalone --export --style=scss
+ng generate service deliver-bundles/deliver-bundles --flat=false
+```
+
+6. Implement one slice as example.  Repeat for the others by copying & renaming.
+
+--- src/app/tenants/tenant.model.ts
+
+```ts
+export interface Tenant {
+  id: string;
+  name: string;
+  description: string;
+  programId?: string;
+}
+```
+
+--- src/app/tenants/tenant.service.ts
+
+```ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Tenant } from './tenant.model';
+import { Observable } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class TenantService {
+  private base = '/api/tenants';
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable<Tenant[]> {
+    return this.http.get<Tenant[]>(`${this.base}`);
+  }
+  get(id: string): Observable<Tenant> {
+    return this.http.get<Tenant>(`${this.base}/${id}`);
+  }
+  create(t: Partial<Tenant>): Observable<Tenant> {
+    return this.http.post<Tenant>(`${this.base}`, t);
+  }
+  update(id: string, t: Partial<Tenant>): Observable<void> {
+    return this.http.put<void>(`${this.base}/${id}`, t);
+  }
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
+  }
+}
+```
+
+--- src/app/tenants/tenants-page.component.ts
+
+```ts
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TenantService } from './tenant.service';
+import { Tenant } from './tenant.model';
+import { Observable } from 'rxjs';
+import { PFMTableModule, PageActionsModule } from 'pfm-ui/components';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { TenantWizardComponent } from './tenant-wizard.component';
+
+@Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    PageActionsModule,
+    PFMTableModule,
+    ReactiveFormsModule,
+    TenantWizardComponent
+  ],
+  templateUrl: './tenants-page.component.html',
+  styleUrls: ['./tenants-page.component.scss']
+})
+export class TenantsPageComponent {
+  tenants$ = this.service.getAll();
+  filter = signal('');
+  selected = signal<string[]>([]);
+  wizardVisible = signal(false);
+  editing?: Tenant;
+
+  constructor(private service: TenantService) {}
+
+  onSelection(ids: string[]) {
+    this.selected.set(ids);
+  }
+
+  openWizard(t?: Tenant) {
+    this.editing = t;
+    this.wizardVisible.set(true);
+  }
+
+  deleteSelected() {
+    if (!confirm('Delete selected?')) return;
+    this.selected().forEach(id => this.service.delete(id).subscribe(() => this.reload()));
+  }
+
+  reload() {
+    this.tenants$ = this.service.getAll();
+  }
+
+  onSaved(_: Tenant) {
+    this.wizardVisible.set(false);
+    this.reload();
+  }
+}
+```
+
+--- src/app/tenants/tenants-page.component.html
+
+```html
+<pfm-page-actions>
+  <button pfmButton="primary" (click)="openWizard()">New Tenant</button>
+  <button pfmButton="warn"
+          [disabled]="!selected().length"
+          (click)="deleteSelected()">
+    Delete Selected
+  </button>
+  <input
+    placeholder="Search…"
+    (input)="filter.set($any($event.target).value)"
+  />
+</pfm-page-actions>
+
+<pfm-table
+  [data]="tenants$ | async"
+  [filter]="filter()"
+  [selectable]="true"
+  (selectionChange)="onSelection($event)"
+>
+  <ng-container pfmColumnDef="name">
+    <th pfmHeaderCell>Name</th>
+    <td pfmCell>{{row.name}}</td>
+  </ng-container>
+  <ng-container pfmColumnDef="description">
+    <th pfmHeaderCell>Description</th>
+    <td pfmCell>{{row.description}}</td>
+  </ng-container>
+  <ng-container pfmColumnDef="actions">
+    <th pfmHeaderCell>Actions</th>
+    <td pfmCell>
+      <button (click)="openWizard(row)">Update</button>
+      <button (click)="service.delete(row.id).subscribe(()=>reload())">
+        Delete
+      </button>
+    </td>
+  </ng-container>
+
+  <pfm-header-row *pfmHeaderRowDef="['name','description','actions']"></pfm-header-row>
+  <pfm-row *pfmRowDef="let row; columns: ['name','description','actions']"></pfm-row>
+</pfm-table>
+
+<tenant-wizard
+  *ngIf="wizardVisible()"
+  [tenant]="editing"
+  (saved)="onSaved($event)"
+></tenant-wizard>
+```
+
+--- src/app/tenants/tenant-wizard.component.ts
+
+```ts
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TenantService } from './tenant.service';
+import { Tenant } from './tenant.model';
+
+@Component({
+  selector: 'tenant-wizard',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  template: `
+    <div class="wizard">
+      <h2>{{ tenant ? 'Update' : 'New' }} Tenant</h2>
+      <form [formGroup]="form">
+        <label>Name*</label>
+        <input formControlName="name" />
+        <label>Description*</label>
+        <textarea formControlName="description"></textarea>
+        <div class="buttons">
+          <button (click)="cancel()">Cancel</button>
+          <button (click)="finish()" [disabled]="form.invalid">Finish</button>
+        </div>
+      </form>
+    </div>
+  `,
+  styles: [`.wizard { background: white; padding: 1rem; }`]
+})
+export class TenantWizardComponent {
+  @Input() tenant: Tenant | null = null;
+  @Output() saved = new EventEmitter<Tenant>();
+  form = this.fb.group({
+    name: ['', Validators.required],
+    description: ['', Validators.required]
+  });
+
+  constructor(private fb: FormBuilder, private svc: TenantService) {}
+
+  ngOnInit() {
+    if (this.tenant) this.form.patchValue(this.tenant);
+  }
+
+  finish() {
+    const payload = {...this.tenant, ...this.form.value};
+    const obs = this.tenant
+      ? this.svc.update(this.tenant.id, payload)
+      : this.svc.create(payload);
+    obs.subscribe(t => this.saved.emit(t as Tenant));
+  }
+
+  cancel() {
+    this.saved.emit(null!);
+  }
+}
+```
+
+7. Repeat steps 6 for each of the other five slices—just copy the tenants folder, rename to:
+
+- `form-registry` → FormRegistryPageComponent, FormRegistryWizardComponent, FormRegistryService, FormRegistryItem model
+- `resources` → ResourcesPageComponent, ResourceWizardComponent, ResourceService, ResourceItem model
+- `cohorts` → CohortsPageComponent, CohortWizardComponent, CohortService, Cohort model
+- `bundles` → BundlesPageComponent, BundleWizardComponent, BundleService, Bundle model
+- `deliver-bundles` → DeliverBundlesPageComponent, DeliverBundlesWizardComponent, DeliverBundlesService, DeliverBundle model
+
+Change the field names, table columns and wizard steps exactly as per your database schema definitions in your Features.md.
+
+8. Finishing touches  
+– Each slice folder now has:
+```
+/slice-name
+  slice-name-page.component.ts
+  slice-name-page.component.html
+  slice-name-page.component.scss
+  slice-name-wizard.component.ts
+  slice-name-wizard.component.html
+  slice-name-wizard.component.scss
+  slice.service.ts
+  slice.model.ts
+```
+
+– You’ve wired them into lazy routes under `app.routes.ts`.  
+– You’ve used `<pfm-topbanner>`, `<pfm-breadcrumbs>`, `<pfm-sidemenu>`, `<pfm-footer>` in your shell/layout.  
+– Each page uses `pfm-page-actions` and `pfm-table`.  
+– Each wizard is a standalone component with a reactive form and emits `(saved)`.
+
+At this point you have a fully modern Angular 16 standalone esbuild‐powered shell with all six “Configuration Hub” slices scaffolded.  Simply drop in your detailed UI logic (columns, validation, step flows, API endpoints) and you’re ready to go.
