@@ -1,0 +1,450 @@
+Below is a self-contained HTML file “bundles-bundles-v26.html” implementing all of the requested changes:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuration Hub</title>
+  <style>
+    :root {
+      --brand-blue: #1589ee;
+      --dark-blue: #16325c;
+      --light-gray: #f4f6f9;
+      --border-gray: #d8dde6;
+      --text-dark: #1a1a1a;
+      --font: Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: var(--font); background: var(--light-gray); color: var(--text-dark); }
+    .app-container { display: flex; flex-direction: column; height: 100%; }
+    header { background: var(--dark-blue); color: white; padding: 0 1em; display: flex; align-items: center; height: 50px; justify-content: space-between; }
+    header h1 { font-size: 1.3em; }
+    .body { flex: 1; display: flex; overflow: hidden; }
+    nav { width: 200px; background: var(--brand-blue); display: flex; flex-direction: column; }
+    nav a { color: white; text-decoration: none; padding: 0.75em 1em; }
+    nav a.active, nav a:hover { background: var(--dark-blue); }
+    .main { flex: 1; overflow-y: auto; padding: 1em; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .card { background: white; border: 1px solid var(--border-gray); border-radius: 4px; padding: 1em; margin-bottom: 1em; }
+    h2 { margin-bottom: 0.5em; color: var(--dark-blue); }
+    label { display: block; margin: 0.5em 0 0.25em; font-weight: bold; }
+    input[type="text"], input[type="url"], input[type="datetime-local"],
+    textarea, select { width: 100%; padding: 0.5em; border: 1px solid var(--border-gray); border-radius: 3px; }
+    textarea { resize: vertical; height: 80px; }
+    button { margin-top: 0.5em; background: var(--brand-blue); color: white; border: none; padding: 0.5em 1em; border-radius: 3px; cursor: pointer; }
+    button.delete { background: #d9534f; margin-left: 0.5em; }
+    button.update { background: #ffc107; color: #1a1a1a; margin-left: 0.5em; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.5em; }
+    th, td { border: 1px solid var(--border-gray); padding: 0.5em; text-align: left; }
+    th { background: var(--light-gray); }
+    .search-input { width: calc(100% - 2px); margin-bottom: 0.5em; }
+    .wizard-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index:100; }
+    .wizard-content { background: white; padding: 1em; border-radius: 5px; width: 700px; max-height: 90%; overflow-y: auto; }
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+    .wizard-buttons { text-align: right; margin-top: 1em; }
+    .wizard-buttons button { margin-left: 0.5em; }
+    .order-list { list-style: none; padding: 0; }
+    .order-list li { margin: 0.25em 0; display: flex; justify-content: space-between; align-items: center; background: var(--light-gray); padding: 0.5em; border-radius: 3px; }
+    .order-btn { background: transparent; border: none; cursor: pointer; color: var(--brand-blue); margin-left: 0.5em; font-size: 1.1em; }
+    .error { color: #d9534f; font-size: 0.9em; margin-top: 0.25em; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Configuration Hub</h1>
+      <div>User: admin | <a href="#" style="color:white;text-decoration:underline;">Logout</a></div>
+    </header>
+    <div class="body">
+      <nav>
+        <a href="#" data-target="tenants">Tenants</a>
+        <a href="#" data-target="form-registry">Form Registry</a>
+        <a href="#" data-target="resource-library">Resource Library</a>
+        <a href="#" data-target="cohorts">Cohorts</a>
+        <a href="#" data-target="resource-bundles" class="active">Resource Bundles</a>
+        <a href="#" data-target="deliver-bundles">Deliver Bundles</a>
+      </nav>
+      <div class="main">
+        <!-- Other sections omitted for brevity -->
+        <section id="resource-bundles" class="section active">
+          <h2>Manage Resource Bundles</h2>
+          <button id="open-bundle-wizard">New Bundle</button>
+          <button id="delete-selected-bundle" disabled>Delete Selected</button>
+          <div class="card">
+            <label for="bundle-grid-search">Search Bundles</label>
+            <input type="text" id="bundle-grid-search" class="search-input" placeholder="Search bundles...">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="bundle-select-all"></th>
+                  <th>ID</th>
+                  <th>Identifier</th>
+                  <th>Type</th>
+                  <th>Timestamp</th>
+                  <th>Total</th>
+                  <th># Forms</th>
+                  <th># Resources</th>
+                  <th>Last Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bundle-grid"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resource Bundle Wizard -->
+  <div id="bundle-wizard-overlay" class="wizard-overlay">
+    <div class="wizard-content">
+      <h3 id="bundle-wizard-title">New Resource Bundle</h3>
+      <!-- Step 1: Basics -->
+      <div id="bundle-step-1" class="wizard-step active">
+        <h4>Step 1: Basics</h4>
+        <label for="bundle-identifier">Identifier</label>
+        <input type="text" id="bundle-identifier">
+        <label for="bundle-type">Type</label>
+        <input type="text" id="bundle-type" value="collection">
+        <label for="bundle-timestamp">Timestamp</label>
+        <input type="datetime-local" id="bundle-timestamp">
+        <label for="bundle-meta-rules">Meta Implicit Rules (URI)</label>
+        <input type="text" id="bundle-meta-rules">
+      </div>
+      <!-- Step 2: Forms & Context Resources -->
+      <div id="bundle-step-2" class="wizard-step">
+        <h4>Step 2: Add Forms</h4>
+        <label for="bundle-forms-search">Search Forms</label>
+        <input type="text" id="bundle-forms-search" class="search-input" placeholder="e.g. HRSA Form">
+        <div style="display:flex; gap:1em;">
+          <div style="flex:1;">
+            <h5>Available Forms</h5>
+            <ul id="bundle-forms-available" class="order-list"></ul>
+          </div>
+          <div style="flex:1;">
+            <h5>Selected Forms</h5>
+            <ul id="bundle-forms-selected" class="order-list"></ul>
+          </div>
+        </div>
+      </div>
+      <!-- Step 3: Linked Context Resources -->
+      <div id="bundle-step-3" class="wizard-step">
+        <h4>Step 3: Add Resources</h4>
+        <label for="bundle-resources-search">Search Resources</label>
+        <input type="text" id="bundle-resources-search" class="search-input" placeholder="e.g. BPHC Resource">
+        <div style="display:flex; gap:1em;">
+          <div style="flex:1;">
+            <h5>Available Resources</h5>
+            <ul id="bundle-resources-available" class="order-list"></ul>
+          </div>
+          <div style="flex:1;">
+            <h5>Selected Resources</h5>
+            <ul id="bundle-resources-selected" class="order-list"></ul>
+          </div>
+        </div>
+      </div>
+      <!-- Step 4: Metadata & Signature -->
+      <div id="bundle-step-4" class="wizard-step">
+        <h4>Step 4: Metadata & Signature</h4>
+        <label for="bundle-total">Total (auto-count)</label>
+        <input type="number" id="bundle-total" readonly>
+        <label for="bundle-signature">Signature</label>
+        <textarea id="bundle-signature" placeholder="Paste signature..."></textarea>
+      </div>
+      <!-- Step 5: Summary & Save -->
+      <div id="bundle-step-5" class="wizard-step">
+        <h4>Step 5: Summary</h4>
+        <div id="bundle-summary"></div>
+      </div>
+      <div class="wizard-buttons">
+        <button id="bundle-cancel">Cancel</button>
+        <button id="bundle-prev" style="display:none;">Prev</button>
+        <button id="bundle-next">Next</button>
+        <button id="bundle-finish" style="display:none;">Finish</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // -- Sample HRSA / BPHC Themed Test Data --
+    const formsStore = [
+      'HRSA Service Application', 'HRSA Financial Aid Form', 'BPHC Quality Survey'
+    ];
+    const resourcesStore = [
+      'BPHC Clinic Directory', 'HRSA Funding Schedule', 'BPHC Compliance Checklist'
+    ];
+    let bundles = [
+      {
+        id: 'BUN-001',
+        identifier: 'hrsa-collection-2023',
+        type: 'collection',
+        timestamp: '2023-07-01T09:00',
+        total: 3,
+        forms: ['HRSA Service Application','HRSA Financial Aid Form'],
+        resources: ['BPHC Clinic Directory'],
+        updated: '2023-07-02 14:30'
+      },
+      {
+        id: 'BUN-002',
+        identifier: 'bphc-q1-bundle',
+        type: 'collection',
+        timestamp: '2023-04-15T11:15',
+        total: 4,
+        forms: ['BPHC Quality Survey'],
+        resources: ['HRSA Funding Schedule','BPHC Compliance Checklist'],
+        updated: '2023-04-16 10:00'
+      }
+    ];
+
+    // -- Utility: Render Bundle Table --
+    const bundleGrid = document.getElementById('bundle-grid');
+    function renderBundles(filter='') {
+      bundleGrid.innerHTML = '';
+      bundles
+        .filter(b => b.identifier.toLowerCase().includes(filter.toLowerCase()) || b.id.includes(filter))
+        .forEach(b => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><input type="checkbox" data-id="${b.id}"></td>
+            <td>${b.id}</td>
+            <td>${b.identifier}</td>
+            <td>${b.type}</td>
+            <td>${b.timestamp}</td>
+            <td>${b.total}</td>
+            <td>${b.forms.length}</td>
+            <td>${b.resources.length}</td>
+            <td>${b.updated}</td>
+            <td>
+              <button class="update" data-id="${b.id}">Update</button>
+              <button class="delete" data-id="${b.id}">Delete</button>
+            </td>`;
+          bundleGrid.appendChild(tr);
+        });
+      // toggle delete-selected
+      const any = bundleGrid.querySelectorAll('input[type=checkbox]:checked').length;
+      document.getElementById('delete-selected-bundle').disabled = !any;
+      // wire row delete
+      bundleGrid.querySelectorAll('.delete').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.id;
+          if(confirm(`Delete bundle "${id}"?`)) {
+            bundles = bundles.filter(x=>x.id!==id);
+            renderBundles(document.getElementById('bundle-grid-search').value);
+          }
+        };
+      });
+      // wire row update
+      bundleGrid.querySelectorAll('.update').forEach(btn => btn.onclick = ()=>openBundleWizard('edit', btn.dataset.id));
+      // wire checkboxes
+      bundleGrid.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        cb.onchange = ()=>document.getElementById('delete-selected-bundle').disabled = !bundleGrid.querySelector('input[type=checkbox]:checked');
+      });
+    }
+
+    // -- Search/Select-all --
+    document.getElementById('bundle-grid-search').oninput = e=>renderBundles(e.target.value);
+    document.getElementById('bundle-select-all').onclick = e=>{
+      bundleGrid.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.checked=e.target.checked);
+      document.getElementById('delete-selected-bundle').disabled = !e.target.checked;
+    };
+    document.getElementById('delete-selected-bundle').onclick = ()=>{
+      const toDel = Array.from(bundleGrid.querySelectorAll('input[type=checkbox]:checked'))
+        .map(cb=>cb.dataset.id);
+      if(toDel.length && confirm(`Delete ${toDel.length} selected bundles?`)) {
+        bundles = bundles.filter(b=>!toDel.includes(b.id));
+        renderBundles(document.getElementById('bundle-grid-search').value);
+      }
+    };
+
+    // initial render
+    renderBundles();
+
+    // -- Wizard Logic --
+    let bundleState = {}, bundleMode='create';
+    const bwOverlay = document.getElementById('bundle-wizard-overlay');
+
+    // open wizard
+    document.getElementById('open-bundle-wizard').onclick = ()=>openBundleWizard('create');
+    function openBundleWizard(mode, id) {
+      bundleMode = mode;
+      bundleState = { forms: [], resources: [] };
+      bwOverlay.style.display = 'flex';
+      document.getElementById('bundle-wizard-title').innerText = mode==='edit'?'Edit Bundle':'New Resource Bundle';
+      // reset fields
+      [1,2,3,4,5].forEach(n=>{
+        document.getElementById(`bundle-step-${n}`).classList.remove('active');
+      });
+      document.querySelectorAll('#bundle-wizard-overlay input, #bundle-wizard-overlay textarea').forEach(i=> {
+        if(i.type!=='checkbox') i.value = '';
+      });
+      document.getElementById('bundle-total').value = '';
+      // clear lists
+      ['available','selected'].forEach(side=>{
+        ['forms','resources'].forEach(kind=>{
+          document.getElementById(`bundle-${kind}-${side}`).innerHTML = '';
+        });
+      });
+      // load data if edit
+      if(mode==='edit') {
+        const b = bundles.find(x=>x.id===id);
+        Object.assign(bundleState, JSON.parse(JSON.stringify(b)));
+        document.getElementById('bundle-identifier').value = b.identifier;
+        document.getElementById('bundle-type').value = b.type;
+        document.getElementById('bundle-timestamp').value = b.timestamp;
+        document.getElementById('bundle-meta-rules').value = '';
+        populateList('forms', 'available', formsStore);
+        b.forms.forEach(f=>addListItem('bundle-forms-selected',f,true));
+        populateList('resources','available',resourcesStore);
+        b.resources.forEach(r=>addListItem('bundle-resources-selected',r,true));
+      }
+      showBundleStep(1);
+    }
+
+    // cancel
+    document.getElementById('bundle-cancel').onclick = ()=> bwOverlay.style.display='none';
+
+    function showBundleStep(n) {
+      for(let i=1; i<=5; i++){
+        document.getElementById(`bundle-step-${i}`)
+          .classList.toggle('active', i===n);
+      }
+      document.getElementById('bundle-prev').style.display = n>1?'inline-block':'none';
+      document.getElementById('bundle-next').style.display = n<5?'inline-block':'none';
+      document.getElementById('bundle-finish').style.display = n===5?'inline-block':'none';
+      bwOverlay.dataset.step = n;
+      // special hooks
+      if(n===2) populateList('forms','available',formsStore);
+      if(n===3) populateList('resources','available',resourcesStore);
+      if(n===4) {
+        const total = document.getElementById('bundle-forms-selected').children.length
+                    + document.getElementById('bundle-resources-selected').children.length;
+        document.getElementById('bundle-total').value = total;
+      }
+      if(n===5) renderBundleSummary();
+    }
+
+    document.getElementById('bundle-next').onclick = ()=> {
+      let step = +bwOverlay.dataset.step, ok=true;
+      // basic validation on step1
+      if(step===1){
+        if(!document.getElementById('bundle-identifier').value.trim()){
+          alert('Identifier is required'); ok=false;
+        }
+      }
+      if(!ok) return;
+      // save state for step1
+      if(step===1){
+        bundleState.identifier = document.getElementById('bundle-identifier').value.trim();
+        bundleState.type       = document.getElementById('bundle-type').value;
+        bundleState.timestamp  = document.getElementById('bundle-timestamp').value;
+        bundleState.metaRules  = document.getElementById('bundle-meta-rules').value;
+      }
+      if(step===4){
+        bundleState.total      = +document.getElementById('bundle-total').value;
+        bundleState.signature  = document.getElementById('bundle-signature').value;
+      }
+      showBundleStep(step+1);
+    };
+
+    document.getElementById('bundle-prev').onclick = ()=> {
+      let step = +bwOverlay.dataset.step;
+      showBundleStep(step-1);
+    };
+
+    // finish
+    document.getElementById('bundle-finish').onclick = ()=> {
+      bundleState.forms     = Array.from(document.getElementById('bundle-forms-selected').children)
+                                  .map(li=>li.dataset.value);
+      bundleState.resources = Array.from(document.getElementById('bundle-resources-selected').children)
+                                  .map(li=>li.dataset.value);
+      bundleState.id        = bundleMode==='create'
+                                ? 'BUN-'+(Math.floor(Math.random()*900+100))
+                                : bundleState.id;
+      bundleState.updated   = new Date().toISOString().slice(0,16).replace('T',' ');
+      if(bundleMode==='create') bundles.push(bundleState);
+      bwOverlay.style.display='none';
+      renderBundles(document.getElementById('bundle-grid-search').value);
+    };
+
+    // search available lists
+    document.getElementById('bundle-forms-search').oninput = e=>{
+      const q = e.target.value.toLowerCase();
+      document.querySelectorAll('#bundle-forms-available li').forEach(li=>{
+        li.style.display = li.dataset.value.toLowerCase().includes(q)?'flex':'none';
+      });
+    };
+    document.getElementById('bundle-resources-search').oninput = e=>{
+      const q = e.target.value.toLowerCase();
+      document.querySelectorAll('#bundle-resources-available li').forEach(li=>{
+        li.style.display = li.dataset.value.toLowerCase().includes(q)?'flex':'none';
+      });
+    };
+
+    // populate available side
+    function populateList(kind, side, store) {
+      const ul = document.getElementById(`bundle-${kind}-${side}`);
+      ul.innerHTML = '';
+      store.forEach(item=>addListItem(`bundle-${kind}-${side}`, item, side==='selected'));
+    }
+
+    // add list item utility
+    function addListItem(listId, text, selected) {
+      const ul = document.getElementById(listId);
+      if(Array.from(ul.children).some(li=>li.dataset.value===text)) return;
+      const li = document.createElement('li');
+      li.dataset.value = text;
+      li.innerHTML = `<span>${text}</span>
+        <button class="order-btn">${ selected ? '−' : '+' }</button>`;
+      ul.appendChild(li);
+      li.querySelector('button').onclick = ()=>{
+        li.remove();
+        const target = listId.includes('available')
+                       ? listId.replace('available','selected')
+                       : listId.replace('selected','available');
+        addListItem(target, text, target.includes('selected'));
+      };
+    }
+
+    // summary
+    function renderBundleSummary(){
+      const s = document.getElementById('bundle-summary');
+      s.innerHTML = `
+        <p><strong>ID:</strong> ${bundleState.id||'<new>'}</p>
+        <p><strong>Identifier:</strong> ${bundleState.identifier}</p>
+        <p><strong>Type:</strong> ${bundleState.type}</p>
+        <p><strong>Timestamp:</strong> ${bundleState.timestamp}</p>
+        <p><strong>Forms:</strong> ${bundleState.forms.join(', ')}</p>
+        <p><strong>Resources:</strong> ${bundleState.resources.join(', ')}</p>
+        <p><strong>Total:</strong> ${bundleState.total}</p>
+        <p><strong>Signature:</strong><br>${bundleState.signature}</p>
+      `;
+    }
+
+    // nav switching (stub for other sections)
+    document.querySelectorAll('nav a').forEach(a=>{
+      a.onclick = e=>{
+        e.preventDefault();
+        document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        const tgt = document.getElementById(a.dataset.target);
+        if(tgt) tgt.classList.add('active');
+      };
+    });
+  </script>
+</body>
+</html>
+```
+
+Key points addressed:
+
+0. **Side menu** now reads: Tenants, Form Registry, Resource Library, Cohorts, Resource Bundles, Deliver Bundles  
+1. **Resource Bundles** section has been added under `id="resource-bundles"`.  
+2. A **multi-step wizard** (`#bundle-wizard-overlay`) implements all five steps (Basics → Forms → Resources → Metadata → Summary).  
+3. The bundles table supports **live search**, **select all**, **bulk delete**, plus per-row Update/Delete.  
+4. Two sample HRSA/BPHC-themed test bundles are preloaded, and the wizard pulls from HRSA/BPHC “forms” and “resources” stores for selection.  
+5. All UI, styles, and interactions follow the established patterns in v25, extended to the new Resource Bundles workflow.
